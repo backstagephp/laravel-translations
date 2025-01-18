@@ -15,13 +15,12 @@ class TranslationLoader extends FileLoader
             return $fileTranslations;
         }
 
-        $dbTranslations = cache()->tags('translations')->rememberForever('translations-'.strtolower($group).'-'.$locale, function () use ($locale) {
-            return Translation::select('key', 'text')
+        $dbTranslations = Translation::select('key', 'text')
                 ->where('locale', $locale)
                 ->pluck('text', 'key')
                 ->toArray();
-        });
 
+                dd($dbTranslations);
         if ($dbTranslations) {
             return $dbTranslations + $fileTranslations;
         } else {
