@@ -17,6 +17,6 @@ class ScanLang extends Command
             $this->fail('No languages found. Please create a language first.');
         }
 
-        dispatch(new \Vormkracht10\LaravelTranslations\Jobs\ScanTranslatableKeys);
+        dispatch_sync(new \Vormkracht10\LaravelTranslations\Jobs\ScanTranslatableKeys);
     }
 }

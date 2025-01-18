@@ -9,6 +9,7 @@ return [
         'extensions' => [
             'php',
             'blade.php',
+            'json',
         ],
     ],
 
