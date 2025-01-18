@@ -88,11 +88,11 @@ php artisan translations:translate-keys
 
 For example:
 ```bash
-php artisan translations:translate-keys --lang=nl
+php artisan translations:translate-keys --lang="nl"
 
-php artisan translations:translate-keys --lang=en
+php artisan translations:translate-keys --lang="en"
 
-php artisan translations:translate-keys --lang=fr
+php artisan translations:translate-keys --lang="fr"
 
 php artisan translations:translate-keys --all
 ```
