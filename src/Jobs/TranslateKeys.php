@@ -25,6 +25,7 @@ class TranslateKeys implements ShouldQueue
         $locales = $this->lang ? [$this->lang->locale] : Language::pluck('locale')->toArray();
 
         $configDriver = config('translations.translation.driver');
+
         if (isset($this->defaultDrivers[$configDriver])) {
             $driverClass = $this->defaultDrivers[$configDriver];
             $driver = app($driverClass);

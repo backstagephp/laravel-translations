@@ -1,16 +1,17 @@
 <?php
+
 namespace Vormkracht10\LaravelTranslations\Jobs;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\App;
 use Vormkracht10\LaravelTranslations\Models\Language;
 use Vormkracht10\LaravelTranslations\Models\Translation;
-use Illuminate\Support\Facades\App;
 
 class ScanTranslatableKeys implements ShouldQueue
 {
     public function handle()
     {
-        app()->singleton('translator', function () {
+        App::singleton('translator', function () {
             return new \Illuminate\Translation\Translator(
                 new \Illuminate\Translation\FileLoader(new \Illuminate\Filesystem\Filesystem, 'resources/lang'),
                 'en'

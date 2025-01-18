@@ -5,7 +5,6 @@ namespace Vormkracht10\LaravelTranslations\Commands;
 use Illuminate\Console\Command;
 use Vormkracht10\LaravelTranslations\Jobs\TranslateKeys;
 use Vormkracht10\LaravelTranslations\Models\Language;
-use Illuminate\Support\Facades\App;
 
 class TranslateImports extends Command
 {
