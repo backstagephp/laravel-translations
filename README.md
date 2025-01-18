@@ -67,19 +67,20 @@ php artisan translations:lang nl Nederlands
 php artisan translations:lang en English
 
 php artisan translations:lang fr French
-
 ```
+
+The command can also be used without in-command-line parameters
 
 ### Scan for translations
 
-If you want to scan for translations inside you're Laravel application use the following command:
+To scan for translations within your Laravel application, use the following command:
 ```bash
 php artisan translations:scan
 ```
 
 ### Translate scanned translations
 
-If you want to translate the scanned translations use the following command:
+To translate the scanned translations, use the following command:
 ```bash
 php artisan translations:translate-keys 
                             {--all : Translate imports for all languages} 
