@@ -7,9 +7,9 @@ use Vormkracht10\LaravelTranslations\Drivers\Interface\Translatable;
 
 class Translator implements Translatable
 {
-    function translate(string $text, string $targetLanguage): string
+    public function translate(string $text, string $targetLanguage): string
     {
-        $tr = new GoogleTranslate();
+        $tr = new GoogleTranslate;
 
         $tr->setSource();
 
