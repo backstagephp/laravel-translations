@@ -16,11 +16,11 @@ class TranslationLoader extends FileLoader
         }
 
         $dbTranslations = Translation::select('key', 'text')
-                ->where('locale', $locale)
-                ->pluck('text', 'key')
-                ->toArray();
+            ->where('locale', $locale)
+            ->pluck('text', 'key')
+            ->toArray();
 
-                dd($dbTranslations);
+        dd($dbTranslations);
         if ($dbTranslations) {
             return $dbTranslations + $fileTranslations;
         } else {

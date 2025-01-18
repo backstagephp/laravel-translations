@@ -49,7 +49,7 @@ class GetTranslatables
                     });
                 });
         })
-        ->values()
-        ->unique();
+            ->values()
+            ->unique();
     }
 }
