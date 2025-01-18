@@ -20,16 +20,22 @@ class MakeLang extends Command
         $this->info("Creating language type: $locale with label: $label");
 
         $this->createLanguage($locale, $label);
-
-        $this->info('Language type created');
     }
 
-    public function createLanguage($locale, $label): Language
+    public function createLanguage($locale, $label)
     {
-        $lang = Language::create(['locale' => $locale, 'label' => $label]);
+        $lang = Language::where('locale', $locale)->first();
+
+        if ($lang) {
+            $this->info("Language $locale already exists");
+
+            return $lang;
+        }
+        
+        Language::create(['locale' => $locale, 'label' => $label]);
 
         $this->info("Language $locale with label $label created");
 
-        return $lang;
+        $this->info('Language type created');
     }
 }

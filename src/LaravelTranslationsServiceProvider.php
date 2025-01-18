@@ -4,11 +4,12 @@ namespace Vormkracht10\LaravelTranslations;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Vormkracht10\LaravelTranslations\Commands\LaravelTranslationsCommand;
 use Vormkracht10\LaravelTranslations\Commands\MakeLang;
+use Vormkracht10\LaravelTranslations\Commands\ScanLang;
+use Vormkracht10\LaravelTranslations\Translations\Translator;
 use Vormkracht10\LaravelTranslations\Commands\TranslateImports;
 use Vormkracht10\LaravelTranslations\Translations\TranslationLoader;
-use Vormkracht10\LaravelTranslations\Translations\Translator;
+use Vormkracht10\LaravelTranslations\Commands\LaravelTranslationsCommand;
 
 class LaravelTranslationsServiceProvider extends PackageServiceProvider
 {
@@ -29,7 +30,7 @@ class LaravelTranslationsServiceProvider extends PackageServiceProvider
                 'create_laravel_translations_table'
             )
             ->hasCommands(
-                LaravelTranslationsCommand::class,
+                ScanLang::class,
                 MakeLang::class,
                 TranslateImports::class
             );

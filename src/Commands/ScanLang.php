@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\App;
 use Vormkracht10\LaravelTranslations\Models\Language;
 use Vormkracht10\LaravelTranslations\Models\Translation;
 
-class LaravelTranslationsCommand extends Command
+class ScanLang extends Command
 {
-    protected $signature = 'translations:scan {--translate}';
+    protected $signature = 'translations:scan';
 
     protected $description = 'Scan Laravel translations';
 
@@ -37,10 +37,6 @@ class LaravelTranslationsCommand extends Command
         App::setLocale($baseLocale);
 
         $this->storeTranslations($localizedTranslations);
-
-        if ($this->option('translate')) {
-            //
-        }
     }
 
     protected function getTranslationFunctions(): array

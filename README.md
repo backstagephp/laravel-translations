@@ -53,7 +53,50 @@ OPENAI_API_KEY=SECRET
 
 ## Usage
 
-WIP
+### Add lang types
+
+If you want to add a language use the following command:
+```bash
+php artisan translations:lang {locale} {label}
+```
+
+For example:
+```bash
+php artisan translations:lang nl Nederlands
+
+php artisan translations:lang en English
+
+php artisan translations:lang fr French
+
+```
+
+### Scan for translations
+
+If you want to scan for translations inside you're Laravel application use the following command:
+```bash
+php artisan translations:scan
+```
+
+### Translate scanned translations
+
+If you want to translate the scanned translations use the following command:
+```bash
+php artisan translations:translate-keys 
+                            {--all : Translate imports for all languages} 
+                            {--lang= : Translate imports for a specific language}
+```
+
+For example:
+```bash
+php artisan translations:translate-keys --lang=nl
+
+php artisan translations:translate-keys --lang=en
+
+php artisan translations:translate-keys --lang=fr
+
+php artisan translations:translate-keys --all
+```
+
 
 ## Testing
 
