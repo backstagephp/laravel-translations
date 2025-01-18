@@ -2,17 +2,17 @@
 
 namespace Vormkracht10\LaravelTranslations\Jobs;
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\App;
+use Vormkracht10\LaravelTranslations\Domain\Actions\GetTranslatables;
 use Vormkracht10\LaravelTranslations\Models\Language;
 use Vormkracht10\LaravelTranslations\Models\Translation;
-use Vormkracht10\LaravelTranslations\Domain\Actions\GetTranslatables;
 
 class ScanTranslatableKeys implements ShouldQueue
 {
     protected ?Language $locale;
 
-    public function __construct(Language $locale = null)
+    public function __construct(?Language $locale = null)
     {
         $this->locale = $locale;
     }
@@ -64,7 +64,7 @@ class ScanTranslatableKeys implements ShouldQueue
     protected function storeTranslations($translations): void
     {
         $translations->each(function ($translation) {
-            if (!is_array($translation['text'])) {
+            if (! is_array($translation['text'])) {
                 Translation::updateOrCreate(
                     [
                         'group' => null,
