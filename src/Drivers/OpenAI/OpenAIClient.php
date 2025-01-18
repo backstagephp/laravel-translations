@@ -11,6 +11,6 @@ class OpenAIClient
 
     public function translate(string $text, string $targetLanguage): string
     {
-       return '';
+        return '';
     }
 }

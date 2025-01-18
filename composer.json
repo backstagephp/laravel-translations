@@ -1,12 +1,12 @@
 {
-    "name": "laravel-translations/laravel-translations",
+    "name": "vormkracht10/laravel-translations",
     "description": "A Laravel translations package",
     "keywords": [
         "Vormkracht10",
         "laravel",
         "laravel-translations"
     ],
-    "homepage": "https://github.com/laravel-translations/laravel-translations",
+    "homepage": "https://github.com/vormkracht10/laravel-translations",
     "license": "MIT",
     "authors": [
         {
@@ -17,8 +17,10 @@
     ],
     "require": {
         "php": "^8.2",
+        "echolabsdev/prism": "^0.26.0",
+        "illuminate/contracts": "^10.0||^11.0",
         "spatie/laravel-package-tools": "^1.16",
-        "illuminate/contracts": "^10.0||^11.0"
+        "spatie/laravel-translation-loader": "^2.8"
     },
     "require-dev": {
         "laravel/pint": "^1.14",

@@ -5,6 +5,10 @@ namespace Vormkracht10\LaravelTranslations;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Vormkracht10\LaravelTranslations\Commands\LaravelTranslationsCommand;
+use Vormkracht10\LaravelTranslations\Commands\MakeLang;
+use Vormkracht10\LaravelTranslations\Commands\TranslateImports;
+use Vormkracht10\LaravelTranslations\Translations\TranslationLoader;
+use Vormkracht10\LaravelTranslations\Translations\Translator;
 
 class LaravelTranslationsServiceProvider extends PackageServiceProvider
 {
@@ -15,11 +19,41 @@ class LaravelTranslationsServiceProvider extends PackageServiceProvider
          *
          * More info: https://github.com/spatie/laravel-package-tools
          */
+
         $package
             ->name('laravel-translations')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_laravel_translations_table')
-            ->hasCommand(LaravelTranslationsCommand::class);
+            ->hasMigrations(
+                'create_laravel_languages',
+                'create_laravel_translations_table'
+            )
+            ->hasTranslations()
+            ->hasCommands(
+                LaravelTranslationsCommand::class,
+                MakeLang::class,
+                TranslateImports::class
+            );
+    }
+
+    public function registeringPackage()
+    {
+        $this->app->register(\Spatie\TranslationLoader\TranslationServiceProvider::class, true);
+
+        $this->app->singleton('translation.loader', function ($app) {
+            return new TranslationLoader($app['files'], $app['path.lang']);
+        });
+
+        $this->app->singleton('translator', function ($app) {
+            $loader = $app['translation.loader'];
+
+            $locale = $app['config']['app.locale'];
+
+            $trans = new Translator($loader, $locale);
+            $trans->setFallback($app['config']['app.fallback_locale']);
+
+            return $trans;
+        });
+
     }
 }

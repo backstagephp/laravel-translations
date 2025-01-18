@@ -2,7 +2,9 @@
 
 namespace Vormkracht10\LaravelTranslations\Drivers\OpenAI;
 
-class Translate
+use Vormkracht10\LaravelTranslations\Drivers\Interface\Translatable;
+
+class Translator implements Translatable
 {
     public OpenAIClient $client;
 
