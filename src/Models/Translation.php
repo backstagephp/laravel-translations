@@ -15,6 +15,8 @@ class Translation extends Model
         'text',
         'metadata',
         'namespace',
+        'last_scanned_at',
+        'translated_at',
     ];
 
     protected $casts = [
@@ -23,5 +25,7 @@ class Translation extends Model
         'key' => 'string',
         'text' => 'string',
         'namespace' => 'string',
+        'last_scanned_at' => 'datetime',
+        'translated_at' => 'datetime',
     ];
 }

@@ -2,13 +2,21 @@
 
 namespace Vormkracht10\LaravelTranslations\Jobs;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\App;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Vormkracht10\LaravelTranslations\Models\Language;
 use Vormkracht10\LaravelTranslations\Models\Translation;
+use Vormkracht10\LaravelTranslations\Domain\Actions\GetTranslatables;
 
 class ScanTranslatableKeys implements ShouldQueue
 {
+    protected ?Language $locale;
+
+    public function __construct(Language $locale = null)
+    {
+        $this->locale = $locale;
+    }
+
     public function handle()
     {
         App::singleton('translator', function () {
@@ -18,15 +26,11 @@ class ScanTranslatableKeys implements ShouldQueue
             );
         });
 
-        $functions = $this->getTranslationFunctions();
-        $paths = $this->getPaths();
+        $translations = collect(GetTranslatables::run())->unique();
 
-        $translations = $this->extractTranslations($paths, $functions);
-
-        $locales = $this->getLocales();
+        $locales = $this->locale ? collect([$this->locale->locale]) : $this->getLocales();
 
         $baseLocale = App::getLocale();
-        $translations = collect($translations)->unique();
 
         $localizedTranslations = $this->mapTranslations($translations, $locales);
 
@@ -35,60 +39,9 @@ class ScanTranslatableKeys implements ShouldQueue
         $this->storeTranslations($localizedTranslations);
     }
 
-    protected function getTranslationFunctions(): array
-    {
-        return [
-            'trans',
-            'trans_choice',
-            'Lang::get',
-            'Lang::choice',
-            'Lang::trans',
-            'Lang::transChoice',
-            '@lang',
-            '@choice',
-            '__',
-        ];
-    }
-
-    protected function getPaths(): array
-    {
-        $paths = config('translations.scan.paths');
-
-        return $paths;
-    }
-
-    protected function extractTranslations(array $paths, array $functions): array
-    {
-        $translations = [];
-
-        foreach ($paths as $path) {
-            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-
-            foreach ($files as $file) {
-                if ($file->isFile() && in_array($file->getExtension(), ['php', 'blade.php'])) {
-                    $content = file_get_contents($file->getRealPath());
-
-                    foreach ($functions as $function) {
-                        if (preg_match_all("/$function\\(['\"](.+?)['\"]\\)/", $content, $matches)) {
-                            $translations = array_merge($translations, $matches[1]);
-                        }
-                    }
-                }
-            }
-        }
-
-        return $translations;
-    }
-
     protected function getLocales(): \Illuminate\Support\Collection
     {
-        $locales = Language::pluck('locale');
-
-        if ($locales->isEmpty()) {
-            return collect();
-        }
-
-        return $locales;
+        return Language::pluck('locale');
     }
 
     protected function mapTranslations($translations, $locales): \Illuminate\Support\Collection
@@ -111,21 +64,19 @@ class ScanTranslatableKeys implements ShouldQueue
     protected function storeTranslations($translations): void
     {
         $translations->each(function ($translation) {
-            if (! is_array($translation['text'])) {
-                $text = $translation['text'];
-
-                if ($text === null) {
-                    $text = $translation['key'];
-                }
-
-                Translation::updateOrCreate([
-                    'group' => null,
-                    'locale' => $translation['locale'],
-                    'key' => str_replace([$translation['namespace'], '::'], '', $translation['key']),
-                    'namespace' => $translation['namespace'],
-                ], [
-                    'text' => $translation['text'] ?? $translation['key'],
-                ]);
+            if (!is_array($translation['text'])) {
+                Translation::updateOrCreate(
+                    [
+                        'group' => null,
+                        'locale' => $translation['locale'],
+                        'key' => $translation['key'],
+                        'namespace' => $translation['namespace'],
+                    ],
+                    [
+                        'text' => $translation['text'] ?? $translation['key'],
+                        'last_scanned_at' => now(),
+                    ]
+                );
             }
         });
     }

@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->index('group');
             $table->text('key');
-            $table->string('text')
+            $table->longText('text')
                 ->nullable();
 
             $table->string('namespace')
@@ -24,6 +24,9 @@ return new class extends Migration
             $table->index('namespace');
 
             $table->timestamp('last_scanned_at')
+                ->nullable();
+            
+            $table->timestamp('translated_at')
                 ->nullable();
             
             $table->softDeletes();

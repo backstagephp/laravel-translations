@@ -6,6 +6,10 @@ return [
             base_path('app'),
             base_path('resources/views'),
         ],
+        'extensions' => [
+            'php',
+            'blade.php',
+        ],
     ],
 
     'translation' => [

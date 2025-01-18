@@ -30,12 +30,17 @@ class TranslateKeys implements ShouldQueue
             $driverClass = $this->defaultDrivers[$configDriver];
             $driver = app($driverClass);
 
-            $translations = Translation::whereIn('locale', $locales)->get();
+            $translations = Translation::whereIn('locale', $locales)
+                ->whereNull('translated_at')
+                ->get();
 
             $translations->each(function (Translation $translation) use ($driver) {
                 $newText = $driver->translate($translation->text, $translation->locale);
 
-                $translation->update(['text' => $newText]);
+                $translation->update([
+                    'text' => $newText,
+                    'translated_at' => now(),
+                ]);
 
             });
         } else {
