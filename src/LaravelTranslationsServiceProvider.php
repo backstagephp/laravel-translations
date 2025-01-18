@@ -28,7 +28,6 @@ class LaravelTranslationsServiceProvider extends PackageServiceProvider
                 'create_laravel_languages',
                 'create_laravel_translations_table'
             )
-            ->hasTranslations()
             ->hasCommands(
                 LaravelTranslationsCommand::class,
                 MakeLang::class,
