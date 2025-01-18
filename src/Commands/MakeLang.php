@@ -22,7 +22,7 @@ class MakeLang extends Command
         $this->createLanguage($locale, $label);
     }
 
-    public function createLanguage($locale, $label)
+    protected function createLanguage($locale, $label)
     {
         $lang = Language::where('locale', $locale)->first();
 

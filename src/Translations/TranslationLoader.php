@@ -33,8 +33,5 @@ class TranslationLoader extends FileLoader
 
     public function addJsonPath($path) {}
 
-    public function namespaces()
-    {
-        //
-    }
+    public function namespaces() {}
 }

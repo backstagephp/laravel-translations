@@ -18,14 +18,8 @@ class TranslateKeys implements ShouldQueue
 
     protected $driver;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(public ?Language $lang = null) {}
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
         $locales = $this->lang ? [$this->lang->locale] : Language::pluck('locale')->toArray();
