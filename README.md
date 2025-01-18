@@ -1,4 +1,4 @@
-# Laravel translations package
+# Laravel translations
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/vormkracht10/laravel-translations.svg?style=flat-square)](https://packagist.org/packages/vormkracht10/laravel-translations)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/vormkracht10/laravel-translations/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/vormkracht10/laravel-translations/actions?query=workflow%3Arun-tests+branch%3Amain)
