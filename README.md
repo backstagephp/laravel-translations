@@ -83,8 +83,8 @@ php artisan translations:scan
 To translate the scanned translations, use the following command:
 ```bash
 php artisan translations:translate-keys 
-                            {--all : Translate imports for all languages} 
-                            {--lang= : Translate imports for a specific language}
+            {--all : Translate imports for all languages} 
+            {--lang= : Translate imports for a specific language}
 ```
 
 For example:
