@@ -19,7 +19,7 @@ class TranslationLoader extends FileLoader
             ->where('locale', $locale)
             ->pluck('text', 'key')
             ->toArray();
-            
+
         if ($dbTranslations) {
             return $dbTranslations + $fileTranslations;
         } else {

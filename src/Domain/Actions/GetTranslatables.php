@@ -2,11 +2,10 @@
 
 namespace Vormkracht10\LaravelTranslations\Domain\Actions;
 
-use SplFileInfo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Lang;
 use Lorisleiva\Actions\Concerns\AsAction;
+use SplFileInfo;
 
 class GetTranslatables
 {
@@ -38,6 +37,7 @@ class GetTranslatables
     {
         return $paths->flatMap(function ($path) use ($functions) {
             $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+
             return collect($files)
                 ->filter(function (SplFileInfo $file) {
                     return $file->isFile() && in_array($file->getExtension(), config('translations.scan.extensions') ?? ['php', 'blade.php']);
@@ -57,18 +57,19 @@ class GetTranslatables
             ->values()
             ->unique();
     }
+
     protected function getTranslationKeys(Collection $baseDirectories): Collection
     {
         $translations = collect();
 
         foreach ($baseDirectories as $baseDirectory) {
-            $vendorLangPath = $baseDirectory . '/vendor';
+            $vendorLangPath = $baseDirectory.'/vendor';
             if (File::exists($vendorLangPath)) {
                 $vendorDirectories = File::directories($vendorLangPath);
 
                 foreach ($vendorDirectories as $vendorDirectory) {
-                    if (File::exists($vendorDirectory . '/lang')) {
-                        $vendorLangFiles = File::allFiles($vendorDirectory . '/lang');
+                    if (File::exists($vendorDirectory.'/lang')) {
+                        $vendorLangFiles = File::allFiles($vendorDirectory.'/lang');
                         foreach ($vendorLangFiles as $file) {
                             $fileName = pathinfo($file)['filename'];
                             $vendor = basename($vendorDirectory);  // Package/vendor name
@@ -81,6 +82,4 @@ class GetTranslatables
 
         return $translations;
     }
-    
-    
 }
