@@ -20,7 +20,6 @@ class TranslationLoader extends FileLoader
                 ->pluck('text', 'key')
                 ->toArray();
 
-                dd($dbTranslations);
         if ($dbTranslations) {
             return $dbTranslations + $fileTranslations;
         } else {
