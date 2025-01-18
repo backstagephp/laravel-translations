@@ -13,7 +13,7 @@ class TranslateKeys implements ShouldQueue
 
     protected $defaultDrivers = [
         'openai' => \Vormkracht10\LaravelTranslations\Drivers\OpenAI\Translator::class,
-        'google' => \Vormkracht10\LaravelTranslations\Drivers\Google\Translator::class
+        'google' => \Vormkracht10\LaravelTranslations\Drivers\Google\Translator::class,
     ];
 
     protected $driver;

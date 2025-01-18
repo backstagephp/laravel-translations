@@ -31,7 +31,7 @@ class MakeLang extends Command
 
             return $lang;
         }
-        
+
         Language::create(['locale' => $locale, 'label' => $label]);
 
         $this->info("Language $locale with label $label created");

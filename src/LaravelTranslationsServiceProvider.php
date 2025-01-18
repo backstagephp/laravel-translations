@@ -6,10 +6,9 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Vormkracht10\LaravelTranslations\Commands\MakeLang;
 use Vormkracht10\LaravelTranslations\Commands\ScanLang;
-use Vormkracht10\LaravelTranslations\Translations\Translator;
 use Vormkracht10\LaravelTranslations\Commands\TranslateImports;
 use Vormkracht10\LaravelTranslations\Translations\TranslationLoader;
-use Vormkracht10\LaravelTranslations\Commands\LaravelTranslationsCommand;
+use Vormkracht10\LaravelTranslations\Translations\Translator;
 
 class LaravelTranslationsServiceProvider extends PackageServiceProvider
 {
