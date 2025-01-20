@@ -2,6 +2,7 @@
 
 namespace Vormkracht10\LaravelTranslations\Translations;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Translation\FileLoader;
 use Vormkracht10\LaravelTranslations\Models\Translation;
 
@@ -11,7 +12,10 @@ class TranslationLoader extends FileLoader
     {
         $fileTranslations = parent::load($locale, $group, $namespace);
 
-        if (! is_null($namespace) && $namespace !== '*') {
+        if (
+            ! Schema::hasTable((new Translation)->getTable()) ||
+            ! is_null($namespace) && $namespace !== '*'
+        ) {
             return $fileTranslations;
         }
 
