@@ -2,103 +2,109 @@
 
 namespace Vormkracht10\LaravelTranslations\Domain\Actions;
 
-use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
 use Lorisleiva\Actions\Concerns\AsAction;
-use SplFileInfo;
+use Symfony\Component\Finder\Finder;
 
 class GetTranslatables
 {
     use AsAction;
 
-    public function handle(): Collection
+    public string $baseLanguage = 'nl';
+    public string $baseFilename;
+    protected array $allMatches = [];
+
+    public function __construct()
     {
+    }
+
+    public function handle(bool $mergeKeys = false): Collection
+    {
+        return $this->scan($mergeKeys);
+    }
+
+    protected function scan(bool $mergeKeys = false): Collection
+    {
+        $finder = new Finder();
+        $finder->in(base_path())
+            ->name(['*.php', '*.vue', '*.blade.php'])
+            ->files();
+
         $functions = collect([
-            'trans',
-            'trans_choice',
-            'Lang::get',
-            'Lang::choice',
-            'Lang::trans',
-            'Lang::transChoice',
-            '@lang',
-            '@choice',
-            '__',
+            'trans', 'trans_choice', '__', 'Lang::get', 'Lang::choice',
+            'Lang::trans', 'Lang::transChoice', '@lang', '@choice'
         ]);
 
-        $translations = $this->extractTranslations(collect(config('translations.scan.paths')), $functions);
+        $pattern =
+            '[^\w]' .
+            '(?<!->)' . // Ignore method chaining
+            '(?:' . implode('|', $functions->toArray()) . ')' .
+            '\(\s*' .
+            '(?:' .
+            "'((?:[^'\\\\]|\\\\.)+)'" .  // Match single-quoted keys
+            '|' .
+            "`((?:[^`\\\\]|\\\\.)+)`" .  // Match backtick-quoted keys
+            '|' .
+            '"((?:[^"\\\\]|\\\\.)+)"' .  // Match double-quoted keys
+            '|' .
+            '(\$[a-zA-Z_][a-zA-Z0-9_]*)' . // Match variables
+            ')' .
+            '\s*' .
+            '(?:,([^)]*))?' .  // Capture second argument (parameters)
+            '\s*' .
+            '[\),]';
 
-        $jsontranslations = $this->getTranslationKeysFromPhpFilesInVendor(collect(config('translations.scan.paths')));
-
-        return $translations->merge($jsontranslations)->unique();
-    }
-
-    protected function extractTranslations(Collection $paths, Collection $functions): Collection
-    {
-        return $paths->flatMap(function ($path) use ($functions) {
-            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-
-            return collect($files)
-                ->filter(function (SplFileInfo $file) {
-                    return $file->isFile() && in_array($file->getExtension(), config('translations.scan.extensions') ?? ['php', 'blade.php']);
-                })
-                ->flatMap(function (SplFileInfo $file) use ($functions) {
-                    $content = file_get_contents($file->getRealPath());
-
-                    return $functions->flatMap(function ($function) use ($content) {
-                        if (preg_match_all("/$function\\(['\"](.+?)['\"]\\)/", $content, $matches)) {
-                            return $matches[1];
-                        }
-
-                        return [];
-                    });
-                });
-        })
-            ->values()
-            ->unique();
-    }
-
-    protected function getTranslationKeysFromPhpFilesInVendor(Collection $baseDirectories): Collection
-    {
-        $translations = collect();
-
-        $vendorPath = base_path('vendor');
-        $translations = collect();
-        
-        foreach (File::directories($vendorPath) as $vendorDirectory) {
-            foreach (File::directories($vendorDirectory) as $packageDirectory) {
-                $packageName = basename($vendorDirectory) . '-' . basename($packageDirectory);
-                
-                foreach (File::directories($packageDirectory) as $dir) {
-                    if (str_contains($dir, 'resources')) {
-                        foreach (File::directories($dir) as $resourceDir) {
-                            if (str_contains($resourceDir, 'lang')) {
-                                foreach (File::directories($resourceDir) as $langDir) {
-                                    foreach (File::allFiles($langDir) as $file) {
-                                        if ($file->getExtension() === 'php') {
-                                            $filename = $file->getBasename('.php');
-                                            $content = require $file->getPathname();
-                                            if (is_array($content)) {
-                                                $namespace = $packageName;
-                                                $key = "$namespace::$filename";
-                                                $dotted = [];
-                                                foreach(Arr::dot($content) as $keyName => $data) {
-                                                    $dotted[] = $key.'.'.$keyName;
-                                                }
-
-                                                $translations = $translations->merge($dotted);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+        foreach ($finder as $file) {
+            if (preg_match_all("/$pattern/siU", $file->getContents(), $matches, PREG_SET_ORDER)) {
+                foreach ($matches as $match) {
+                    $key = $match[1] ?: $match[2] ?: $match[3] ?: $match[4]; // Extract key
+                    $params = $match[5] ?? null; // Extract parameters
+                    $this->addMatch($file, $key, $params);
                 }
             }
         }
 
-        return $translations->unique();
+        return collect($this->allMatches)
+            ->collapse()
+            ->map(fn($match) => [
+                'key' => $match['key'],
+                'namespace' => $match['namespace'],
+                'group' => $match['group'],
+                'text' => __($match['key']), // Use Laravel's Lang helper
+                'params' => $match['params'],
+            ])
+            ->when($mergeKeys, fn($collection) => $this->mergeExistingKeys($collection));
+    }
+
+    protected function addMatch($file, $key, $params = null): void
+    {
+        $namespace = $this->extractNamespace($key);
+        $group = $this->extractGroup($key);
+
+        $this->allMatches[$file->getRelativePathname()][] = [
+            'key' => $key,
+            'namespace' => $namespace,
+            'group' => $group,
+            'params' => $params,
+        ];
+    }
+
+    protected function extractNamespace(string $key): ?string
+    {
+        return Str::contains($key, '::') ? explode('::', $key)[0] : null;
+    }
+
+    protected function extractGroup(string $key): ?string
+    {
+        return Str::contains($key, '.') ? explode('.', $key)[0] : null;
+    }
+
+    protected function mergeExistingKeys(Collection $newKeys): Collection
+    {
+        $existingKeys = collect(json_decode(File::get($this->baseFilename), true) ?? []);
+        return $existingKeys->union($newKeys->filter(fn($key) => !$existingKeys->has($key)));
     }
 }

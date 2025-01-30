@@ -11,6 +11,37 @@ class TranslateKeys implements ShouldQueue
 {
     use Queueable;
 
+    /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 2200;
+
+    /**
+     * Determine number of times the job may be attempted.
+     */
+    public function tries(): int
+    {
+        return 5;
+    }
+
+    /**
+     * Calculate the number of seconds to wait before retrying the job.
+     */
+    public function backoff(): int
+    {
+        return 3;
+    }
+
+    /**
+     * Determine the time at which the job should timeout.
+     */
+    public function retryUntil()
+    {
+        return now()->addMinutes(1);
+    }
+
     protected $defaultDrivers = [
         'openai' => \Vormkracht10\LaravelTranslations\Drivers\OpenAI\Translator::class,
         'google' => \Vormkracht10\LaravelTranslations\Drivers\Google\Translator::class,
@@ -41,7 +72,6 @@ class TranslateKeys implements ShouldQueue
                     'text' => $newText,
                     'translated_at' => now(),
                 ]);
-
             });
         } else {
             logger()->error("Translation driver '{$configDriver}' is not configured.");

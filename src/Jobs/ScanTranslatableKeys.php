@@ -4,6 +4,7 @@ namespace Vormkracht10\LaravelTranslations\Jobs;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
 use Vormkracht10\LaravelTranslations\Domain\Actions\GetTranslatables;
 use Vormkracht10\LaravelTranslations\Models\Language;
 use Vormkracht10\LaravelTranslations\Models\Translation;
@@ -27,7 +28,6 @@ class ScanTranslatableKeys implements ShouldQueue
         });
 
         $translations = collect(GetTranslatables::run())->unique();
-
         $locales = $this->locale ? collect([$this->locale->locale]) : $this->getLocales();
 
         $baseLocale = App::getLocale();
@@ -53,10 +53,12 @@ class ScanTranslatableKeys implements ShouldQueue
 
                 return [
                     'locale' => $locale,
-                    'key' => $translation,
-                    'text' => __($translation, [], $locale),
-                    'namespace' => $this->getNamespace($translation),
+                    'group' => $translation['group'],
+                    'key' => $translation['key'],
+                    'text' => Lang::get($translation['key'], [], $locale, 'en'),
+                    'namespace' => $translation['namespace'] ?? '*',
                 ];
+           
             });
         });
     }
@@ -67,7 +69,7 @@ class ScanTranslatableKeys implements ShouldQueue
             if (! is_array($translation['text'])) {
                 Translation::updateOrCreate(
                     [
-                        'group' => null,
+                        'group' => $translation['group'],
                         'locale' => $translation['locale'],
                         'key' => $translation['key'],
                         'namespace' => $translation['namespace'],
@@ -79,12 +81,5 @@ class ScanTranslatableKeys implements ShouldQueue
                 );
             }
         });
-    }
-
-    protected function getNamespace(string $translation): string
-    {
-        return str_contains($translation, '::')
-            ? explode('::', $translation)[0]
-            : '*';
     }
 }

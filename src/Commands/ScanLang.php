@@ -18,8 +18,6 @@ class ScanLang extends Command
             $this->fail('No languages found. Please create a language first.');
         }
 
-        // dispatch_sync(new \Vormkracht10\LaravelTranslations\Jobs\ScanTranslatableKeys);
-
         $saveScan = new SaveScan;
         $saveScan->save();
     }

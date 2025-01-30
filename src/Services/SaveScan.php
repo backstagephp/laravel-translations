@@ -4,6 +4,7 @@ namespace Vormkracht10\LaravelTranslations\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
 use Vormkracht10\LaravelTranslations\Services\Scan;
 use Vormkracht10\LaravelTranslations\Models\Language;
@@ -22,7 +23,7 @@ class SaveScan {
             $scanner->addScannedPath($path);
         });
 
-        [$trans, $__] = $s  canner->getAllViewFilesWithTranslations();
+        [$trans, $__] = $scanner->getAllViewFilesWithTranslations();
 
         /** @var Collection $trans */
         /** @var Collection $__ */
