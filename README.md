@@ -16,24 +16,24 @@ composer require vormkracht10/laravel-translations
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-translations-migrations"
+php artisan vendor:publish --provider="Vormkracht10\LaravelTranslations\LaravelTranslationsServiceProvider"
 php artisan migrate
 ```
 
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="laravel-translations-config"
-```
 
 This is the contents of the published config file:
 
 ```php
-return [
+[
     'scan' => [
         'paths' => [
             base_path('app'),
             base_path('resources/views'),
+        ],
+        'extensions' => [
+            'php',
+            'blade.php',
+            'json',
         ],
     ],
 
