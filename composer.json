@@ -44,8 +44,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Vormkracht10\\LaravelTranslations\\": "src/",
-            "Vormkracht10\\LaravelTranslations\\Database\\Factories\\": "database/factories/"
+            "Vormkracht10\\LaravelTranslations\\": "src/"
         }
     },
     "autoload-dev": {
