@@ -13,7 +13,7 @@ class ScanTranslatableKeys implements ShouldQueue
 {
     protected ?Language $locale;
 
-    public function __construct(?Language $locale = null)
+    public function __construct(?Language $locale = null, public bool $redo = false)
     {
         $this->locale = $locale;
     }
@@ -51,14 +51,32 @@ class ScanTranslatableKeys implements ShouldQueue
                 App::setLocale($locale);
                 App::setFallbackLocale($locale);
 
-                return [
+                $data =  [
                     'locale' => $locale,
                     'group' => $translation['group'],
                     'key' => $translation['key'],
-                    'text' => Lang::get($translation['key'], [], $locale, 'en'),
                     'namespace' => $translation['namespace'] ?? '*',
                 ];
-           
+
+                if (!$this->redo) {
+                    $data['text'] = Lang::get($translation['key'], [], $locale);
+
+                    return $data;
+                }
+
+                $oldTranslation = Translation::where('key', $translation['key'])
+                    ->where('group', $translation['group'])
+                    ->where('namespace', $translation['namespace'] ?? '*')
+                    ->where('locale', $locale)
+                    ->first();
+
+                if ($oldTranslation) {
+                    $data['text'] = $oldTranslation->text;
+                } else {
+                    $data['text'] = Lang::get($translation['key'], [], $locale);
+                }
+
+                return $data;
             });
         });
     }
