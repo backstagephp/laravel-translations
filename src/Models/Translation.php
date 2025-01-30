@@ -8,6 +8,10 @@ class Translation extends Model
 {
     protected $table = 'translations';
 
+    const STATUS_SAVED = 0;
+
+    const STATUS_CHANGED = 1;
+
     protected $fillable = [
         'locale',
         'group',

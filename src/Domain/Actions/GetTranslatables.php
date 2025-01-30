@@ -2,8 +2,10 @@
 
 namespace Vormkracht10\LaravelTranslations\Domain\Actions;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Lang;
 use Lorisleiva\Actions\Concerns\AsAction;
 use SplFileInfo;
 
@@ -27,10 +29,9 @@ class GetTranslatables
 
         $translations = $this->extractTranslations(collect(config('translations.scan.paths')), $functions);
 
-        $jsontranslations = $this->getTranslationKeys(collect(config('translations.scan.paths')));
+        $jsontranslations = $this->getTranslationKeysFromPhpFilesInVendor(collect(config('translations.scan.paths')));
 
         return $translations->merge($jsontranslations)->unique();
-
     }
 
     protected function extractTranslations(Collection $paths, Collection $functions): Collection
@@ -58,28 +59,46 @@ class GetTranslatables
             ->unique();
     }
 
-    protected function getTranslationKeys(Collection $baseDirectories): Collection
+    protected function getTranslationKeysFromPhpFilesInVendor(Collection $baseDirectories): Collection
     {
         $translations = collect();
 
-        foreach ($baseDirectories as $baseDirectory) {
-            $vendorLangPath = $baseDirectory.'/vendor';
-            if (File::exists($vendorLangPath)) {
-                $vendorDirectories = File::directories($vendorLangPath);
+        $vendorPath = base_path('vendor');
+        $translations = collect();
+        
+        foreach (File::directories($vendorPath) as $vendorDirectory) {
+            foreach (File::directories($vendorDirectory) as $packageDirectory) {
+                $packageName = basename($vendorDirectory) . '-' . basename($packageDirectory);
+                
+                foreach (File::directories($packageDirectory) as $dir) {
+                    if (str_contains($dir, 'resources')) {
+                        foreach (File::directories($dir) as $resourceDir) {
+                            if (str_contains($resourceDir, 'lang')) {
+                                foreach (File::directories($resourceDir) as $langDir) {
+                                    foreach (File::allFiles($langDir) as $file) {
+                                        if ($file->getExtension() === 'php') {
+                                            $filename = $file->getBasename('.php');
+                                            $content = require $file->getPathname();
+                                            if (is_array($content)) {
+                                                $namespace = $packageName;
+                                                $key = "$namespace::$filename";
+                                                $dotted = [];
+                                                foreach(Arr::dot($content) as $keyName => $data) {
+                                                    $dotted[] = $key.'.'.$keyName;
+                                                }
 
-                foreach ($vendorDirectories as $vendorDirectory) {
-                    if (File::exists($vendorDirectory.'/lang')) {
-                        $vendorLangFiles = File::allFiles($vendorDirectory.'/lang');
-                        foreach ($vendorLangFiles as $file) {
-                            $fileName = pathinfo($file)['filename'];
-                            $vendor = basename($vendorDirectory);  // Package/vendor name
-                            $translations[$vendor][$fileName] = require $file->getPathname();
+                                                $translations = $translations->merge($dotted);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }
 
-        return $translations;
+        return $translations->unique();
     }
 }
