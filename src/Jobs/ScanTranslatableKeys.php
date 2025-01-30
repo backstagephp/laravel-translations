@@ -51,14 +51,14 @@ class ScanTranslatableKeys implements ShouldQueue
                 App::setLocale($locale);
                 App::setFallbackLocale($locale);
 
-                $data =  [
+                $data = [
                     'locale' => $locale,
                     'group' => $translation['group'],
                     'key' => $translation['key'],
                     'namespace' => $translation['namespace'] ?? '*',
                 ];
 
-                if (!$this->redo) {
+                if (! $this->redo) {
                     $data['text'] = Lang::get($translation['key'], [], $locale);
 
                     return $data;
