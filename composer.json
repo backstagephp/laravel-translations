@@ -13,6 +13,11 @@
             "name": "Manoj Hortulanus",
             "email": "manoj@vormkracht10.nl",
             "role": "Developer"
+        },
+        {
+            "name": "Mark",
+            "email": "mark@vormkracht10.nl",
+            "role": "Developer"
         }
     ],
     "require": {
