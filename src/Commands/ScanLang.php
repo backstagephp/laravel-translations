@@ -5,7 +5,6 @@ namespace Vormkracht10\LaravelTranslations\Commands;
 use Illuminate\Console\Command;
 use Vormkracht10\LaravelTranslations\Jobs\ScanTranslatableKeys;
 use Vormkracht10\LaravelTranslations\Models\Language;
-use Vormkracht10\LaravelTranslations\Services\SaveScan;
 
 class ScanLang extends Command
 {

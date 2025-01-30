@@ -6,13 +6,12 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
-use Vormkracht10\LaravelTranslations\Services\Scan;
 use Vormkracht10\LaravelTranslations\Models\Language;
 use Vormkracht10\LaravelTranslations\Models\Translation;
 
-class SaveScan {
+class SaveScan
+{
     protected $paths;
-    
 
     public function save()
     {
@@ -68,7 +67,7 @@ class SaveScan {
                 $translation->restore();
             }
         } else {
-            $locals = Language::pluck('locale','locale')->toArray();
+            $locals = Language::pluck('locale', 'locale')->toArray();
             $text = [];
             foreach ($locals as $locale => $lang) {
                 $translation = Lang::get(key: $key, fallback: str($key)->replace('.', ' ')->replace('_', ' ')->title()->toString());
@@ -94,9 +93,9 @@ class SaveScan {
         }
 
         if ($translation->namespace === '*') {
-            return is_array(trans($translation->group . '.' . $translation->key, [], $locale));
+            return is_array(trans($translation->group.'.'.$translation->key, [], $locale));
         }
 
-        return is_array(trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale));
+        return is_array(trans($translation->namespace.'::'.$translation->group.'.'.$translation->key, [], $locale));
     }
 }

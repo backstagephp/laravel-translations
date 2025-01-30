@@ -58,6 +58,7 @@ class ScanTranslatableKeys implements ShouldQueue
                     'namespace' => $translation['namespace'] ?? '*',
                 ];
 
+<<<<<<< HEAD
                 if (!$this->redo) {
                     $data['text'] = Lang::get($translation['key'], [], $locale);
 
@@ -77,6 +78,8 @@ class ScanTranslatableKeys implements ShouldQueue
                 }
 
                 return $data;
+=======
+>>>>>>> f2e97a670b36144f3eacf6d57a92fdc4d63c7fb4
             });
         });
     }

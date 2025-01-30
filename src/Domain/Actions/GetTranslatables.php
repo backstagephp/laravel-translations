@@ -2,10 +2,10 @@
 
 namespace Vormkracht10\LaravelTranslations\Domain\Actions;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Finder\Finder;
 
@@ -14,12 +14,12 @@ class GetTranslatables
     use AsAction;
 
     public string $baseLanguage = 'nl';
+
     public string $baseFilename;
+
     protected array $allMatches = [];
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function handle(bool $mergeKeys = false): Collection
     {
@@ -28,33 +28,33 @@ class GetTranslatables
 
     protected function scan(bool $mergeKeys = false): Collection
     {
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->in(base_path())
             ->name(['*.php', '*.vue', '*.blade.php'])
             ->files();
 
         $functions = collect([
             'trans', 'trans_choice', '__', 'Lang::get', 'Lang::choice',
-            'Lang::trans', 'Lang::transChoice', '@lang', '@choice'
+            'Lang::trans', 'Lang::transChoice', '@lang', '@choice',
         ]);
 
         $pattern =
-            '[^\w]' .
-            '(?<!->)' . // Ignore method chaining
-            '(?:' . implode('|', $functions->toArray()) . ')' .
-            '\(\s*' .
-            '(?:' .
-            "'((?:[^'\\\\]|\\\\.)+)'" .  // Match single-quoted keys
-            '|' .
-            "`((?:[^`\\\\]|\\\\.)+)`" .  // Match backtick-quoted keys
-            '|' .
-            '"((?:[^"\\\\]|\\\\.)+)"' .  // Match double-quoted keys
-            '|' .
-            '(\$[a-zA-Z_][a-zA-Z0-9_]*)' . // Match variables
-            ')' .
-            '\s*' .
-            '(?:,([^)]*))?' .  // Capture second argument (parameters)
-            '\s*' .
+            '[^\w]'.
+            '(?<!->)'. // Ignore method chaining
+            '(?:'.implode('|', $functions->toArray()).')'.
+            '\(\s*'.
+            '(?:'.
+            "'((?:[^'\\\\]|\\\\.)+)'".  // Match single-quoted keys
+            '|'.
+            '`((?:[^`\\\\]|\\\\.)+)`'.  // Match backtick-quoted keys
+            '|'.
+            '"((?:[^"\\\\]|\\\\.)+)"'.  // Match double-quoted keys
+            '|'.
+            '(\$[a-zA-Z_][a-zA-Z0-9_]*)'. // Match variables
+            ')'.
+            '\s*'.
+            '(?:,([^)]*))?'.  // Capture second argument (parameters)
+            '\s*'.
             '[\),]';
 
         foreach ($finder as $file) {
@@ -69,14 +69,14 @@ class GetTranslatables
 
         return collect($this->allMatches)
             ->collapse()
-            ->map(fn($match) => [
+            ->map(fn ($match) => [
                 'key' => $match['key'],
                 'namespace' => $match['namespace'],
                 'group' => $match['group'],
                 'text' => __($match['key']), // Use Laravel's Lang helper
                 'params' => $match['params'],
             ])
-            ->when($mergeKeys, fn($collection) => $this->mergeExistingKeys($collection));
+            ->when($mergeKeys, fn ($collection) => $this->mergeExistingKeys($collection));
     }
 
     protected function addMatch($file, $key, $params = null): void
@@ -105,6 +105,7 @@ class GetTranslatables
     protected function mergeExistingKeys(Collection $newKeys): Collection
     {
         $existingKeys = collect(json_decode(File::get($this->baseFilename), true) ?? []);
-        return $existingKeys->union($newKeys->filter(fn($key) => !$existingKeys->has($key)));
+
+        return $existingKeys->union($newKeys->filter(fn ($key) => ! $existingKeys->has($key)));
     }
 }
