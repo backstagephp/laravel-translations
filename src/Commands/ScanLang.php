@@ -3,6 +3,7 @@
 namespace Vormkracht10\LaravelTranslations\Commands;
 
 use Illuminate\Console\Command;
+use Vormkracht10\LaravelTranslations\Jobs\ScanTranslatableKeys;
 use Vormkracht10\LaravelTranslations\Models\Language;
 use Vormkracht10\LaravelTranslations\Services\SaveScan;
 
@@ -18,7 +19,8 @@ class ScanLang extends Command
             $this->fail('No languages found. Please create a language first.');
         }
 
-        $saveScan = new SaveScan;
-        $saveScan->save();
+        Language::all()->each(function (Language $language) {
+            dispatch_sync(new ScanTranslatableKeys($language));
+        });
     }
 }
