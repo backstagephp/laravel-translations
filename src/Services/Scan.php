@@ -18,8 +18,6 @@ class Scan
 
     /**
      * The paths to directories where we look for localised strings to scan.
-     *
-     * @var Collection
      */
     protected Collection $scannedPaths;
 
@@ -58,48 +56,48 @@ class Scan
 
         $patternA =
             // See https://regex101.com/r/jS5fX0/4
-            '[^\w]' . // Must not start with any alphanum or _
-            '(?<!->)' . // Must not start with ->
-            '(' . implode('|', $functions) . ')' . // Must start with one of the functions
-            "\(" . // Match opening parentheses
-            "[\'\"]" . // Match " or '
-            '(' . // Start a new group to match:
-            '([a-zA-Z0-9_\/-]+::)?' .
-            '[a-zA-Z0-9_-]+' . // Must start with group
-            "([.][^\1)$]+)+" . // Be followed by one or more items/keys
-            ')' . // Close group
-            "[\'\"]" . // Closing quote
+            '[^\w]'. // Must not start with any alphanum or _
+            '(?<!->)'. // Must not start with ->
+            '('.implode('|', $functions).')'. // Must start with one of the functions
+            "\(". // Match opening parentheses
+            "[\'\"]". // Match " or '
+            '('. // Start a new group to match:
+            '([a-zA-Z0-9_\/-]+::)?'.
+            '[a-zA-Z0-9_-]+'. // Must start with group
+            "([.][^\1)$]+)+". // Be followed by one or more items/keys
+            ')'. // Close group
+            "[\'\"]". // Closing quote
             "[\),]";  // Close parentheses or new parameter
 
         $patternB =
             // See https://regex101.com/r/2EfItR/2
-            '[^\w]' . // Must not start with any alphanum or _
-            '(?<!->)' . // Must not start with ->
-            '(__|Lang::getFromJson)' . // Must start with one of the functions
-            '\(' . // Match opening parentheses
+            '[^\w]'. // Must not start with any alphanum or _
+            '(?<!->)'. // Must not start with ->
+            '(__|Lang::getFromJson)'. // Must start with one of the functions
+            '\('. // Match opening parentheses
 
-            '[\"]' . // Match "
-            '(' . // Start a new group to match:
-            '[^"]+' . //Can have everything except "
+            '[\"]'. // Match "
+            '('. // Start a new group to match:
+            '[^"]+'. // Can have everything except "
             //            '(?:[^"]|\\")+' . //Can have everything except " or can have escaped " like \", however it is not working as expected
-            ')' . // Close group
-            '[\"]' . // Closing quote
+            ')'. // Close group
+            '[\"]'. // Closing quote
 
             '[\)]';  // Close parentheses or new parameter
 
         $patternC =
             // See https://regex101.com/r/VaPQ7A/2
-            '[^\w]' . // Must not start with any alphanum or _
-            '(?<!->)' . // Must not start with ->
-            '(__|Lang::getFromJson)' . // Must start with one of the functions
-            '\(' . // Match opening parentheses
+            '[^\w]'. // Must not start with any alphanum or _
+            '(?<!->)'. // Must not start with ->
+            '(__|Lang::getFromJson)'. // Must start with one of the functions
+            '\('. // Match opening parentheses
 
-            '[\']' . // Match '
-            '(' . // Start a new group to match:
-            "[^']+" . //Can have everything except '
+            '[\']'. // Match '
+            '('. // Start a new group to match:
+            "[^']+". // Can have everything except '
             //            "(?:[^']|\\')+" . //Can have everything except 'or can have escaped ' like \', however it is not working as expected
-            ')' . // Close group
-            '[\']' . // Closing quote
+            ')'. // Close group
+            '[\']'. // Closing quote
 
             '[\)]';  // Close parentheses or new parameter
 

@@ -58,7 +58,7 @@ class ScanTranslatableKeys implements ShouldQueue
                     'text' => Lang::get($translation['key'], [], $locale, 'en'),
                     'namespace' => $translation['namespace'] ?? '*',
                 ];
-           
+
             });
         });
     }
