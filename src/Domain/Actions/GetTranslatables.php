@@ -29,9 +29,10 @@ class GetTranslatables
     protected function scan(bool $mergeKeys = false): Collection
     {
         $finder = new Finder;
-        $finder->in(base_path())
+        $finder->in(base_path(''))
             ->name(['*.php', '*.vue', '*.blade.php'])
-            ->files();
+            ->files()
+            ->followLinks();
 
         $functions = collect([
             'trans', 'trans_choice', '__', 'Lang::get', 'Lang::choice',
@@ -56,7 +57,7 @@ class GetTranslatables
             '(?:,([^)]*))?'.  // Capture second argument (parameters)
             '\s*'.
             '[\),]';
-
+            
         foreach ($finder as $file) {
             if (preg_match_all("/$pattern/siU", $file->getContents(), $matches, PREG_SET_ORDER)) {
                 foreach ($matches as $match) {
