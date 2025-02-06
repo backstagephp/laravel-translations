@@ -63,7 +63,6 @@ class RedoTranslations extends Command
             ]);
         });
 
-
         if (! $language) {
             $this->fail("Language '$lang' not found.");
         }
