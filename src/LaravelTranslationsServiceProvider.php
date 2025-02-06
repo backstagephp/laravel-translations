@@ -5,6 +5,7 @@ namespace Vormkracht10\LaravelTranslations;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Vormkracht10\LaravelTranslations\Commands\MakeLang;
+use Vormkracht10\LaravelTranslations\Commands\RedoTranslations;
 use Vormkracht10\LaravelTranslations\Commands\ScanLang;
 use Vormkracht10\LaravelTranslations\Commands\TranslateImports;
 use Vormkracht10\LaravelTranslations\Translations\TranslationLoader;
@@ -25,7 +26,8 @@ class LaravelTranslationsServiceProvider extends PackageServiceProvider
             ->hasCommands(
                 ScanLang::class,
                 MakeLang::class,
-                TranslateImports::class
+                TranslateImports::class,
+                RedoTranslations::class
             );
     }
 

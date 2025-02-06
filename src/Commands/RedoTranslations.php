@@ -7,7 +7,7 @@ use Vormkracht10\LaravelTranslations\Jobs\TranslateKeys;
 use Vormkracht10\LaravelTranslations\Models\Language;
 use Vormkracht10\LaravelTranslations\Models\Translation;
 
-class TranslateImports extends Command
+class RedoTranslations extends Command
 {
     protected $signature = 'translations:redo-translate-keys 
                             {--all : Translate imports for all languages} 
