@@ -30,6 +30,7 @@ class TranslateTranslations extends Command
 
                 if ($translations->isEmpty()) {
                     $this->fail("No translations found with the code: {$code}");
+
                     return;
                 }
             }
