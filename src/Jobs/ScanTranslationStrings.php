@@ -1,15 +1,15 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Jobs;
+namespace Backstage\Translations\Laravel\Jobs;
 
+use Backstage\Translations\Laravel\Domain\Actions\GetTranslatables;
+use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
-use Vormkracht10\LaravelTranslations\Domain\Actions\GetTranslatables;
-use Vormkracht10\LaravelTranslations\Models\Language;
-use Vormkracht10\LaravelTranslations\Models\Translation;
 
-class ScanTranslatableKeys implements ShouldQueue
+class ScanTranslationStrings implements ShouldQueue
 {
     protected ?Language $locale;
 
@@ -28,7 +28,7 @@ class ScanTranslatableKeys implements ShouldQueue
         });
 
         $translations = collect(GetTranslatables::run())->unique();
-        $locales = $this->locale ? collect([$this->locale->locale]) : $this->getLocales();
+        $locales = $this->locale ? collect([$this->locale->code]) : $this->getLocales();
 
         $baseLocale = App::getLocale();
 
@@ -41,18 +41,21 @@ class ScanTranslatableKeys implements ShouldQueue
 
     protected function getLocales(): \Illuminate\Support\Collection
     {
-        return Language::pluck('locale');
+        return Language::pluck('code');
     }
 
     protected function mapTranslations($translations, $locales): \Illuminate\Support\Collection
     {
         return $translations->flatMap(function ($translation) use ($locales) {
             return $locales->map(function ($locale) use ($translation) {
+                $baseLocale = $locale;
+                $locale = explode('_', $baseLocale)[0];
+
                 App::setLocale($locale);
                 App::setFallbackLocale($locale);
 
                 $data = [
-                    'locale' => $locale,
+                    'code' => $baseLocale,
                     'group' => $translation['group'],
                     'key' => $translation['key'],
                     'namespace' => $translation['namespace'] ?? '*',
@@ -67,7 +70,7 @@ class ScanTranslatableKeys implements ShouldQueue
                 $oldTranslation = Translation::where('key', $translation['key'])
                     ->where('group', $translation['group'])
                     ->where('namespace', $translation['namespace'] ?? '*')
-                    ->where('locale', $locale)
+                    ->where('code', $baseLocale)
                     ->first();
 
                 if ($oldTranslation) {
@@ -88,13 +91,12 @@ class ScanTranslatableKeys implements ShouldQueue
                 Translation::updateOrCreate(
                     [
                         'group' => $translation['group'],
-                        'locale' => $translation['locale'],
+                        'code' => $translation['code'],
                         'key' => $translation['key'],
                         'namespace' => $translation['namespace'],
                     ],
                     [
                         'text' => $translation['text'] ?? $translation['key'],
-                        'last_scanned_at' => now(),
                     ]
                 );
             }

@@ -1,22 +1,23 @@
 {
-    "name": "vormkracht10/laravel-translations",
+    "name": "backstage/laravel-translations",
     "description": "A Laravel translations package",
     "keywords": [
-        "Vormkracht10",
+        "backstage",
+        "vormkracht10",
         "laravel",
-        "laravel-translations"
+        "translations"
     ],
-    "homepage": "https://github.com/vormkracht10/laravel-translations",
+    "homepage": "https://github.com/backstagephp/laravel-translations",
     "license": "MIT",
     "authors": [
         {
             "name": "Manoj Hortulanus",
-            "email": "manoj@vormkracht10.nl",
+            "email": "manoj@backstagephp.com",
             "role": "Developer"
         },
         {
             "name": "Mark",
-            "email": "mark@vormkracht10.nl",
+            "email": "mark@backstagephp.com",
             "role": "Developer"
         }
     ],
@@ -44,12 +45,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Vormkracht10\\LaravelTranslations\\": "src/"
+            "Backstage\\Translations\\Laravel\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Vormkracht10\\LaravelTranslations\\Tests\\": "tests/",
+            "Backstage\\Translations\\Laravel\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -81,7 +82,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Vormkracht10\\LaravelTranslations\\LaravelTranslationsServiceProvider"
+                "Backstage\\Translations\\Laravel\\TranslationServiceProvider"
             ]
         }
     },

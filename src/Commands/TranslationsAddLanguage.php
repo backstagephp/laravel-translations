@@ -1,22 +1,22 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Commands;
+namespace Backstage\Translations\Laravel\Commands;
 
+use Backstage\Translations\Laravel\Models\Language;
 use Illuminate\Console\Command;
-use Vormkracht10\LaravelTranslations\Models\Language;
 
 use function Laravel\Prompts\text;
 
-class MakeLang extends Command
+class TranslationsAddLanguage extends Command
 {
-    protected $signature = 'translations:lang {locale?} {label?}';
+    protected $signature = 'translations:languages:add {code?} {label?}';
 
     protected $description = 'Create a new language type';
 
     public function handle()
     {
-        $locale = $this->argument('locale') ?? text('Enter locale');
-        $label = $this->argument('label') ?? text('Enter label');
+        $locale = $this->argument('code') ?? text('Enter locale');
+        $label = $this->argument('name') ?? text('Enter label');
         $this->info("Creating language type: $locale with label: $label");
 
         $this->createLanguage($locale, $label);
@@ -24,7 +24,7 @@ class MakeLang extends Command
 
     protected function createLanguage($locale, $label)
     {
-        $lang = Language::where('locale', $locale)->first();
+        $lang = Language::where('code', $locale)->first();
 
         if ($lang) {
             $this->info("Language $locale already exists");
@@ -32,7 +32,7 @@ class MakeLang extends Command
             return $lang;
         }
 
-        Language::create(['locale' => $locale, 'label' => $label]);
+        Language::create(['code' => $locale, 'name' => $label]);
 
         $this->info("Language $locale with label $label created");
 

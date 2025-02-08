@@ -1,5 +1,5 @@
 <?php
 
-use Vormkracht10\LaravelTranslations\Tests\TestCase;
+use Backstage\Translations\Laravel\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

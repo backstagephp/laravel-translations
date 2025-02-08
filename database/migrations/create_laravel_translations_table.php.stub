@@ -10,27 +10,25 @@ return new class extends Migration
     {
         Schema::create('translations', function (Blueprint $table) {
             $table->id();
-            $table->string('locale');
+            $table->string('code', 5);
+            
             $table->string('group')
-                ->nullable();
+                ->nullable()
+                ->index();
 
-            $table->index('group');
             $table->text('key');
             $table->longText('text')
                 ->nullable();
 
             $table->string('namespace')
-                ->default('*');
-            $table->index('namespace');
-
-            $table->timestamp('last_scanned_at')
-                ->nullable();
+                ->default('*')
+                ->index();
             
             $table->timestamp('translated_at')
                 ->nullable();
             
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

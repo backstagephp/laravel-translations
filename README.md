@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/vormkracht10/laravel-translations/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/vormkracht10/laravel-translations/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/vormkracht10/laravel-translations.svg?style=flat-square)](https://packagist.org/packages/vormkracht10/laravel-translations)
 
-## Nice to meet you, we're [Vormkracht10](https://vormkracht10.nl)
+## Nice to meet you, we're [Backstagephp](https://backstagephp.com)
 
 Hi! We are a web development agency from Nijmegen in the Netherlands and we use Laravel for everything: advanced websites with a lot of bells and whitles and large web applications.
 
@@ -21,7 +21,7 @@ composer require vormkracht10/laravel-translations
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --provider="Vormkracht10\LaravelTranslations\LaravelTranslationsServiceProvider"
+php artisan vendor:publish --provider="Backstage\Translations\Laravel\LaravelTranslationsServiceProvider"
 php artisan migrate
 ```
 

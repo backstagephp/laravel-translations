@@ -1,6 +1,6 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Translations;
+namespace Backstage\Translations\Laravel\Base;
 
 use Illuminate\Translation\Translator as BaseTranslator;
 

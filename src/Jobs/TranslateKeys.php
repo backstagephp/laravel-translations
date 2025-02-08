@@ -1,11 +1,12 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Jobs;
+namespace Backstage\Translations\Laravel\Jobs;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Foundation\Queue\Queueable;
-use Vormkracht10\LaravelTranslations\Models\Language;
-use Vormkracht10\LaravelTranslations\Models\Translation;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Models\Translation;
 
 class TranslateKeys implements ShouldQueue
 {
@@ -43,8 +44,8 @@ class TranslateKeys implements ShouldQueue
     }
 
     protected $defaultDrivers = [
-        'openai' => \Vormkracht10\LaravelTranslations\Drivers\OpenAI\Translator::class,
-        'google' => \Vormkracht10\LaravelTranslations\Drivers\Google\Translator::class,
+        'ai' => \Backstage\Translations\Laravel\Drivers\AITranslator::class,
+        'google' => \Backstage\Translations\Laravel\Drivers\GoogleTranslator::class,
     ];
 
     protected $driver;
@@ -53,26 +54,36 @@ class TranslateKeys implements ShouldQueue
 
     public function handle(): void
     {
-        $locales = $this->lang ? [$this->lang->locale] : Language::pluck('locale')->toArray();
+        $locales = $this->lang ? [$this->lang->code] : Language::pluck('code')->toArray();
 
-        $configDriver = config('translations.translation.driver');
+        $configDriver = config('translations.translators.default');
 
         if (isset($this->defaultDrivers[$configDriver])) {
             $driverClass = $this->defaultDrivers[$configDriver];
             $driver = app($driverClass);
 
-            $translations = Translation::whereIn('locale', $locales)
+            Translation::whereIn('code', $locales)
                 ->whereNull('translated_at')
-                ->get();
+                ->get()
+                ->each(function (Translation $translation) use ($driver) {
+                    // $original = Lang::get($translation->key, [], $translation->languageCode);
 
-            $translations->each(function (Translation $translation) use ($driver) {
-                $newText = $driver->translate($translation->text, $translation->locale);
+                    // if($original !== $translation->key) {
+                    //     $translation->update([
+                    //         'text' => $original,
+                    //         'translated_at' => now(),
+                    //     ]);
 
-                $translation->update([
-                    'text' => $newText,
-                    'translated_at' => now(),
-                ]);
-            });
+                    //     return;
+                    // }
+
+                    $newText = $driver->translate($translation->text, $translation->languageCode);
+
+                    $translation->update([
+                        'text' => $newText,
+                        'translated_at' => now(),
+                    ]);
+                });
         } else {
             logger()->error("Translation driver '{$configDriver}' is not configured.");
         }

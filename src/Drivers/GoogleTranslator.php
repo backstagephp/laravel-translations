@@ -1,11 +1,11 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Drivers\Google;
+namespace Backstage\Translations\Laravel\Drivers;
 
+use Backstage\Translations\Laravel\Drivers\Interface\Translatable;
 use Stichoza\GoogleTranslate\GoogleTranslate;
-use Vormkracht10\LaravelTranslations\Drivers\Interface\Translatable;
 
-class Translator implements Translatable
+class GoogleTranslator implements Translatable
 {
     public function translate(string $text, string $targetLanguage): string
     {

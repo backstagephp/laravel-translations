@@ -1,18 +1,19 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Commands;
+namespace Backstage\Translations\Laravel\Commands;
 
+use Backstage\Translations\Laravel\Jobs\TranslateKeys;
+use Backstage\Translations\Laravel\Models\Language;
 use Illuminate\Console\Command;
-use Vormkracht10\LaravelTranslations\Jobs\TranslateKeys;
-use Vormkracht10\LaravelTranslations\Models\Language;
 
-class TranslateImports extends Command
+class TranslateTranslations extends Command
 {
-    protected $signature = 'translations:translate-keys 
-                            {--all : Translate imports for all languages} 
-                            {--lang= : Translate imports for a specific language}';
+    protected $signature = 'translations:translate
+                            {--all : Translate language strings for all languages} 
+                            {--lang= : Translate language strings for a specific language}
+                            {--update : Update and overwrite existing translations}';
 
-    protected $description = 'Translate imports for a specific language or all languages';
+    protected $description = 'Translate language strings using the configured driver';
 
     public function handle()
     {
@@ -48,7 +49,7 @@ class TranslateImports extends Command
     {
         $this->info("Translating imports for language: $lang...");
 
-        $language = Language::where('locale', $lang)->first();
+        $language = Language::where('code', $lang)->first();
 
         if (! $language) {
             $this->fail("Language '$lang' not found.");

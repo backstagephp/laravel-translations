@@ -1,17 +1,16 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations;
+namespace Backstage\Translations\Laravel;
 
+use Backstage\Translations\Laravel\Base\Translator;
+use Backstage\Translations\Laravel\Commands\TranslateTranslations;
+use Backstage\Translations\Laravel\Commands\TranslationsAddLanguage;
+use Backstage\Translations\Laravel\Commands\TranslationsScan;
+use Backstage\Translations\Laravel\Base\TranslationLoader;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Vormkracht10\LaravelTranslations\Commands\MakeLang;
-use Vormkracht10\LaravelTranslations\Commands\RedoTranslations;
-use Vormkracht10\LaravelTranslations\Commands\ScanLang;
-use Vormkracht10\LaravelTranslations\Commands\TranslateImports;
-use Vormkracht10\LaravelTranslations\Translations\TranslationLoader;
-use Vormkracht10\LaravelTranslations\Translations\Translator;
 
-class LaravelTranslationsServiceProvider extends PackageServiceProvider
+class TranslationServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
@@ -24,10 +23,9 @@ class LaravelTranslationsServiceProvider extends PackageServiceProvider
                 'create_laravel_translations_table'
             )
             ->hasCommands(
-                ScanLang::class,
-                MakeLang::class,
-                TranslateImports::class,
-                RedoTranslations::class
+                TranslateTranslations::class,
+                TranslationsAddLanguage::class,
+                TranslationsScan::class,
             );
     }
 

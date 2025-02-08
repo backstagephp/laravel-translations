@@ -1,10 +1,10 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Translations;
+namespace Backstage\Translations\Laravel\Base;
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Translation\FileLoader;
-use Vormkracht10\LaravelTranslations\Models\Translation;
+use Backstage\Translations\Laravel\Models\Translation;
 
 class TranslationLoader extends FileLoader
 {
@@ -20,15 +20,14 @@ class TranslationLoader extends FileLoader
         }
 
         $dbTranslations = Translation::select('key', 'text')
-            ->where('locale', $locale)
+            ->where('code', $locale)
             ->pluck('text', 'key')
             ->toArray();
 
-        if ($dbTranslations) {
+            if ($dbTranslations) {
             return $dbTranslations + $fileTranslations;
-        } else {
-            return $fileTranslations;
         }
+        return $fileTranslations;
     }
 
     public function addNamespace($namespace, $hint) {}

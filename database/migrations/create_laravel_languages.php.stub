@@ -9,10 +9,20 @@ return new class extends Migration
     public function up()
     {
         Schema::create('languages', function (Blueprint $table) {
-            $table->id();
-            $table->string('locale')
-                ->unique();
-            $table->string('label');
+            $table->char('code', 5)
+                ->primary();
+
+            $table->string('name');
+            $table->string('native')
+                ->nullable();
+
+
+            $table->boolean('active')
+                ->default(true);
+
+            $table->boolean('default')
+                ->default(false);
+
             $table->softDeletes();
             $table->timestamps();
         });

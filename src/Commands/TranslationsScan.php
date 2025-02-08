@@ -1,12 +1,12 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Commands;
+namespace Backstage\Translations\Laravel\Commands;
 
+use Backstage\Translations\Laravel\Jobs\ScanTranslationStrings;
+use Backstage\Translations\Laravel\Models\Language;
 use Illuminate\Console\Command;
-use Vormkracht10\LaravelTranslations\Jobs\ScanTranslatableKeys;
-use Vormkracht10\LaravelTranslations\Models\Language;
 
-class ScanLang extends Command
+class TranslationsScan extends Command
 {
     protected $signature = 'translations:scan';
 
@@ -19,7 +19,7 @@ class ScanLang extends Command
         }
 
         Language::all()->each(function (Language $language) {
-            dispatch_sync(new ScanTranslatableKeys($language));
+            dispatch_sync(new ScanTranslationStrings($language));
         });
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Models;
+namespace Backstage\Translations\Laravel\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,23 +13,31 @@ class Translation extends Model
     const STATUS_CHANGED = 1;
 
     protected $fillable = [
-        'locale',
+        'code',
         'group',
         'key',
         'text',
         'metadata',
         'namespace',
-        'last_scanned_at',
         'translated_at',
     ];
 
     protected $casts = [
-        'locale' => 'string',
+        'code' => 'string',
         'group' => 'string',
         'key' => 'string',
         'text' => 'string',
         'namespace' => 'string',
-        'last_scanned_at' => 'datetime',
         'translated_at' => 'datetime',
     ];
+
+    public function getLanguageCodeAttribute()
+    {
+        return explode('_', $this->attributes['code'])[0];
+    }
+
+    public function getCountryCodeAttribute()
+    {
+        return explode('_', $this->attributes['code'])[1];
+    }
 }

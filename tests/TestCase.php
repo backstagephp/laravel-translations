@@ -1,10 +1,10 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Tests;
+namespace Backstage\Translations\Laravel\Tests;
 
+use Backstage\Translations\Laravel\LaravelTranslationsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Vormkracht10\LaravelTranslations\LaravelTranslationsServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Vormkracht10\\LaravelTranslations\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Backstage\\Translations\\Laravel\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 

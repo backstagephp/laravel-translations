@@ -1,6 +1,6 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Drivers\Interface;
+namespace Backstage\Translations\Laravel\Drivers\Interface;
 
 interface Translatable
 {

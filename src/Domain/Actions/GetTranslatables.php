@@ -1,6 +1,6 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Domain\Actions;
+namespace Backstage\Translations\Laravel\Domain\Actions;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
@@ -13,8 +13,6 @@ class GetTranslatables
 {
     use AsAction;
 
-    public string $baseLanguage = 'nl';
-
     public string $baseFilename;
 
     protected array $allMatches = [];
@@ -23,21 +21,14 @@ class GetTranslatables
 
     public function handle(bool $mergeKeys = false): Collection
     {
-        return $this->scan($mergeKeys);
-    }
-
-    protected function scan(bool $mergeKeys = false): Collection
-    {
         $finder = new Finder;
-        $finder->in(base_path(''))
-            ->name(['*.php', '*.vue', '*.blade.php'])
+
+        $finder->in(config('translations.scan.paths'))
+            ->name(config('translations.scan.files'))
             ->files()
             ->followLinks();
 
-        $functions = collect([
-            'trans', 'trans_choice', '__', 'Lang::get', 'Lang::choice',
-            'Lang::trans', 'Lang::transChoice', '@lang', '@choice',
-        ]);
+            $functions = collect(config('translations.scan.functions'));
 
         $pattern =
             '[^\w]'.
@@ -45,16 +36,16 @@ class GetTranslatables
             '(?:'.implode('|', $functions->toArray()).')'.
             '\(\s*'.
             '(?:'.
-            "'((?:[^'\\\\]|\\\\.)+)'".  // Match single-quoted keys
+            "'((?:[^'\\\\]|\\\\.)+)'". // Match single-quoted keys
             '|'.
-            '`((?:[^`\\\\]|\\\\.)+)`'.  // Match backtick-quoted keys
+            '`((?:[^`\\\\]|\\\\.)+)`'. // Match backtick-quoted keys
             '|'.
-            '"((?:[^"\\\\]|\\\\.)+)"'.  // Match double-quoted keys
+            '"((?:[^"\\\\]|\\\\.)+)"'. // Match double-quoted keys
             '|'.
             '(\$[a-zA-Z_][a-zA-Z0-9_]*)'. // Match variables
             ')'.
             '\s*'.
-            '(?:,([^)]*))?'.  // Capture second argument (parameters)
+            '(?:,([^)]*))?'. // Capture second argument (parameters)
             '\s*'.
             '[\),]';
 

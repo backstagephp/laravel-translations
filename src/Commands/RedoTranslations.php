@@ -1,11 +1,11 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Commands;
+namespace Backstage\Translations\Laravel\Commands;
 
+use Backstage\Translations\Laravel\Jobs\TranslateKeys;
+use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Console\Command;
-use Vormkracht10\LaravelTranslations\Jobs\TranslateKeys;
-use Vormkracht10\LaravelTranslations\Models\Language;
-use Vormkracht10\LaravelTranslations\Models\Translation;
 
 class RedoTranslations extends Command
 {
@@ -55,9 +55,9 @@ class RedoTranslations extends Command
     {
         $this->info("Translating imports for language: $lang...");
 
-        $language = Language::where('locale', $lang)->first();
+        $language = Language::where('code', $lang)->first();
 
-        Translation::where('locale', $language->locale)->get()->each(function ($translation) {
+        Translation::where('code', $language->locale)->get()->each(function ($translation) {
             $translation->update([
                 'translated_at' => null,
             ]);
