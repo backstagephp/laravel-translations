@@ -109,18 +109,19 @@ php artisan translations:scan
 
 To translate the scanned translations, use the following command:
 ```bash
-php artisan translations:translate-keys 
-            {--all : Translate imports for all languages} 
-            {--lang= : Translate imports for a specific language}
+php artisan translations:translate
+        {--all : Translate language strings for all languages} 
+        {--lang= : Translate language strings for a specific language}
+        {--update : Update and overwrite existing translations}
 ```
 
 For example:
 ```bash
-php artisan translations:translate-keys --lang="nl"
+php artisan translations:translate-keys --lang="nl_NL"
 
-php artisan translations:translate-keys --lang="en"
+php artisan translations:translate-keys --lang="en_US"
 
-php artisan translations:translate-keys --lang="fr"
+php artisan translations:translate-keys --lang="fr_FR" --update
 
 php artisan translations:translate-keys --all
 ```
