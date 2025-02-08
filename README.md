@@ -1,11 +1,11 @@
 # Laravel translations
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/vormkracht10/laravel-translations.svg?style=flat-square)](https://packagist.org/packages/vormkracht10/laravel-translations)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/vormkracht10/laravel-translations/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/vormkracht10/laravel-translations/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/vormkracht10/laravel-translations/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/vormkracht10/laravel-translations/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/vormkracht10/laravel-translations.svg?style=flat-square)](https://packagist.org/packages/vormkracht10/laravel-translations)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/backstage/laravel-translations.svg?style=flat-square)](https://packagist.org/packages/backstage/laravel-translations)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/backstagephp/laravel-translations/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/backstagephp/laravel-translations/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/backstagephp/laravel-translations/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/backstagephp/laravel-translations/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/backstage/laravel-translations.svg?style=flat-square)](https://packagist.org/packages/backstage/laravel-translations)
 
-## Nice to meet you, we're [Backstagephp](https://backstagephp.com)
+## Nice to meet you, we're [Vormkracht10](https://vormrkacht10.nl)
 
 Hi! We are a web development agency from Nijmegen in the Netherlands and we use Laravel for everything: advanced websites with a lot of bells and whitles and large web applications.
 
@@ -15,7 +15,7 @@ Hi! We are a web development agency from Nijmegen in the Netherlands and we use 
 You can install the package via composer:
 
 ```bash
-composer require vormkracht10/laravel-translations
+composer require backstage/laravel-translations
 ```
 
 You can publish and run the migrations with:
@@ -89,11 +89,11 @@ php artisan translations:lang {locale} {label}
 
 For example:
 ```bash
-php artisan translations:lang nl Nederlands
+php artisan translations:lang nl_NL Nederlands
 
-php artisan translations:lang en English
+php artisan translations:lang en_US English
 
-php artisan translations:lang fr French
+php artisan translations:lang fr_FR French
 ```
 
 The command can also be used without in-command-line parameters

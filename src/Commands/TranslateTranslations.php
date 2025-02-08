@@ -22,6 +22,25 @@ class TranslateTranslations extends Command
 
         $this->invalidOptionCombination($all, $lang);
 
+        if ($this->option('update')) {
+            $translations = Translation::all();
+
+            if ($lang) {
+                $translations = Translation::where('code', $code)->get();
+
+                if ($translations->isEmpty()) {
+                    $this->fail("No translations found with the code: {$code}");
+                    return;
+                }
+            }
+
+            $translations->each(function ($translation) {
+                $translation->update([
+                    'translated_at' => null,
+                ]);
+            });
+        }
+
         $all ? $this->handleAllLanguages() : $this->handleSpecificLanguage($lang);
     }
 
