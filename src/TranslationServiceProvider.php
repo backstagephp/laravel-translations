@@ -2,11 +2,11 @@
 
 namespace Backstage\Translations\Laravel;
 
+use Backstage\Translations\Laravel\Base\TranslationLoader;
 use Backstage\Translations\Laravel\Base\Translator;
 use Backstage\Translations\Laravel\Commands\TranslateTranslations;
 use Backstage\Translations\Laravel\Commands\TranslationsAddLanguage;
 use Backstage\Translations\Laravel\Commands\TranslationsScan;
-use Backstage\Translations\Laravel\Base\TranslationLoader;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 

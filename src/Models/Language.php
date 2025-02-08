@@ -26,14 +26,14 @@ class Language extends Model
     {
         static::saved(function (Language $language) {
             $defaultExists = static::where('default', true)->exists();
-        
+
             if ($language->default) {
                 static::where('code', '!=', $language->code)->update(['default' => false]);
-            } elseif (!$language->default && !$defaultExists) {
-              static::where('code', $language->code)->update(['default' => true]);
+            } elseif (! $language->default && ! $defaultExists) {
+                static::where('code', $language->code)->update(['default' => true]);
             }
         });
-        
+
         static::deleted(function (Language $language) {
             if ($language->default && static::count() > 0) {
                 static::where('code', '!=', $language->code)->first()->update(['default' => true]);
@@ -41,7 +41,7 @@ class Language extends Model
         });
 
         static::creating(function (Language $language) {
-            if (!static::where('default', true)->exists()) {
+            if (! static::where('default', true)->exists()) {
                 $language->default = true;
             }
         });

@@ -2,11 +2,11 @@
 
 namespace Backstage\Translations\Laravel\Jobs;
 
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Translation;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Lang;
 
 class TranslateKeys implements ShouldQueue
 {

@@ -28,7 +28,7 @@ class GetTranslatables
             ->files()
             ->followLinks();
 
-            $functions = collect(config('translations.scan.functions'));
+        $functions = collect(config('translations.scan.functions'));
 
         $pattern =
             '[^\w]'.
