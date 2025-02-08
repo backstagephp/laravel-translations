@@ -29,30 +29,54 @@ php artisan migrate
 This is the contents of the published config file:
 
 ```php
+use EchoLabs\Prism\Enums\Provider;
+
 [
     'scan' => [
         'paths' => [
             base_path('app'),
             base_path('resources/views'),
+            // base_path('')
         ],
-        'extensions' => [
-            'php',
-            'blade.php',
-            'json',
+        'files' => [
+            '*.php',
+            '*.blade.php',
+            '*.json',
+        ],
+
+        'functions' => [
+            'trans',
+            'trans_choice',
+            'Lang::transChoice',
+            'Lang::trans',
+            'Lang::get',
+            'Lang::choice',
+            '@lang',
+            '@choice',
+            '__',
         ],
     ],
 
-    'translation' => [
-        // Can be set to 'google' or 'openai'
-        'driver' => env('TRANSLATION_DRIVER', 'google'),
+    'translators' => [
+        'default' => env('TRANSLATION_DRIVER', 'google'),
+
+        'drivers' => [
+            'google' => [
+                // no options
+            ],
+
+            'ai' => [
+                'provider' => Provider::OpenAI, // Example provider
+                'model' => 'text-davinci-003', // Example model 
+                'system_prompt' => 'You are an expert mathematician who explains concepts simply. The only thing you do it output what i ask. No comments, no extra information. Just the answer.', // Example system prompt
+            ],
+        ],
     ],
 ];
+
 ```
 
-For OpenAI add this to the .env:
-```env
-OPENAI_API_KEY=SECRET
-```
+If you have choosen the AI driver, please read the [Prism documentation](https://prism.echolabs.dev/providers/anthropic.html) on how to configure providers.
 
 ## Usage
 
