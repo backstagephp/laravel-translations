@@ -16,7 +16,7 @@ class TranslationsAddLanguage extends Command
     public function handle()
     {
         $locale = $this->argument('code') ?? text('Enter locale');
-        $label = $this->argument('name') ?? text('Enter label');
+        $label = $this->argument('label') ?? text('Enter label');
         $this->info("Creating language type: $locale with label: $label");
 
         $this->createLanguage($locale, $label);
