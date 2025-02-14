@@ -30,6 +30,7 @@ class GetTranslatables
 
         $functions = collect(config('translations.scan.functions'));
 
+<<<<<<< Updated upstream
         $pattern =
             '[^\w]'.
             '(?<!->)'. // Ignore method chaining
@@ -55,6 +56,53 @@ class GetTranslatables
                     $key = $match[1] ?: $match[2] ?: $match[3] ?: $match[4]; // Extract key
                     $params = $match[5] ?? null; // Extract parameters
                     $this->addMatch($file, $key, $params);
+=======
+        return $translations->merge($jsontranslations)->unique();
+        
+    }
+
+    protected function extractTranslations(Collection $paths, Collection $functions): Collection
+    {
+        return $paths->flatMap(function ($path) use ($functions) {
+            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+            return collect($files)
+                ->filter(function (SplFileInfo $file) {
+                    return $file->isFile() && in_array($file->getExtension(), config('translations.scan.extensions') ?? ['php', 'blade.php']);
+                })
+                ->flatMap(function (SplFileInfo $file) use ($functions) {
+                    $content = file_get_contents($file->getRealPath());
+
+                    return $functions->flatMap(function ($function) use ($content) {
+                        if (preg_match_all("/$function\\(['\"](.+?)['\"]\\)/", $content, $matches)) {
+                            return $matches[1];
+                        }
+
+                        return [];
+                    });
+                });
+        })
+            ->values()
+            ->unique();
+    }
+    protected function getTranslationKeys(Collection $baseDirectories): Collection
+    {
+        $translations = collect();
+
+        foreach ($baseDirectories as $baseDirectory) {
+            $vendorLangPath = $baseDirectory . '/vendor';
+            if (File::exists($vendorLangPath)) {
+                $vendorDirectories = File::directories($vendorLangPath);
+
+                foreach ($vendorDirectories as $vendorDirectory) {
+                    if (File::exists($vendorDirectory . '/lang')) {
+                        $vendorLangFiles = File::allFiles($vendorDirectory . '/lang');
+                        foreach ($vendorLangFiles as $file) {
+                            $fileName = pathinfo($file)['filename'];
+                            $vendor = basename($vendorDirectory);  // Package/vendor name
+                            $translations[$vendor][$fileName] = require $file->getPathname();
+                        }
+                    }
+>>>>>>> Stashed changes
                 }
             }
         }
