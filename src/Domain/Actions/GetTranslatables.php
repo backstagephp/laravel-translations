@@ -1,6 +1,6 @@
 <?php
 
-namespace Vormkracht10\LaravelTranslations\Domain\Actions;
+namespace Backstage\Translations\Laravel\Domain\Actions;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
