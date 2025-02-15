@@ -57,7 +57,7 @@ class GetTranslatables
             '(?:,([^)]*))?'.  // Capture second argument (parameters)
             '\s*'.
             '[\),]';
-            
+
         foreach ($finder as $file) {
             if (preg_match_all("/$pattern/siU", $file->getContents(), $matches, PREG_SET_ORDER)) {
                 foreach ($matches as $match) {
