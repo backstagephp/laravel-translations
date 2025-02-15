@@ -25,13 +25,13 @@ class Language extends Model
     public static function booting()
     {
         static::saved(function (Language $language) {
-            if ($language->wasChanged('active') && !$language->active) {
+            if ($language->wasChanged('active') && ! $language->active) {
                 if (static::where('active', true)->count() == 0) {
                     static::where('code', $language->code)->update(['active' => true]);
                 }
             }
 
-            if ($language->wasChanged('default') && !$language->active) {
+            if ($language->wasChanged('default') && ! $language->active) {
                 static::where('code', $language->code)->update(['default' => false]);
 
                 return;
