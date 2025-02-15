@@ -17,7 +17,6 @@ class TranslationServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-translations')
             ->hasConfigFile()
-            ->hasViews()
             ->hasMigrations(
                 'create_laravel_languages',
                 'create_laravel_translations_table'
