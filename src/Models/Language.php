@@ -56,4 +56,9 @@ class Language extends Model
     {
         return explode('_', $this->attributes['code'])[1];
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
+    }
 }
