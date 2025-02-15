@@ -22,9 +22,21 @@ class Language extends Model
         'default' => 'boolean',
     ];
 
-    public static function booted()
+    public static function booting()
     {
         static::saved(function (Language $language) {
+            if ($language->wasChanged('active') && !$language->active) {
+                if (static::where('active', true)->count() == 0) {
+                    static::where('code', $language->code)->update(['active' => true]);
+                }
+            }
+
+            if ($language->wasChanged('default') && !$language->active) {
+                static::where('code', $language->code)->update(['default' => false]);
+
+                return;
+            }
+
             $defaultExists = static::where('default', true)->exists();
 
             if ($language->default) {
