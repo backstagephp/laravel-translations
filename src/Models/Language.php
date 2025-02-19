@@ -2,8 +2,11 @@
 
 namespace Backstage\Translations\Laravel\Models;
 
+use Backstage\Translations\Laravel\Observers\LanguageObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy(LanguageObserver::class)]
 class Language extends Model
 {
     protected $table = 'languages';
@@ -21,43 +24,6 @@ class Language extends Model
         'active' => 'boolean',
         'default' => 'boolean',
     ];
-
-    public static function booting()
-    {
-        static::saved(function (Language $language) {
-            if ($language->wasChanged('active') && !$language->active) {
-                if (static::where('active', true)->count() == 0) {
-                    static::where('code', $language->code)->update(['active' => true]);
-                }
-            }
-
-            if ($language->wasChanged('default') && !$language->active) {
-                static::where('code', $language->code)->update(['default' => false]);
-
-                return;
-            }
-
-            $defaultExists = static::where('default', true)->exists();
-
-            if ($language->default) {
-                static::where('code', '!=', $language->code)->update(['default' => false]);
-            } elseif (! $language->default && ! $defaultExists) {
-                static::where('code', $language->code)->update(['default' => true]);
-            }
-        });
-
-        static::deleted(function (Language $language) {
-            if ($language->default && static::count() > 0) {
-                static::where('code', '!=', $language->code)->first()->update(['default' => true]);
-            }
-        });
-
-        static::creating(function (Language $language) {
-            if (! static::where('default', true)->exists()) {
-                $language->default = true;
-            }
-        });
-    }
 
     public function getLanguageCodeAttribute()
     {

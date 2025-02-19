@@ -20,7 +20,8 @@ class TranslationLoader extends FileLoader
         }
 
         $dbTranslations = Translation::select('key', 'text')
-            ->where('code', $locale)
+            ->where('code', 'LIKE', $locale.'_%')
+            ->OrWhere('code', $locale)
             ->pluck('text', 'key')
             ->toArray();
 

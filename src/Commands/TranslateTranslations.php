@@ -4,6 +4,7 @@ namespace Backstage\Translations\Laravel\Commands;
 
 use Backstage\Translations\Laravel\Jobs\TranslateKeys;
 use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Console\Command;
 
 class TranslateTranslations extends Command
@@ -26,10 +27,10 @@ class TranslateTranslations extends Command
             $translations = Translation::all();
 
             if ($lang) {
-                $translations = Translation::where('code', $code)->get();
+                $translations = Translation::where('code', $lang)->get();
 
                 if ($translations->isEmpty()) {
-                    $this->fail("No translations found with the code: {$code}");
+                    $this->fail("No translations found with the code: {$lang}");
 
                     return;
                 }

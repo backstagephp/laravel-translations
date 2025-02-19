@@ -7,6 +7,9 @@ use Backstage\Translations\Laravel\Base\Translator;
 use Backstage\Translations\Laravel\Commands\TranslateTranslations;
 use Backstage\Translations\Laravel\Commands\TranslationsAddLanguage;
 use Backstage\Translations\Laravel\Commands\TranslationsScan;
+use Backstage\Translations\Laravel\Events\LanguageDeleted;
+use Backstage\Translations\Laravel\Listners\HandleLanguageDeletion;
+use Illuminate\Support\Facades\Event;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -46,6 +49,10 @@ class TranslationServiceProvider extends PackageServiceProvider
 
             return $trans;
         });
+    }
 
+    public function bootingPackage()
+    {
+        Event::listen(LanguageDeleted::class, HandleLanguageDeletion::class);
     }
 }
