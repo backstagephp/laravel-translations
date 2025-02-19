@@ -15,6 +15,6 @@ class GoogleTranslator implements Translatable
 
         $tr->setTarget($targetLanguage);
 
-        return $tr->translate($text);
+        return retry(3, fn () => $tr->translate($text), 100);
     }
 }
