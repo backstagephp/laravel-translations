@@ -2,10 +2,11 @@
 
 namespace Backstage\Translations\Laravel\Observers;
 
+use Illuminate\Support\Facades\Lang;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Translation;
+use Backstage\Translations\Laravel\Events\LanguageCreated;
 use Backstage\Translations\Laravel\Events\LanguageDeleted;
-use Illuminate\Support\Facades\Lang;
 
 class LanguageObserver
 {
@@ -18,6 +19,9 @@ class LanguageObserver
         if (! Language::where('active', true)->exists()) {
             $language->active = true;
         }
+
+        event(new LanguageCreated($language));
+
     }
 
     public function updated(Language $language)
