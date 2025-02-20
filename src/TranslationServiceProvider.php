@@ -50,7 +50,7 @@ class TranslationServiceProvider extends PackageServiceProvider
             $trans->setFallback($app['config']['app.fallback_locale']);
 
             return $trans;
-        });        
+        });
     }
 
     public function bootingPackage()

@@ -2,11 +2,9 @@
 
 namespace Backstage\Translations\Laravel\Observers;
 
-use Illuminate\Support\Facades\Lang;
-use Backstage\Translations\Laravel\Models\Language;
-use Backstage\Translations\Laravel\Models\Translation;
 use Backstage\Translations\Laravel\Events\LanguageCreated;
 use Backstage\Translations\Laravel\Events\LanguageDeleted;
+use Backstage\Translations\Laravel\Models\Language;
 
 class LanguageObserver
 {
@@ -48,7 +46,7 @@ class LanguageObserver
 
         if ($language->default) {
             Language::where('code', '!=', $language->code)->update([
-                'default' => false
+                'default' => false,
             ]);
         } elseif (! $language->default && ! $defaultExists) {
             Language::where('code', $language->code)
