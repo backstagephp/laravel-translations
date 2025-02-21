@@ -2,10 +2,11 @@
 
 namespace Backstage\Translations\Laravel\Models;
 
-use Backstage\Translations\Laravel\Observers\LanguageObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Backstage\Translations\Laravel\Observers\LanguageObserver;
 
 #[ObservedBy(LanguageObserver::class)]
 class Language extends Model
