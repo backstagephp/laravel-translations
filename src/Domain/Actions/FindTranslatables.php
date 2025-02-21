@@ -32,12 +32,12 @@ class FindTranslatables
     {
         $finder = new Finder;
 
-        $finder->in(config('backstage.translations.scan.paths'))
-            ->name(config('backstage.translations.scan.extensions'))
+        $finder->in(config('translations.scan.paths'))
+            ->name(config('translations.scan.extensions'))
             ->files()
             ->followLinks();
 
-        $functions = collect(config('backstage.translations.scan.functions'));
+        $functions = collect(config('translations.scan.functions'));
 
         $pattern =
             '[^\w]'.
