@@ -34,8 +34,7 @@ class FindTranslatables
 
         $finder->in(config('translations.scan.paths'))
             ->name(config('translations.scan.extensions'))
-            ->files()
-            ->followLinks();
+            ->files();
 
         $functions = collect(config('translations.scan.functions'));
 
