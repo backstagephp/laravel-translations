@@ -25,6 +25,11 @@ class Language extends Model
         'default' => 'boolean',
     ];
 
+    public static function default(): ?Language
+    {
+        return static::firstWhere('default', 1);
+    }
+
     public function getLanguageCodeAttribute()
     {
         return explode('_', $this->attributes['code'])[0];
