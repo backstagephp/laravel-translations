@@ -23,8 +23,8 @@ class TranslationServiceProvider extends PackageServiceProvider
             ->name('laravel-translations')
             ->hasConfigFile()
             ->hasMigrations(
-                'create_laravel_languages',
-                'create_laravel_translations_table'
+                'create_languages_table',
+                'create_translations_table'
             )
             ->hasCommands(
                 TranslateTranslations::class,
