@@ -3,6 +3,7 @@
 namespace Backstage\Translations\Laravel\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Translation extends Model
 {
@@ -26,6 +27,11 @@ class Translation extends Model
         'namespace' => 'string',
         'translated_at' => 'datetime',
     ];
+    
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class);
+    }
 
     public function getLanguageCodeAttribute()
     {

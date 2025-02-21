@@ -42,40 +42,26 @@ class TranslateKeys implements ShouldQueue
         return now()->addMinutes(1);
     }
 
-    protected $defaultDrivers = [
-        'ai' => \Backstage\Translations\Laravel\Drivers\AITranslator::class,
-        'google' => \Backstage\Translations\Laravel\Drivers\GoogleTranslator::class,
-    ];
-
-    protected $driver;
-
     public function __construct(public ?Language $lang = null) {}
 
     public function handle(): void
     {
         ScanTranslationStrings::dispatchSync();
 
-        $locales = $this->lang ? [$this->lang->code] : Language::pluck('code')->toArray();
+        $locales = $this->lang ? [$this->lang->code] : Language::active()->pluck('code')->toArray();
 
-        $configDriver = config('translations.translators.default');
+        $translator = TranslatorManager::with(config('translations.translators.default'));
+        $driver = app($driverClass);
 
-        if (isset($this->defaultDrivers[$configDriver])) {
-            $driverClass = $this->defaultDrivers[$configDriver];
-            $driver = app($driverClass);
+        Translation::whereIn('code', $locales)
+            ->whereNull('translated_at')
+            ->get()
+            ->each(function (Translation $translation) use ($driver) {
+                $newText = $driver->translate($translation->text, $translation->languageCode);
 
-            Translation::whereIn('code', $locales)
-                ->whereNull('translated_at')
-                ->get()
-                ->each(function (Translation $translation) use ($driver) {
-                    $newText = $driver->translate($translation->text, $translation->languageCode);
-
-                    $translation->update([
-                        'text' => $newText,
-                        'translated_at' => now(),
-                    ]);
-                });
-        } else {
-            logger()->error("Translation driver '{$configDriver}' is not configured.");
-        }
-    }
+                $translation->update([
+                    'text' => $newText,
+                    'translated_at' => now(),
+                ]);
+            });
 }

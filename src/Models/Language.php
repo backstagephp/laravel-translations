@@ -2,11 +2,12 @@
 
 namespace Backstage\Translations\Laravel\Models;
 
-use Backstage\Translations\Laravel\Observers\LanguageObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Backstage\Translations\Laravel\Observers\LanguageObserver;
 
 #[ObservedBy(LanguageObserver::class)]
 class Language extends Model
@@ -48,6 +49,11 @@ class Language extends Model
         $path = $package.'Database\\Factories\\'.$modelName.'Factory';
 
         return $path::new();
+    }
+
+    public function translations(): HasMany
+    {
+        return $this->hasMany(Translation::class);
     }
 
     public function getLanguageCodeAttribute()

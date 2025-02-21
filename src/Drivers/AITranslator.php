@@ -2,10 +2,11 @@
 
 namespace Backstage\Translations\Laravel\Drivers;
 
+use Backstage\Translations\Laravel\Contracts\TranslatorContract;
 use Backstage\Translations\Laravel\Drivers\Interface\Translatable;
 use EchoLabs\Prism\Prism;
 
-class AITranslator implements Translatable
+class AITranslator implements TranslatorContract
 {
     public function translate(string $text, string $targetLanguage): string
     {

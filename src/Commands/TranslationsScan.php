@@ -18,8 +18,8 @@ class TranslationsScan extends Command
             $this->fail('No languages found. Please create a language first.');
         }
 
-        Language::all()->each(function (Language $language) {
-            dispatch_sync(new ScanTranslationStrings($language));
+        Language::active()->get()->each(function (Language $language) {
+            ScanTranslationStrings::dispatchSync($language);
         });
     }
 }

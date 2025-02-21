@@ -1,8 +1,8 @@
 <?php
 
-namespace Backstage\Translations\Laravel\Drivers\Interface;
+namespace Backstage\Translations\Laravel\Contracts;
 
-interface Translatable
+interface TranslatorContract
 {
     public function translate(string $text, string $targetLanguage): string;
 }

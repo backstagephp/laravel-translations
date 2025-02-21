@@ -47,7 +47,7 @@ class ScanTranslationStrings implements ShouldQueue
 
     protected function getLocales(): \Illuminate\Support\Collection
     {
-        return Language::pluck('code');
+        return Language::active()->pluck('code');
     }
 
     protected function mapTranslations($translations, $locales): \Illuminate\Support\Collection
