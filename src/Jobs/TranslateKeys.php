@@ -54,6 +54,8 @@ class TranslateKeys implements ShouldQueue
 
     public function handle(): void
     {
+        ScanTranslationStrings::dispatch();
+        
         $locales = $this->lang ? [$this->lang->code] : Language::pluck('code')->toArray();
 
         $configDriver = config('translations.translators.default');
@@ -66,17 +68,6 @@ class TranslateKeys implements ShouldQueue
                 ->whereNull('translated_at')
                 ->get()
                 ->each(function (Translation $translation) use ($driver) {
-                    // $original = Lang::get($translation->key, [], $translation->languageCode);
-
-                    // if($original !== $translation->key) {
-                    //     $translation->update([
-                    //         'text' => $original,
-                    //         'translated_at' => now(),
-                    //     ]);
-
-                    //     return;
-                    // }
-
                     $newText = $driver->translate($translation->text, $translation->languageCode);
 
                     $translation->update([
