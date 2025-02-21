@@ -53,7 +53,7 @@ class TranslateKeys implements ShouldQueue
 
     public function handle(): void
     {
-        ScanTranslationStrings::dispatch();
+        ScanTranslationStrings::dispatchSync();
 
         $locales = $this->lang ? [$this->lang->code] : Language::pluck('code')->toArray();
 
