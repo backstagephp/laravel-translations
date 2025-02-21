@@ -8,7 +8,8 @@ return [
             app_path(),
             resource_path('views'),
         ],
-        'files' => [
+    
+        'extensions' => [
             '*.php',
             '*.blade.php',
             '*.json',
