@@ -17,6 +17,8 @@ class Language extends Model
     protected $primaryKey = 'code';
 
     protected $guarded = [];
+    
+    protected $keyType = 'string';
 
     public $incrementing = false;
 
