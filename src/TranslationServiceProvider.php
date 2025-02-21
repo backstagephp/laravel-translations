@@ -56,7 +56,5 @@ class TranslationServiceProvider extends PackageServiceProvider
     public function bootingPackage()
     {
         Event::listen(LanguageDeleted::class, HandleLanguageDeletion::class);
-        Event::listen(LanguageCreated::class, DispatchLangScanner::class);
-
     }
 }
