@@ -29,15 +29,13 @@ class GetTranslatables
     protected function scan(bool $mergeKeys = false): Collection
     {
         $finder = new Finder;
-        $finder->in(base_path(''))
-            ->name(['*.php', '*.vue', '*.blade.php'])
+        
+        $finder->in(config('translations.scan.paths'))
+            ->name(config('translations.scan.extensions'))
             ->files()
             ->followLinks();
 
-        $functions = collect([
-            'trans', 'trans_choice', '__', 'Lang::get', 'Lang::choice',
-            'Lang::trans', 'Lang::transChoice', '@lang', '@choice',
-        ]);
+        $functions = collect(config('translations.scan.functions'));
 
         $pattern =
             '[^\w]'.
