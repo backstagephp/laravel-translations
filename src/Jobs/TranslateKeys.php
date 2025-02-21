@@ -6,7 +6,6 @@ use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Lang;
 
 class TranslateKeys implements ShouldQueue
 {
@@ -55,7 +54,7 @@ class TranslateKeys implements ShouldQueue
     public function handle(): void
     {
         ScanTranslationStrings::dispatch();
-        
+
         $locales = $this->lang ? [$this->lang->code] : Language::pluck('code')->toArray();
 
         $configDriver = config('translations.translators.default');
