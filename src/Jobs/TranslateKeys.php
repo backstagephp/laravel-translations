@@ -2,10 +2,11 @@
 
 namespace Backstage\Translations\Laravel\Jobs;
 
-use Backstage\Translations\Laravel\Models\Language;
-use Backstage\Translations\Laravel\Models\Translation;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Facades\Translator;
+use Backstage\Translations\Laravel\Models\Translation;
 
 class TranslateKeys implements ShouldQueue
 {
@@ -50,18 +51,18 @@ class TranslateKeys implements ShouldQueue
 
         $locales = $this->lang ? [$this->lang->code] : Language::active()->pluck('code')->toArray();
 
-        $translator = TranslatorManager::with(config('translations.translators.default'));
-        $driver = app($driverClass);
+        $translator = Translator::with(config('translations.translators.default'));
 
         Translation::whereIn('code', $locales)
             ->whereNull('translated_at')
             ->get()
-            ->each(function (Translation $translation) use ($driver) {
-                $newText = $driver->translate($translation->text, $translation->languageCode);
+            ->each(function (Translation $translation) use ($translator) {
+                $newText = $translator->translate($translation->text, $translation->languageCode);
 
                 $translation->update([
                     'text' => $newText,
                     'translated_at' => now(),
                 ]);
             });
+    }
 }
