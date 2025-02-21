@@ -2,7 +2,7 @@
 
 namespace Backstage\Translations\Laravel\Jobs;
 
-use Backstage\Translations\Laravel\Domain\Actions\GetTranslatables;
+use Backstage\Translations\Laravel\Domain\Actions\FindTranslatables;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Bus\Queueable;
@@ -33,7 +33,7 @@ class ScanTranslationStrings implements ShouldQueue
             );
         });
 
-        $translations = collect(GetTranslatables::run())->unique();
+        $translations = collect((new FindTranslatables)())->unique();
         $locales = $this->locale ? collect([$this->locale->code]) : $this->getLocales();
 
         $baseLocale = App::getLocale();

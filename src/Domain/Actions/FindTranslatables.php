@@ -6,13 +6,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
-use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Finder\Finder;
 
-class GetTranslatables
+class FindTranslatables
 {
-    use AsAction;
-
     public string $baseLanguage = 'nl';
 
     public string $baseFilename;
@@ -20,6 +17,11 @@ class GetTranslatables
     protected array $allMatches = [];
 
     public function __construct() {}
+
+    public function __invoke(bool $mergeKeys = false): Collection
+    {
+        return $this->handle($mergeKeys);
+    }
 
     public function handle(bool $mergeKeys = false): Collection
     {
