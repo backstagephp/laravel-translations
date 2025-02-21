@@ -37,7 +37,7 @@ class Language extends Model
 
     public static function default(): ?Language
     {
-        return static::firstWhere('default', 1);
+        return static::firstWhere('default', true);
     }
 
     protected static function newFactory()
