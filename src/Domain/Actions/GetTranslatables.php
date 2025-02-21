@@ -29,7 +29,7 @@ class GetTranslatables
     protected function scan(bool $mergeKeys = false): Collection
     {
         $finder = new Finder;
-        
+
         $finder->in(config('translations.scan.paths'))
             ->name(config('translations.scan.extensions'))
             ->files()
