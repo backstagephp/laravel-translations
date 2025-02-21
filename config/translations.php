@@ -29,10 +29,10 @@ return [
     ],
 
     'translators' => [
-        'default' => env('TRANSLATION_DRIVER', 'google'),
+        'default' => env('TRANSLATION_DRIVER', 'google-translate'),
 
         'drivers' => [
-            'google' => [
+            'google-translate' => [
                 // no options
             ],
 

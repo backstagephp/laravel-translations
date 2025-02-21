@@ -9,7 +9,6 @@
 
 Hi! We are a web development agency from Nijmegen in the Netherlands and we use Laravel for everything: advanced websites with a lot of bells and whitles and large web applications.
 
-
 ## Installation
 
 You can install the package via composer:
@@ -24,7 +23,6 @@ You can publish and run the migrations with:
 php artisan vendor:publish --provider="Backstage\Translations\Laravel\TranslationServiceProvider"
 php artisan migrate
 ```
-
 
 This is the contents of the published config file:
 
@@ -58,16 +56,16 @@ use EchoLabs\Prism\Enums\Provider;
     ],
 
     'translators' => [
-        'default' => env('TRANSLATION_DRIVER', 'google'),
+        'default' => env('TRANSLATION_DRIVER', 'google-translate'),
 
         'drivers' => [
-            'google' => [
+            'google-translate' => [
                 // no options
             ],
 
             'ai' => [
                 'provider' => Provider::OpenAI, // Example provider
-                'model' => 'text-davinci-003', // Example model 
+                'model' => 'text-davinci-003', // Example model
                 'system_prompt' => 'You are an expert mathematician who explains concepts simply. The only thing you do it output what i ask. No comments, no extra information. Just the answer.', // Example system prompt
             ],
         ],
@@ -83,11 +81,13 @@ If you have choosen the AI driver, please read the [Prism documentation](https:/
 ### Add lang types
 
 If you want to add a language use the following command:
+
 ```bash
 php artisan translations:lang {locale} {label}
 ```
 
 For example:
+
 ```bash
 php artisan translations:lang nl_NL Nederlands
 
@@ -101,6 +101,7 @@ The command can also be used without in-command-line parameters
 ### Scan for translations
 
 To scan for translations within your Laravel application, use the following command:
+
 ```bash
 php artisan translations:scan
 ```
@@ -108,14 +109,16 @@ php artisan translations:scan
 ### Translate scanned translations
 
 To translate the scanned translations, use the following command:
+
 ```bash
 php artisan translations:translate
-        {--all : Translate language strings for all languages} 
+        {--all : Translate language strings for all languages}
         {--lang= : Translate language strings for a specific language}
         {--update : Update and overwrite existing translations}
 ```
 
 For example:
+
 ```bash
 php artisan translations:translate-keys --lang="nl_NL"
 
@@ -125,7 +128,6 @@ php artisan translations:translate-keys --lang="fr_FR" --update
 
 php artisan translations:translate-keys --all
 ```
-
 
 ## Testing
 
@@ -147,9 +149,9 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Manoj Hortulanus](https://github.com/arduinomaster22)
-- [Mark van Eijk](https://github.com/markvaneijk)
-- [All Contributors](../../contributors)
+-   [Manoj Hortulanus](https://github.com/arduinomaster22)
+-   [Mark van Eijk](https://github.com/markvaneijk)
+-   [All Contributors](../../contributors)
 
 ## License
 
