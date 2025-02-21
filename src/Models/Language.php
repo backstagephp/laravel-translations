@@ -30,6 +30,11 @@ class Language extends Model
         'default' => 'boolean',
     ];
 
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
+    }
+
     public static function default(): ?Language
     {
         return static::firstWhere('default', 1);
@@ -46,16 +51,11 @@ class Language extends Model
 
     public function getLanguageCodeAttribute()
     {
-        return explode('_', $this->attributes['code'])[0];
+        return explode('-', $this->attributes['code'])[0];
     }
 
-    public function geCountryCodeAttribute()
+    public function getCountryCodeAttribute()
     {
-        return explode('_', $this->attributes['code'])[1];
-    }
-
-    public function scopeActive($query)
-    {
-        return $query->where('active', true);
+        return explode('-', $this->attributes['code'])[1];
     }
 }
