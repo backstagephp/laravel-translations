@@ -2,18 +2,18 @@
 
 namespace Backstage\Translations\Laravel;
 
+use Backstage\Translations\Laravel\Base\TranslationLoader;
+use Backstage\Translations\Laravel\Base\Translator;
+use Backstage\Translations\Laravel\Commands\TranslateTranslations;
+use Backstage\Translations\Laravel\Commands\TranslationsAddLanguage;
+use Backstage\Translations\Laravel\Commands\TranslationsScan;
+use Backstage\Translations\Laravel\Contracts\TranslatorContract;
+use Backstage\Translations\Laravel\Events\LanguageDeleted;
+use Backstage\Translations\Laravel\Listners\HandleLanguageDeletion;
+use Backstage\Translations\Laravel\Managers\TranslatorManager;
 use Illuminate\Support\Facades\Event;
 use Spatie\LaravelPackageTools\Package;
-use Backstage\Translations\Laravel\Base\Translator;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Backstage\Translations\Laravel\Base\TranslationLoader;
-use Backstage\Translations\Laravel\Events\LanguageDeleted;
-use Backstage\Translations\Laravel\Commands\TranslationsScan;
-use Backstage\Translations\Laravel\Managers\TranslatorManager;
-use Backstage\Translations\Laravel\Contracts\TranslatorContract;
-use Backstage\Translations\Laravel\Commands\TranslateTranslations;
-use Backstage\Translations\Laravel\Listners\HandleLanguageDeletion;
-use Backstage\Translations\Laravel\Commands\TranslationsAddLanguage;
 
 class TranslationServiceProvider extends PackageServiceProvider
 {

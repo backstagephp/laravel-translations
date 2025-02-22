@@ -27,7 +27,7 @@ class Translation extends Model
         'namespace' => 'string',
         'translated_at' => 'datetime',
     ];
-    
+
     public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class);

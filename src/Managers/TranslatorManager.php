@@ -2,9 +2,9 @@
 
 namespace Backstage\Translations\Laravel\Managers;
 
-use Illuminate\Support\Manager;
 use Backstage\Translations\Laravel\Drivers\AITranslator;
 use Backstage\Translations\Laravel\Drivers\GoogleTranslator;
+use Illuminate\Support\Manager;
 
 class TranslatorManager extends Manager
 {
