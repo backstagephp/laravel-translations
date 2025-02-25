@@ -18,7 +18,7 @@ class LanguageObserver
             $language->active = true;
         }
     }
-    
+
     public function created(Language $language)
     {
         event(new LanguageAdded($language));
