@@ -2,7 +2,7 @@
 
 namespace Backstage\Translations\Laravel\Observers;
 
-use Backstage\Translations\Laravel\Events\LanguageCreated;
+use Backstage\Translations\Laravel\Events\LanguageAdded;
 use Backstage\Translations\Laravel\Events\LanguageDeleted;
 use Backstage\Translations\Laravel\Models\Language;
 
@@ -17,8 +17,11 @@ class LanguageObserver
         if (! Language::where('active', true)->exists()) {
             $language->active = true;
         }
-
-        event(new LanguageCreated($language));
+    }
+    
+    public function created(Language $language)
+    {
+        event(new LanguageAdded($language));
 
     }
 
@@ -54,6 +57,8 @@ class LanguageObserver
                     'default' => true,
                 ]);
         }
+
+        event(new LanguageUpdated($language));
     }
 
     public function deleted(Language $language)

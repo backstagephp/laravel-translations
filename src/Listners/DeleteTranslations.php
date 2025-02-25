@@ -6,7 +6,7 @@ use Backstage\Translations\Laravel\Events\LanguageDeleted;
 use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class HandleLanguageDeletion implements ShouldQueue
+class DeleteTranslations implements ShouldQueue
 {
     public function handle(LanguageDeleted $event)
     {
