@@ -55,7 +55,7 @@ class ScanTranslationStrings implements ShouldQueue
         return $translations->flatMap(function ($translation) use ($locales) {
             return $locales->map(function ($locale) use ($translation) {
                 $baseLocale = $locale;
-                $locale = explode('_', $baseLocale)[0];
+                $locale = explode('-', $baseLocale)[0];
 
                 App::setLocale($locale);
                 App::setFallbackLocale($locale);

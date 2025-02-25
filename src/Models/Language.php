@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use Locale;
 
 #[ObservedBy(LanguageObserver::class)]
 class Language extends Model
@@ -64,5 +65,19 @@ class Language extends Model
     public function getCountryCodeAttribute()
     {
         return explode('-', $this->attributes['code'])[1];
+    }
+
+    public function getLocalizedCountryNameAttribute($locale = null)
+    {
+        $code = strtolower(explode('-', $this->attributes['code'])[1] ?? $this->attributes['code']);
+
+        return Locale::getDisplayRegion('-'.$code, $locale ?? app()->getLocale());
+    }
+
+    public function getLocalizedLanguageNameAttribute($locale = null)
+    {
+        $code = strtolower(explode('-', $this->attributes['code'])[0]);
+
+        return Locale::getDisplayLanguage($code, $locale ?? app()->getLocale());
     }
 }

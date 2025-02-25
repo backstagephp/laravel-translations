@@ -21,7 +21,6 @@ class TranslationServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-translations')
-            ->hasConfigFile()
             ->hasMigrations(
                 'create_languages_table',
                 'create_translations_table'
@@ -31,6 +30,10 @@ class TranslationServiceProvider extends PackageServiceProvider
                 TranslationsAddLanguage::class,
                 TranslationsScan::class,
             );
+
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/translations.php', 'translations',
+        );
     }
 
     public function registeringPackage()

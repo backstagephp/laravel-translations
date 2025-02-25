@@ -35,11 +35,11 @@ class Translation extends Model
 
     public function getLanguageCodeAttribute()
     {
-        return explode('_', $this->attributes['code'])[0];
+        return explode('-', $this->attributes['code'])[0];
     }
 
     public function getCountryCodeAttribute()
     {
-        return explode('_', $this->attributes['code'])[1];
+        return explode('-', $this->attributes['code'])[1];
     }
 }
