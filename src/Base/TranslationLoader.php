@@ -28,7 +28,7 @@ class TranslationLoader extends FileLoader
         if ($dbTranslations) {
             return $dbTranslations + $fileTranslations;
         }
-        
+
         return $fileTranslations;
     }
 }
