@@ -34,7 +34,7 @@ class ScanTranslationStrings implements ShouldQueue
         });
 
         $translations = collect((new FindTranslatables)())->unique();
-        
+
         $locales = $this->locale ? collect([$this->locale->code]) : $this->getLocales();
 
         $baseLocale = App::getLocale();
