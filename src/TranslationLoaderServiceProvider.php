@@ -3,7 +3,6 @@
 namespace Backstage\Translations\Laravel;
 
 use Backstage\Translations\Laravel\Base\TranslationLoader;
-use Backstage\Translations\Laravel\Base\Translator;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Translation\TranslationServiceProvider as IlluminateTranslationServiceProvider;
 
@@ -14,18 +13,6 @@ class TranslationLoaderServiceProvider extends IlluminateTranslationServiceProvi
         $this->app->singleton('translation.loader', function ($app) {
             return new TranslationLoader($app['files'], $app['path.lang']);
         });
-
-        $this->app->singleton('translator', function ($app) {
-            $loader = $app['translation.loader'];
-
-            $locale = $app->getLocale();
-
-            $trans = new Translator($loader, $locale);
-
-            $trans->setFallback($app['config']['app.fallback_locale']);
-
-            return $trans;
-        });
     }
 
     /**
@@ -33,6 +20,6 @@ class TranslationLoaderServiceProvider extends IlluminateTranslationServiceProvi
      */
     public function provides(): array
     {
-        return ['translator', 'translation.loader'];
+        return ['translation.loader'];
     }
 }
