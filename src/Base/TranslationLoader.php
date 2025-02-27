@@ -19,16 +19,19 @@ class TranslationLoader extends FileLoader
             return $fileTranslations;
         }
 
-        $dbTranslations = Translation::select('key', 'text')
-            ->where('code', 'LIKE', $locale.'_%')
-            ->orWhere('code', $locale)
+        return array_replace_recursive($fileTranslations, $this->getTranslationsFromDatabase($locale, $group, $namespace));
+    }
+
+    protected function getTranslationsFromDatabase(
+        string $locale,
+        string $group,
+        string|null $namespace = null
+    ): array {
+        return Translation::select('key', 'text')
+            ->where('group', $group)
+            ->where('namespace', $namespace)
+            ->where(fn ($query) => $query->where('code', 'LIKE', $locale.'_%')->orWhere('code', $locale))
             ->pluck('text', 'key')
             ->toArray();
-
-        if ($dbTranslations) {
-            return $dbTranslations + $fileTranslations;
-        }
-
-        return $fileTranslations;
     }
 }
