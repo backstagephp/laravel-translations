@@ -2,7 +2,6 @@
 
 namespace Backstage\Translations\Laravel\Listners;
 
-use Backstage\Translations\Laravel\Events\LanguageDeleted;
 use Backstage\Translations\Laravel\Events\LanguageUpdated;
 use Backstage\Translations\Laravel\Jobs\TranslateKeys;
 use Backstage\Translations\Laravel\Models\Translation;
@@ -15,7 +14,7 @@ class CheckTranslations implements ShouldQueue
         if ($event->language->wasChanged('code')) {
             Translation::where('code', $event->language->getOriginal('code'))
                 ->get()
-                ->each(fn($translation) => $translation->update(['code' => $event->language->getAttribute('code')]));
+                ->each(fn ($translation) => $translation->update(['code' => $event->language->getAttribute('code')]));
 
             TranslateKeys::dispatch($event->language);
         }
