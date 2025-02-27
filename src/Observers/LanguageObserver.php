@@ -23,7 +23,6 @@ class LanguageObserver
     public function created(Language $language)
     {
         event(new LanguageAdded($language));
-
     }
 
     public function updated(Language $language)
@@ -59,7 +58,9 @@ class LanguageObserver
                 ]);
         }
 
-        event(new LanguageUpdated($language));
+        if ($language->wasChanged('code')) {
+            event(new LanguageUpdated($language));
+        }
     }
 
     public function deleted(Language $language)
