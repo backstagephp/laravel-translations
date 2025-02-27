@@ -22,7 +22,7 @@ class TranslationLoader extends FileLoader
         return array_replace_recursive($fileTranslations, $this->getTranslationsFromDatabase($locale, $group, $namespace));
     }
 
-    protected function getTranslationsFromDatabase(string $locale, string $group, string|null $namespace = null): array
+    protected function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
     {
         return Translation::select('key', 'text')
             ->where('group', $group)
