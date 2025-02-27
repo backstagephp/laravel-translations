@@ -57,7 +57,7 @@ class LanguageObserver
                     'default' => true,
                 ]);
         }
-        
+
         if ($language->wasChanged('code')) {
             event(new LanguageUpdated($language));
         }
