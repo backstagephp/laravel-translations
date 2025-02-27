@@ -11,12 +11,10 @@ class CheckTranslations implements ShouldQueue
 {
     public function handle(LanguageUpdated $event)
     {
-        if ($event->language->wasChanged('code')) {
             Translation::where('code', $event->language->getOriginal('code'))
                 ->get()
                 ->each(fn ($translation) => $translation->update(['code' => $event->language->getAttribute('code')]));
 
             TranslateKeys::dispatch($event->language);
-        }
     }
 }
