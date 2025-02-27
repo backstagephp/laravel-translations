@@ -12,8 +12,6 @@ class TranslationLoader extends FileLoader
     {
         $fileTranslations = parent::load($locale, $group, $namespace);
 
-        dd($this->loadPaths($this->paths, $locale, $group));
-
         if (
             ! Schema::hasTable((new Translation)->getTable()) ||
             (! is_null($namespace) && $namespace !== '*')
