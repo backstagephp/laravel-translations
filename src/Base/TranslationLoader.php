@@ -28,13 +28,7 @@ class TranslationLoader extends FileLoader
         if ($dbTranslations) {
             return $dbTranslations + $fileTranslations;
         }
-
+        
         return $fileTranslations;
     }
-
-    public function addNamespace($namespace, $hint) {}
-
-    public function addJsonPath($path) {}
-
-    public function namespaces() {}
 }

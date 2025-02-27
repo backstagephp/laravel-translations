@@ -38,8 +38,6 @@ class TranslationServiceProvider extends PackageServiceProvider
 
     public function registeringPackage()
     {
-        $this->app->register(\Spatie\TranslationLoader\TranslationServiceProvider::class, true);
-
         $this->app->singleton('translation.loader', function ($app) {
             return new TranslationLoader($app['files'], $app['path.lang']);
         });
