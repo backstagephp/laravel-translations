@@ -25,7 +25,7 @@ class TranslationLoader extends FileLoader
     protected function getTranslationsFromDatabase(
         string $locale,
         string $group,
-        string|null $namespace = null
+        ?string $namespace = null
     ): array {
         return Translation::select('key', 'text')
             ->where('group', $group)

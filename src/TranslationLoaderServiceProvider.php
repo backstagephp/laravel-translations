@@ -2,9 +2,9 @@
 
 namespace Backstage\Translations\Laravel;
 
+use Backstage\Translations\Laravel\Base\TranslationLoader;
 use Backstage\Translations\Laravel\Base\Translator;
 use Illuminate\Contracts\Support\DeferrableProvider;
-use Backstage\Translations\Laravel\Base\TranslationLoader;
 use Illuminate\Translation\TranslationServiceProvider as IlluminateTranslationServiceProvider;
 
 class TranslationLoaderServiceProvider extends IlluminateTranslationServiceProvider implements DeferrableProvider
@@ -30,8 +30,6 @@ class TranslationLoaderServiceProvider extends IlluminateTranslationServiceProvi
 
     /**
      * Get the services provided by the provider.
-     *
-     * @return array
      */
     public function provides(): array
     {
