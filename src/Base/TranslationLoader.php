@@ -26,7 +26,7 @@ class TranslationLoader extends FileLoader
             ->toArray();
 
         if ($dbTranslations) {
-            return $fileTranslations + $dbTranslations;
+            return $dbTranslations + $fileTranslations;
         }
 
         return $fileTranslations;
