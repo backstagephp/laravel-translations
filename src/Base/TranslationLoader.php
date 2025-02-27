@@ -26,15 +26,9 @@ class TranslationLoader extends FileLoader
             ->toArray();
 
         if ($dbTranslations) {
-            return $dbTranslations + $fileTranslations;
+            return $dbTranslations;
         }
 
         return $fileTranslations;
     }
-
-    public function addNamespace($namespace, $hint) {}
-
-    public function addJsonPath($path) {}
-
-    public function namespaces() {}
 }

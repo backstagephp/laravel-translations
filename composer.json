@@ -79,7 +79,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Backstage\\Translations\\Laravel\\TranslationServiceProvider"
+                "Backstage\\Translations\\Laravel\\TranslationServiceProvider",
+                "Backstage\\Translations\\Laravel\\TranslationLoaderServiceProvider"
             ]
         }
     },

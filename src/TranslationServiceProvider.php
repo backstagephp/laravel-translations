@@ -2,8 +2,6 @@
 
 namespace Backstage\Translations\Laravel;
 
-use Backstage\Translations\Laravel\Base\TranslationLoader;
-use Backstage\Translations\Laravel\Base\Translator;
 use Backstage\Translations\Laravel\Commands\TranslateTranslations;
 use Backstage\Translations\Laravel\Commands\TranslationsAddLanguage;
 use Backstage\Translations\Laravel\Commands\TranslationsScan;
@@ -38,23 +36,6 @@ class TranslationServiceProvider extends PackageServiceProvider
 
     public function registeringPackage()
     {
-        $this->app->register(\Spatie\TranslationLoader\TranslationServiceProvider::class, true);
-
-        $this->app->singleton('translation.loader', function ($app) {
-            return new TranslationLoader($app['files'], $app['path.lang']);
-        });
-
-        $this->app->singleton('translator', function ($app) {
-            $loader = $app['translation.loader'];
-
-            $locale = $app['config']['app.locale'];
-
-            $trans = new Translator($loader, $locale);
-            $trans->setFallback($app['config']['app.fallback_locale']);
-
-            return $trans;
-        });
-
         $this->app->singleton(TranslatorContract::class, fn ($app) => new TranslatorManager($app));
     }
 
