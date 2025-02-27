@@ -5,7 +5,7 @@ use EchoLabs\Prism\Enums\Provider;
 return [
     'scan' => [
         'paths' => [
-            app_path(),
+            base_path(),
             resource_path('views'),
         ],
 
