@@ -2,10 +2,10 @@
 
 namespace Backstage\Translations\Laravel\Observers;
 
-use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Events\LanguageAdded;
 use Backstage\Translations\Laravel\Events\LanguageDeleted;
 use Backstage\Translations\Laravel\Events\LanguageUpdated;
+use Backstage\Translations\Laravel\Models\Language;
 
 class LanguageObserver
 {
