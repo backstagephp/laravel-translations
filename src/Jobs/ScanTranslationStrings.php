@@ -94,7 +94,7 @@ class ScanTranslationStrings implements ShouldQueue
     {
         $translations->each(function ($translation) {
             if (! is_array($translation['text'])) {
-                Translation::updateOrCreate([
+                Translation::firstOrCreate([
                     'group' => $translation['group'],
                     'code' => $translation['code'],
                     'key' => $translation['key'],
