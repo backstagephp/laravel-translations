@@ -1,4 +1,4 @@
-# Backstage: Laravel translations
+# Laravel Translations package
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/backstage/laravel-translations.svg?style=flat-square)](https://packagist.org/packages/backstage/laravel-translations)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/backstagephp/laravel-translations/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/backstagephp/laravel-translations/actions?query=workflow%3Arun-tests+branch%3Amain)
