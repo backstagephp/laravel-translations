@@ -14,6 +14,7 @@ class Translation extends Model
         'group',
         'key',
         'text',
+        'source_text',
         'metadata',
         'namespace',
         'translated_at',
