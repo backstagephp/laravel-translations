@@ -2,9 +2,9 @@
 
 namespace Backstage\Translations\Laravel\Base;
 
+use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Translation\FileLoader;
-use Backstage\Translations\Laravel\Models\Translation;
 
 class TranslationLoader extends FileLoader
 {
@@ -26,14 +26,14 @@ class TranslationLoader extends FileLoader
     {
         $translations = Translation::select('key', 'text');
 
-        if($namespace !== '*') {
+        if ($namespace !== '*') {
             $translations->where('namespace', $namespace);
         }
 
-        if($group !== '*') {
+        if ($group !== '*') {
             $translations->where('group', $group);
         }
-        
+
         return $translations->where(fn ($query) => $query->where('code', 'LIKE', $locale.'_%')->orWhere('code', $locale))
             ->pluck('text', 'key')
             ->toArray();
