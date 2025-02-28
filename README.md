@@ -81,7 +81,7 @@ If you have choosen the AI driver, please read the [Prism documentation](https:/
 If you want to add a language use the following command:
 
 ```bash
-php artisan translations:lang {locale} {label}
+php artisan translations:languages:add {locale} {label}
 ```
 
 For example:
