@@ -32,9 +32,7 @@ use EchoLabs\Prism\Enums\Provider;
 [
     'scan' => [
         'paths' => [
-            base_path('app'),
-            base_path('resources/views'),
-            // base_path('')
+            base_path(),
         ],
         'files' => [
             '*.php',
@@ -89,11 +87,11 @@ php artisan translations:lang {locale} {label}
 For example:
 
 ```bash
-php artisan translations:lang nl_NL Nederlands
+php artisan translations:languages:add nl Nederlands
 
-php artisan translations:lang en_US English
+translations:languages:add en English
 
-php artisan translations:lang fr_FR French
+translations:languages:add fr-BE Français // French specifically for Belgians
 ```
 
 The command can also be used without in-command-line parameters
@@ -113,20 +111,20 @@ To translate the scanned translations, use the following command:
 ```bash
 php artisan translations:translate
         {--all : Translate language strings for all languages}
-        {--lang= : Translate language strings for a specific language}
+        {--code= : Translate language strings for a specific language}
         {--update : Update and overwrite existing translations}
 ```
 
 For example:
 
 ```bash
-php artisan translations:translate-keys --lang="nl_NL"
+php artisan translations:translate --code=nl
 
-php artisan translations:translate-keys --lang="en_US"
+php artisan translations:translate --code=en
 
-php artisan translations:translate-keys --lang="fr_FR" --update
+php artisan translations:translate --code=fr-BE --update // overwrite existing translations
 
-php artisan translations:translate-keys --all
+php artisan translations:translate // translate all languages
 ```
 
 ## Testing
