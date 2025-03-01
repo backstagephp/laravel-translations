@@ -25,15 +25,12 @@ class TranslationServiceProvider extends PackageServiceProvider
                 'create_languages_table',
                 'create_translations_table'
             )
+            ->hasConfigFile('translations')
             ->hasCommands(
                 TranslateTranslations::class,
                 TranslationsAddLanguage::class,
                 TranslationsScan::class,
             );
-
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/translations.php', 'translations',
-        );
     }
 
     public function registeringPackage()
