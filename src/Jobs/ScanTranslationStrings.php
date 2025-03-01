@@ -29,7 +29,7 @@ class ScanTranslationStrings implements ShouldQueue
         App::singleton('translator', function () {
             return new \Illuminate\Translation\Translator(
                 new \Illuminate\Translation\FileLoader(new \Illuminate\Filesystem\Filesystem, 'resources/lang'),
-                'en'
+                $this->locale->languageCode ?? $this->locale
             );
         });
 

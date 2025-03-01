@@ -15,7 +15,6 @@ class Translation extends Model
         'key',
         'text',
         'source_text',
-        'metadata',
         'namespace',
         'translated_at',
     ];
