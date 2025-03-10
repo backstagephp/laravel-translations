@@ -3,8 +3,8 @@
 namespace Backstage\Translations\Laravel\Observers;
 
 use Backstage\Translations\Laravel\Events\LanguageAdded;
+use Backstage\Translations\Laravel\Events\LanguageCodeChanged;
 use Backstage\Translations\Laravel\Events\LanguageDeleted;
-use Backstage\Translations\Laravel\Events\LanguageUpdated;
 use Backstage\Translations\Laravel\Models\Language;
 
 class LanguageObserver
@@ -59,7 +59,7 @@ class LanguageObserver
         }
 
         if ($language->wasChanged('code')) {
-            event(new LanguageUpdated($language));
+            event(new LanguageCodeChanged($language));
         }
     }
 
