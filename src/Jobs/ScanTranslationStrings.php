@@ -12,6 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Translation\FileLoader;
 
 class ScanTranslationStrings implements ShouldQueue
 {
@@ -28,9 +29,13 @@ class ScanTranslationStrings implements ShouldQueue
     {
         App::singleton('translator', function () {
             return new \Illuminate\Translation\Translator(
-                new \Illuminate\Translation\FileLoader(new \Illuminate\Filesystem\Filesystem, 'resources/lang'),
+                new \Illuminate\Translation\FileLoader(new \Illuminate\Filesystem\Filesystem, ['resources/lang', 'lang']),
                 'en'
             );
+        });
+
+        App::singleton('translation.loader', function ($app) {
+            return new FileLoader($app['files'], $app['path.lang']);
         });
 
         $translations = collect((new FindTranslatables)())->unique();
