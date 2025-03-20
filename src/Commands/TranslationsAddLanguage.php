@@ -9,21 +9,19 @@ use function Laravel\Prompts\text;
 
 class TranslationsAddLanguage extends Command
 {
-    protected $signature = 'translations:languages:add {code?} {label?}';
+    protected $signature = 'translations:languages:add {code?} {name?}';
 
-    protected $description = 'Create a new language type';
+    protected $description = 'Add a new language';
 
     public function handle()
     {
-        $locale = $this->argument('code') ?? text('Enter locale');
-        $label = $this->argument('label') ?? text('Enter label');
+        $code = $this->argument('code') ?? text('Enter language code');
+        $name = $this->argument('name') ?? text('Enter name');
 
-        $this->info("Creating language type: $locale with label: $label");
-
-        $this->createLanguage($locale, $label);
+        $this->createLanguage($code, $name);
     }
 
-    protected function createLanguage($locale, $label)
+    protected function createLanguage($code, $name)
     {
         $lang = Language::where('code', $locale)->first();
 
@@ -33,10 +31,12 @@ class TranslationsAddLanguage extends Command
             return $lang;
         }
 
-        Language::create(['code' => $locale, 'name' => $label]);
+        Language::create([
+            'code' => $locale,
+            'name' => $name,
+            'native' => localized_language_name($name),
+        ]);
 
-        $this->info("Language $locale with label $label created");
-
-        $this->info('Language type created');
+        $this->info("Language $name ($code) added.");
     }
 }
