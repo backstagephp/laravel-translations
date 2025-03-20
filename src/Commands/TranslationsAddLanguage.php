@@ -23,10 +23,10 @@ class TranslationsAddLanguage extends Command
 
     protected function createLanguage($code, $name)
     {
-        $lang = Language::where('code', $locale)->first();
+        $language = Language::where('code', $code)->first();
 
-        if ($lang) {
-            $this->info("Language $locale already exists");
+        if ($language) {
+            $this->info("Language $code already exists");
 
             return $lang;
         }
