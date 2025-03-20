@@ -15,7 +15,12 @@ class TranslationsScan extends Command
     public function handle()
     {
         if (Language::count() === 0) {
-            $this->fail('No languages found. Please create a language first.');
+            Language::create([
+                'code' => app()->getLocale(),
+                'name' => localized_language_name(app()->getLocale()),
+                'native' => localized_language_name(app()->getLocale()),
+                'active' => true,
+            ]);
         }
 
         Language::active()->get()->each(function (Language $language) {
