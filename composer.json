@@ -22,7 +22,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "echolabsdev/prism": "^0.58.0",
+        "echolabsdev/prism": "^0.61.0",
         "illuminate/contracts": "^10.0||^11.0",
         "spatie/laravel-package-tools": "^1.16",
         "stichoza/google-translate-php": "^5.2"
