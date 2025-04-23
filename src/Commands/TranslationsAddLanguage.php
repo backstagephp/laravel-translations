@@ -28,11 +28,11 @@ class TranslationsAddLanguage extends Command
         if ($language) {
             $this->info("Language $code already exists");
 
-            return $lang;
+            return Command::INVALID;
         }
 
         Language::create([
-            'code' => $locale,
+            'code' => $code,
             'name' => $name,
             'native' => localized_language_name($name),
         ]);
