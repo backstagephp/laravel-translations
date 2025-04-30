@@ -11,7 +11,7 @@ class AITranslator implements TranslatorContract
     {
         $response = Prism::text()
             ->using(config('translations.translators.drivers.ai.provider'), config('translations.translators.drivers.ai.model'))
-            ->withSystemPrompt(config('translations.translators.ai.system_prompt'))
+            ->withSystemPrompt(config('translations.translators.drivers.ai.system_prompt'))
             ->withPrompt('Translate the following text to '.$targetLanguage.': '.$text)
             ->asText();
 

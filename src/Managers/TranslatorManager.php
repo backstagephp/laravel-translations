@@ -22,7 +22,7 @@ class TranslatorManager extends Manager
         return new GoogleTranslator;
     }
 
-    protected function createAITranslatorDriver()
+    protected function createAiDriver()
     {
         return new AITranslator;
     }
