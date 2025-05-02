@@ -11,17 +11,17 @@ class AITranslator implements TranslatorContract
     {
         $instructions = [
             "Translate the following text to {$targetLanguage}.",
-            "Preserve the original format, including any special characters.",
-            "Do not alter the meaning of the text.",
-            "Use correct grammar and punctuation appropriate for the target language.",
-            "Maintain the intent of the sentence (question, command, or statement).",
-            "Return *only* the translated text—no additional commentary or output.",
-            "No unnecessary language or elaboration.",
+            'Preserve the original format, including any special characters.',
+            'Do not alter the meaning of the text.',
+            'Use correct grammar and punctuation appropriate for the target language.',
+            'Maintain the intent of the sentence (question, command, or statement).',
+            'Return *only* the translated text—no additional commentary or output.',
+            'No unnecessary language or elaboration.',
             "Text to translate: {$text}",
         ];
-        
+
         $instructionsString = implode("\n", $instructions);
-        
+
         $response = Prism::text()
             ->using(config('translations.translators.drivers.ai.provider'), config('translations.translators.drivers.ai.model'))
             ->withSystemPrompt(config('translations.translators.drivers.ai.system_prompt'))
