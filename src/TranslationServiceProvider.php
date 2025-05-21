@@ -23,7 +23,8 @@ class TranslationServiceProvider extends PackageServiceProvider
             ->name('laravel-translations')
             ->hasMigrations(
                 'create_languages_table',
-                'create_translations_table'
+                'create_translations_table',
+                'add_language_locale_to_users'
             )
             ->hasConfigFile('translations')
             ->hasCommands(
@@ -35,12 +36,19 @@ class TranslationServiceProvider extends PackageServiceProvider
 
     public function registeringPackage()
     {
-        $this->app->singleton(TranslatorContract::class, fn ($app) => new TranslatorManager($app));
+        $this->app->singleton(TranslatorContract::class, fn($app) => new TranslatorManager($app));
     }
 
     public function bootingPackage()
     {
         Event::listen(LanguageDeleted::class, DeleteTranslations::class);
         Event::listen(LanguageCodeChanged::class, HandleLanguageCodeChanges::class);
+
+        /**
+         * @var \Illuminate\Foundation\Http\Kernel $routingKernel
+         */
+        $routingKernel = $this->app->make('Illuminate\Contracts\Http\Kernel');
+
+        $routingKernel->appendMiddlewareToGroup('web', \Backstage\Translations\Laravel\Http\Middleware\SwitchRouteMiddleware::class);
     }
 }
