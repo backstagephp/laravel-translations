@@ -16,11 +16,11 @@ class SwitchRouteMiddleware
      */
     public function handle($request, \Closure $next)
     {
-        if (!$request->user()) {
+        if (! $request->user()) {
             return $next($request);
         }
 
-        if (!$request->has('switchLocaleTo')) {
+        if (! $request->has('switchLocaleTo')) {
             return $next($request);
         }
 
@@ -28,7 +28,7 @@ class SwitchRouteMiddleware
 
         $existingLocale = Language::query()->where('code', $locale)->exists();
 
-        if (!$existingLocale) {
+        if (! $existingLocale) {
             return $next($request);
         }
 
