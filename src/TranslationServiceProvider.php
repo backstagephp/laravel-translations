@@ -44,6 +44,14 @@ class TranslationServiceProvider extends PackageServiceProvider
         Event::listen(LanguageDeleted::class, DeleteTranslations::class);
         Event::listen(LanguageCodeChanged::class, HandleLanguageCodeChanges::class);
 
+        $this->appendMiddleware();
+    }
+
+    /**
+     * Append the SwitchRouteMiddleware to the web middleware group.
+     */
+    protected function appendMiddleware(): void
+    {
         /**
          * @var \Illuminate\Foundation\Http\Kernel $routingKernel
          */
