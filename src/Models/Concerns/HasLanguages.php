@@ -9,12 +9,12 @@ trait HasLanguages
 {
     public function language(): BelongsTo
     {
-        return $this->belongsTo(Language::class, 'locale', 'code');
+        return $this->belongsTo(Language::class, config('translations.eloquent.models.user.language-relation', 'locale'), 'code');
     }
 
     public function setLanguage(Language $language): void
     {
-        $this->locale = $language->code;
+        $this->{config('translations.eloquent.models.user.language-relation', 'locale')} = $language->code;
         $this->save();
     }
 

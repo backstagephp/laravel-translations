@@ -40,14 +40,14 @@ class Language extends Model
 
     public static function default(): ?Language
     {
-        return static::firstWhere('default', true);
+        return static::query()->firstWhere('default', true);
     }
 
     protected static function newFactory()
     {
         $package = Str::before(get_called_class(), 'Models\\');
         $modelName = Str::after(get_called_class(), 'Models\\');
-        $path = $package.'Database\\Factories\\'.$modelName.'Factory';
+        $path = $package . 'Database\\Factories\\' . $modelName . 'Factory';
 
         return $path::new();
     }
@@ -59,7 +59,7 @@ class Language extends Model
 
     public function users(): HasMany
     {
-        return $this->hasMany(config('auth.providers.users.model'), 'locale', 'code');
+        return $this->hasMany(config('auth.providers.users.model'), config('translations.eloquent.models.user.language-relation', 'locale'), 'code');
     }
 
     public function getLanguageCodeAttribute()
@@ -76,7 +76,7 @@ class Language extends Model
     {
         $code = strtolower(explode('-', $this->attributes['code'])[1] ?? $this->attributes['code']);
 
-        return Locale::getDisplayRegion('-'.$code, $locale ?? app()->getLocale());
+        return Locale::getDisplayRegion('-' . $code, $locale ?? app()->getLocale());
     }
 
     public function getLocalizedLanguageNameAttribute($locale = null)

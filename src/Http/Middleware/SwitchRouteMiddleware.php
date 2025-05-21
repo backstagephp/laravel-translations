@@ -20,11 +20,17 @@ class SwitchRouteMiddleware
             return $next($request);
         }
 
-        if (! $request->has('switchLocaleTo')) {
+        $query = $request->query();
+
+        if (! $query) {
             return $next($request);
         }
 
-        $locale = $request->get('switchLocaleTo');
+        if (!isset($query['switchLocaleTo']) || empty($query['switchLocaleTo'])) {
+            return $next($request);
+        }
+
+        $locale = $query['switchLocaleTo'];
 
         $existingLocale = Language::query()->where('code', $locale)->exists();
 

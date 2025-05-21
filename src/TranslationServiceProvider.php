@@ -11,6 +11,7 @@ use Backstage\Translations\Laravel\Events\LanguageDeleted;
 use Backstage\Translations\Laravel\Listners\DeleteTranslations;
 use Backstage\Translations\Laravel\Listners\HandleLanguageCodeChanges;
 use Backstage\Translations\Laravel\Managers\TranslatorManager;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Event;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -36,7 +37,7 @@ class TranslationServiceProvider extends PackageServiceProvider
 
     public function registeringPackage()
     {
-        $this->app->singleton(TranslatorContract::class, fn ($app) => new TranslatorManager($app));
+        $this->app->singleton(TranslatorContract::class, fn($app) => new TranslatorManager($app));
     }
 
     public function bootingPackage()
@@ -55,8 +56,8 @@ class TranslationServiceProvider extends PackageServiceProvider
         /**
          * @var \Illuminate\Foundation\Http\Kernel $routingKernel
          */
-        $routingKernel = $this->app->make('Illuminate\Contracts\Http\Kernel');
-
-        $routingKernel->appendMiddlewareToGroup('web', \Backstage\Translations\Laravel\Http\Middleware\SwitchRouteMiddleware::class);
+        $this->app->make(Kernel::class)->pushMiddleware(
+            \Backstage\Translations\Laravel\Http\Middleware\SwitchRouteMiddleware::class
+        );
     }
 }

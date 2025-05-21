@@ -10,13 +10,13 @@ return new class extends Migration
     {
         Schema::table(app(config('auth.providers.users.model'))->getTable(), function (Blueprint $table) {
             $table->after('id', function (Blueprint $table) {
-                $table->string('locale', 5)
+                $table->string(config('translations.eloquent.models.user.language-relation', 'locale'), 5)
                     ->nullable()
                     ->default(null)
                     ->comment('Language locale of the user');
             });
 
-            $table->foreign('locale')
+            $table->foreign(config('translations.eloquent.models.user.language-relation', 'locale'))
                 ->references('code')
                 ->on('languages')
                 ->nullOnDelete();
@@ -26,8 +26,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table(app(config('auth.providers.users.model'))->getTable(), function (Blueprint $table) {
-            $table->dropForeign(['locale']);
-            $table->dropColumn('locale');
+            $table->dropForeign([config('translations.eloquent.models.user.language-relation', 'locale')]);
+            $table->dropColumn(config('translations.eloquent.models.user.language-relation', 'locale'));
         });
     }
 };
