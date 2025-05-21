@@ -49,7 +49,7 @@ class TranslationServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * Append the SwitchRouteMiddleware to the web middleware group.
+     * Append the middleware to the routing kernel.
      */
     protected function appendMiddleware(): void
     {
