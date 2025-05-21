@@ -48,6 +48,6 @@ return [
             'user' => [
                 'language-relation' => 'locale',
             ],
-        ]
-    ]
+        ],
+    ],
 ];

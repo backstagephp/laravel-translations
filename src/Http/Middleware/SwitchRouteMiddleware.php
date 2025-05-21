@@ -26,7 +26,7 @@ class SwitchRouteMiddleware
             return $next($request);
         }
 
-        if (!isset($query['switchLocaleTo']) || empty($query['switchLocaleTo'])) {
+        if (! isset($query['switchLocaleTo']) || empty($query['switchLocaleTo'])) {
             return $next($request);
         }
 
