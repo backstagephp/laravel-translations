@@ -127,6 +127,10 @@ php artisan translations:translate --code=fr-BE --update // overwrite existing t
 php artisan translations:translate // translate all languages
 ```
 
+## If used in Filament
+
+To use this package with Filament, make sure to register the `\Backstage\Translations\Laravel\Http\Middleware\SwitchRouteMiddleware::class` middleware in your Filament panel configuration.
+
 ## Testing
 
 ```bash
