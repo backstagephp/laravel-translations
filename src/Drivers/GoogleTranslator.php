@@ -15,6 +15,6 @@ class GoogleTranslator implements TranslatorContract
 
         $tr->setTarget($targetLanguage);
 
-        return retry(3, fn() => $tr->translate($text), 100);
+        return retry(3, fn () => $tr->translate($text), 100);
     }
 }
