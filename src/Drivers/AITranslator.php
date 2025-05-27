@@ -7,7 +7,7 @@ use Prism\Prism\Prism;
 
 class AITranslator implements TranslatorContract
 {
-    public function translate(string|array $text, string $targetLanguage): string
+    public function translate(string|array $text, string $targetLanguage): string|array
     {
         if (is_array($text)) {
             return $this->translateJson($text, $targetLanguage);
