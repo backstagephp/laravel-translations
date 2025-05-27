@@ -7,7 +7,7 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class GoogleTranslator implements TranslatorContract
 {
-    public function translate(string $text, string $targetLanguage): string
+    public function translate(string $text, string $targetLanguage): string|array
     {
         $tr = new GoogleTranslate;
 
@@ -15,6 +15,6 @@ class GoogleTranslator implements TranslatorContract
 
         $tr->setTarget($targetLanguage);
 
-        return retry(3, fn () => $tr->translate($text), 100);
+        return retry(3, fn() => $tr->translate($text), 100);
     }
 }
