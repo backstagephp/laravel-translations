@@ -83,7 +83,7 @@ class AITranslator implements TranslatorContract
         return trim($response->text);
     }
 
-    protected function translateJson(array $toBeJson, string $targetLanguage): string
+    protected function translateJson(array $toBeJson, string $targetLanguage): array
     {
         $systemPromptLines = [
             'You are a professional translation engine. Your sole task is to translate raw input values of a JSON object into the specified target language.',
