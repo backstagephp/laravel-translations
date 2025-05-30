@@ -22,8 +22,8 @@ class TranslationServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-translations')
             ->hasMigrations(
-                'create_languages_table',
-                'create_translations_table'
+                '2025_02_15_345600_create_languages_table',
+                '2025_02_15_345601_create_translations_table'
             )
             ->hasConfigFile('translations')
             ->hasCommands(
