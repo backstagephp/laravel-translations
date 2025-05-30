@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('native')
                 ->nullable();
 
-
             $table->boolean('active')
                 ->default(true);
 
