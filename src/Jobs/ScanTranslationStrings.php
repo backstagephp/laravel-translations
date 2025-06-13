@@ -81,7 +81,7 @@ class ScanTranslationStrings implements ShouldQueue
 
                     if ($localized !== $translation['key'] && $localized !== $enText) {
                         $data['translated_text'] = $localized;
-                    } elseif ($localized === $enText) {
+                    } elseif ($localized === $enText && $locale === 'en') {
                         $data['translated_text'] = $localized;
                     }
 
@@ -97,6 +97,7 @@ class ScanTranslationStrings implements ShouldQueue
 
                 if (! $oldTranslation) {
                     $localized = Lang::get($translation['key'], [], $locale);
+
                     if ($localized !== $translation['key']) {
                         $data['translated_text'] = $localized;
                     }

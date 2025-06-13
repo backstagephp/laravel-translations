@@ -63,7 +63,6 @@ class TranslateKeys implements ShouldQueue
             $model::all()
                 ->each(function (TranslatesAttributes $record) use ($locales) {
                     $locales->each(function ($locale) use ($record) {
-                        info('Translating attributes:'.json_encode($record->getTranslatableAttributes())." for locale: $locale in model: ".$record->id);
                         $record->translateAttributes($locale);
                     });
                 });

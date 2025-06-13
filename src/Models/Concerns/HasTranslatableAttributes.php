@@ -11,89 +11,100 @@ use Illuminate\Support\Facades\App;
 trait HasTranslatableAttributes
 {
     /**
-     * Translate all configured translatable attributes into a given language.
+     * Translate the given attributes.
      */
-    public function translateAttributes(?string $targetLocale): array
+    public function translateAttributes(?string $targetLanguage): array
     {
-        $locale = $targetLocale ?: App::getLocale();
+        $targetLanguage = $targetLanguage ?: App::getLocale();
 
-        return collect($this->getTranslatableAttributes())
-            ->mapWithKeys(function (string $attribute) use ($locale) {
-                return [$attribute => $this->translateAttribute($attribute, $locale)];
-            })
-            ->toArray();
+        $translatedAttributes = [];
+
+        foreach ($this->getTranslatableAttributes() as $attribute) {
+            $translatedAttributes[$attribute] = $this->translateAttribute($attribute, $targetLanguage);
+        }
+
+        return $translatedAttributes;
     }
 
     /**
-     * Translate all translatable attributes into every supported language.
+     * Translate attributes for all languages defined in the system.
      */
     public function translateAttributesForAllLanguages(): array
     {
-        return Language::all()
-            ->mapWithKeys(function (Language $language) {
-                return [$language->code => $this->translateAttributes($language->code)];
-            })
-            ->toArray();
+        $languages = Language::all();
+
+        $translations = $languages->mapWithKeys(function (Language $language) {
+            return [$language->code => $this->translateAttributes($language->code)];
+        });
+
+        return $translations->toArray();
     }
 
-    /**
-     * Translate a specific attribute into every supported language.
-     */
     public function translateAttributeForAllLanguages(string $attribute): array
     {
-        return Language::all()
-            ->mapWithKeys(function (Language $language) use ($attribute) {
-                return [$language->code => $this->translateAttribute($attribute, $language->code)];
-            })
-            ->toArray();
+        $languages = Language::all();
+
+        $translations = $languages->mapWithKeys(function (Language $language) use ($attribute) {
+            return [$language->code => $this->translateAttribute($attribute, $language->code)];
+        });
+
+        return $translations->toArray();
     }
 
     /**
-     * Translate a single attribute into a specific language.
+     * Translate a single attribute.
      */
-    public function translateAttribute(string $attribute, string $locale): string
+    public function translateAttribute(string $attribute, string $targetLanguage): string
     {
         $originalValue = $this->getAttribute($attribute);
 
-        $translatedValue = Translator::with(config('translations.translators.default'))
-            ->translate($originalValue, $locale);
+        $isTranslated = $this->translatableAttributes()
+            ->getQuery()
+            ->where('attribute', $attribute)
+            ->where('code', $targetLanguage)
+            ->exists();
 
-        if ($translatedValue === null) {
-            $translatedValue = $this->translatableAttributes()
+        if ($isTranslated) {
+            return $this->getTranslatedAttribute($attribute, $targetLanguage);
+        }
+
+        $translated = Translator::with(config('translations.translators.default'))
+            ->translate($originalValue, $targetLanguage);
+
+        if ($translated === null) {
+            $translated = $this->translatableAttributes()
                 ->where('attribute', $attribute)
-                ->where('code', $locale)
+                ->where('code', $targetLanguage)
                 ->value('translated_attribute');
         }
 
-        if ($translatedValue !== null) {
-            $this->storeTranslatedAttribute($attribute, $translatedValue, $locale);
-        }
+        $this->pushTranslateAttribute($attribute, $translated, $targetLanguage);
 
-        return $translatedValue ?? $originalValue;
+        return $translated ?: $originalValue;
     }
 
     /**
-     * Store or update a translated value for a given attribute and locale.
+     * Store or update a translated attribute.
      */
-    public function storeTranslatedAttribute(string $attribute, string $translatedText, string $locale): void
+    public function pushTranslateAttribute(string $attribute, string $translation, string $locale): void
     {
         $this->translatableAttributes()->updateOrCreate([
             'translatable_type' => static::class,
-            'translatable_id' => $this->getKey(),
-            'attribute' => $attribute,
-            'code' => $locale,
+            'translatable_id'   => $this->getKey(),
+            'attribute'         => $attribute,
+            'code'              => $locale,
         ], [
-            'translated_attribute' => $translatedText,
-            'translated_at' => now(),
+            'translated_attribute' => $translation,
+            'translated_at'        => now(),
         ]);
     }
 
     /**
-     * Get the translated value for a single attribute.
+     * Get the translated value of a given attribute.
      */
     public function getTranslatedAttribute(string $attribute, ?string $locale): ?string
     {
-        if (! $this->isTranslatableAttribute($attribute)) {
+        if (!in_array($attribute, $this->getTranslatableAttributes())) {
             return $this->getAttribute($attribute);
         }
 
@@ -107,26 +118,32 @@ trait HasTranslatableAttributes
     }
 
     /**
-     * Get the list of attribute names that are translatable.
+     * Get the attributes that should be translated.
      */
     public function getTranslatableAttributes(): array
     {
         return [];
     }
 
-    /**
-     * Determine if an attribute is configured to be translatable.
-     */
     public function isTranslatableAttribute(string $attribute): bool
     {
         return in_array($attribute, $this->getTranslatableAttributes());
     }
 
     /**
-     * Define the morphMany relationship to translated attributes.
+     * Get the relationship for translated attributes.
      */
     public function translatableAttributes(): MorphMany
     {
         return $this->morphMany(TranslatedAttribute::class, 'translatable');
+    }
+
+    public function syncTranslations(): void
+    {
+        $designatedAttributes = $this->getTranslatableAttributes();
+
+        foreach ($designatedAttributes as $attribute) {
+            $this->translateAttributeForAllLanguages($attribute);
+        }
     }
 }
