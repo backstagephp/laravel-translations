@@ -79,12 +79,12 @@ trait HasTranslatableAttributes
     {
         $this->translatableAttributes()->updateOrCreate([
             'translatable_type' => static::class,
-            'translatable_id'   => $this->getKey(),
-            'attribute'         => $attribute,
-            'code'              => $locale,
+            'translatable_id' => $this->getKey(),
+            'attribute' => $attribute,
+            'code' => $locale,
         ], [
             'translated_attribute' => $translatedText,
-            'translated_at'        => now(),
+            'translated_at' => now(),
         ]);
     }
 
