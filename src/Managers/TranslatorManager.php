@@ -2,10 +2,10 @@
 
 namespace Backstage\Translations\Laravel\Managers;
 
-use Illuminate\Support\Manager;
 use Backstage\Translations\Laravel\Drivers\AITranslator;
 use Backstage\Translations\Laravel\Drivers\DeepLTranslator;
 use Backstage\Translations\Laravel\Drivers\GoogleTranslator;
+use Illuminate\Support\Manager;
 
 class TranslatorManager extends Manager
 {
@@ -30,7 +30,7 @@ class TranslatorManager extends Manager
 
     protected function createDeepLDriver()
     {
-        return new DeepLTranslator; 
+        return new DeepLTranslator;
     }
 
     public function getDefaultDriver(): string

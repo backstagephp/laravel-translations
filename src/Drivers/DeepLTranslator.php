@@ -2,8 +2,8 @@
 
 namespace Backstage\Translations\Laravel\Drivers;
 
-use DeepL\DeepLClient;
 use Backstage\Translations\Laravel\Contracts\TranslatorContract;
+use DeepL\DeepLClient;
 
 class DeepLTranslator implements TranslatorContract
 {
