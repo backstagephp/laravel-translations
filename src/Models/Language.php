@@ -47,14 +47,14 @@ class Language extends Model
     {
         $package = Str::before(get_called_class(), 'Models\\');
         $modelName = Str::after(get_called_class(), 'Models\\');
-        $path = $package.'Database\\Factories\\'.$modelName.'Factory';
+        $path = $package . 'Database\\Factories\\' . $modelName . 'Factory';
 
         return $path::new();
     }
 
-    public function translations(): HasMany
+    public function translatableAttributes(): HasMany
     {
-        return $this->hasMany(Translation::class);
+        return $this->hasMany(TranslatedAttribute::class, 'locale', 'code');
     }
 
     public function getLanguageCodeAttribute()
@@ -71,7 +71,7 @@ class Language extends Model
     {
         $code = strtolower(explode('-', $this->attributes['code'])[1] ?? $this->attributes['code']);
 
-        return Locale::getDisplayRegion('-'.$code, $locale ?? app()->getLocale());
+        return Locale::getDisplayRegion('-' . $code, $locale ?? app()->getLocale());
     }
 
     public function getLocalizedLanguageNameAttribute($locale = null)
