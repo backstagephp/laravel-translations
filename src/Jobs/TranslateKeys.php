@@ -2,14 +2,12 @@
 
 namespace Backstage\Translations\Laravel\Jobs;
 
+use Backstage\Translations\Laravel\Interfaces\TranslatesAttributes;
+use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Models\TranslatableCodeString;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Backstage\Translations\Laravel\Models\Language;
-use Backstage\Translations\Laravel\Facades\Translator;
-use Backstage\Translations\Laravel\Models\Translation;
-use Backstage\Translations\Laravel\Models\TranslatableCodeString;
-use Backstage\Translations\Laravel\Interfaces\TranslatesAttributes;
 
 class TranslateKeys implements ShouldQueue
 {
@@ -65,7 +63,7 @@ class TranslateKeys implements ShouldQueue
             $model::all()
                 ->each(function (TranslatesAttributes $record) use ($locales) {
                     $locales->each(function ($locale) use ($record) {
-                        info("Translating attributes:" . json_encode($record->getTranslatableAttributes()) . " for locale: $locale in model: " . $record->id);
+                        info('Translating attributes:'.json_encode($record->getTranslatableAttributes())." for locale: $locale in model: ".$record->id);
                         $record->translateAttributes($locale);
                     });
                 });

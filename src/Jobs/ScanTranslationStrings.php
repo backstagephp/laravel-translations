@@ -2,18 +2,17 @@
 
 namespace Backstage\Translations\Laravel\Jobs;
 
+use Backstage\Translations\Laravel\Domain\Actions\FindTranslatables;
+use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Models\TranslatableCodeString;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Translation\FileLoader;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Backstage\Translations\Laravel\Models\Language;
-use Backstage\Translations\Laravel\Models\Translation;
-use Backstage\Translations\Laravel\Models\TranslatableCodeString;
-use Backstage\Translations\Laravel\Domain\Actions\FindTranslatables;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Translation\FileLoader;
 
 class ScanTranslationStrings implements ShouldQueue
 {
@@ -83,7 +82,7 @@ class ScanTranslationStrings implements ShouldQueue
                     if ($localized !== $translation['key'] && $localized !== $enText) {
                         $data['translated_text'] = $localized;
                     } elseif ($localized === $enText) {
-                        $data['translated_text'] =  $localized;
+                        $data['translated_text'] = $localized;
                     }
 
                     return $data;
@@ -107,7 +106,6 @@ class ScanTranslationStrings implements ShouldQueue
             })->filter();
         });
     }
-
 
     protected function storeTranslations($translations): void
     {

@@ -32,7 +32,7 @@ return [
     'eloquent' => [
         'translatable-models' => [
             TranslatableCodeString::class,
-        ]
+        ],
     ],
 
     'translators' => [
