@@ -6,5 +6,7 @@ use Backstage\Translations\Laravel\Models\Language;
 
 class LanguageDeleted
 {
-    public function __construct(public Language $language) {}
+    public function __construct(public Language $language) {
+        
+    }
 }
