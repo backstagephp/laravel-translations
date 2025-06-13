@@ -2,10 +2,9 @@
 
 namespace Backstage\Translations\Laravel\Listners;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Backstage\Translations\Laravel\Models\Translation;
 use Backstage\Translations\Laravel\Events\LanguageCodeChanged;
 use Backstage\Translations\Laravel\Models\TranslatableCodeString;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class HandleLanguageCodeChanges implements ShouldQueue
 {
