@@ -2,11 +2,14 @@
 
 namespace Backstage\Translations\Laravel\Jobs;
 
-use Backstage\Translations\Laravel\Facades\Translator;
-use Backstage\Translations\Laravel\Models\Language;
-use Backstage\Translations\Laravel\Models\Translation;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Facades\Translator;
+use Backstage\Translations\Laravel\Models\Translation;
+use Backstage\Translations\Laravel\Models\TranslatableCodeString;
+use Backstage\Translations\Laravel\Interfaces\TranslatesAttributes;
 
 class TranslateKeys implements ShouldQueue
 {
@@ -49,20 +52,23 @@ class TranslateKeys implements ShouldQueue
     {
         ScanTranslationStrings::dispatchSync();
 
-        $locales = $this->lang ? [$this->lang->code] : Language::active()->pluck('code')->toArray();
+        $locales = $this->lang ? collect([$this->lang->code]) : Language::active()->pluck('code');
 
-        $translator = Translator::with(config('translations.translators.default'));
+        $translatableModels = config('translations.eloquent.translatable-models', [
+            TranslatableCodeString::class,
+        ]);
 
-        Translation::whereIn('code', $locales)
-            ->whereNull('translated_at')
-            ->get()
-            ->each(function (Translation $translation) use ($translator) {
-                $newText = $translator->translate($translation->text, $translation->languageCode);
-
-                $translation->update([
-                    'text' => $newText,
-                    'translated_at' => now(),
-                ]);
-            });
+        /**
+         * @var class-string<Model&TranslatesAttributes>[] $translatableModels
+         */
+        collect($translatableModels)->each(function ($model) use ($locales) {
+            $model::all()
+                ->each(function (TranslatesAttributes $record) use ($locales) {
+                    $locales->each(function ($locale) use ($record) {
+                        info("Translating attributes:" . json_encode($record->getTranslatableAttributes()) . " for locale: $locale in model: " . $record->id);
+                        $record->translateAttributes($locale);
+                    });
+                });
+        });
     }
 }

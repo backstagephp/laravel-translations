@@ -23,7 +23,9 @@ class TranslationServiceProvider extends PackageServiceProvider
             ->name('laravel-translations')
             ->hasMigrations(
                 'create_languages_table',
-                'create_translations_table'
+                'create_translations_table',
+                'create_translated_attributes_table',
+                'migrate_translations_to_translatable_code_strings',
             )
             ->hasConfigFile('translations')
             ->hasCommands(
@@ -35,7 +37,7 @@ class TranslationServiceProvider extends PackageServiceProvider
 
     public function registeringPackage()
     {
-        $this->app->singleton(TranslatorContract::class, fn ($app) => new TranslatorManager($app));
+        $this->app->singleton(TranslatorContract::class, fn($app) => new TranslatorManager($app));
     }
 
     public function bootingPackage()

@@ -4,7 +4,7 @@ namespace Backstage\Translations\Laravel\Commands;
 
 use Backstage\Translations\Laravel\Jobs\TranslateKeys;
 use Backstage\Translations\Laravel\Models\Language;
-use Backstage\Translations\Laravel\Models\Translation;
+use Backstage\Translations\Laravel\Models\TranslatableCodeString;
 use Illuminate\Console\Command;
 
 class TranslateTranslations extends Command
@@ -20,10 +20,10 @@ class TranslateTranslations extends Command
         $languageCode = $this->option('code');
 
         if ($this->option('update')) {
-            $translations = Translation::all();
+            $translations = TranslatableCodeString::all();
 
             if ($languageCode) {
-                $translations = Translation::where('code', $languageCode)->get();
+                $translations = TranslatableCodeString::where('code', $languageCode)->get();
 
                 if ($translations->isEmpty()) {
                     $this->fail("No translations found with the code: {$languageCode}");
@@ -44,7 +44,7 @@ class TranslateTranslations extends Command
 
     protected function handleAllLanguages(): void
     {
-        $this->info('Translating imports for all languages...');
+        $this->info('Translating translatable attributes per model for all languages...');
 
         TranslateKeys::dispatchSync();
 

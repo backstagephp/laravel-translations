@@ -2,6 +2,7 @@
 
 namespace Backstage\Translations\Laravel\Base;
 
+use Backstage\Translations\Laravel\Models\TranslatableCodeString;
 use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Translation\FileLoader;
@@ -13,18 +14,18 @@ class TranslationLoader extends FileLoader
         $fileTranslations = parent::load($locale, $group, $namespace);
 
         if (
-            ! Schema::hasTable((new Translation)->getTable()) ||
+            ! Schema::hasTable((new TranslatableCodeString())->getTable()) ||
             (! is_null($namespace) && $namespace !== '*')
         ) {
             return $fileTranslations;
         }
 
-        return array_replace_recursive($fileTranslations, $this->getTranslationsFromDatabase($locale, $group, $namespace));
+        return array_replace_recursive($fileTranslations, once(fn() => $this->getTranslationsFromDatabase($locale, $group, $namespace)));
     }
 
     protected function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
     {
-        $translations = Translation::select('key', 'text');
+        $translations = TranslatableCodeString::all();
 
         if ($namespace !== '*') {
             $translations->where('namespace', $namespace);
@@ -34,8 +35,12 @@ class TranslationLoader extends FileLoader
             $translations->where('group', $group);
         }
 
-        return $translations->where(fn ($query) => $query->where('code', 'LIKE', $locale.'_%')->orWhere('code', $locale))
-            ->pluck('text', 'key')
+        $translations = $translations
+            ->mapWithKeys(function (TranslatableCodeString $translation) use ($locale) {
+                return [$translation->key => $translation->getTranslatedAttribute('text', $locale)];
+            })
             ->toArray();
+
+        return $translations;
     }
 }
