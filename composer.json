@@ -22,6 +22,7 @@
     ],
     "require": {
         "php": "^8.2",
+        "backstage/laravel-permanent-cache": "dev-main",
         "deeplcom/deepl-php": ">=1.12",
         "echolabsdev/prism": ">0.65",
         "illuminate/contracts": "^10.0||^11.0||^12.0",

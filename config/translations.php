@@ -1,5 +1,6 @@
 <?php
 
+use Backstage\Translations\Laravel\Models\TranslatableCodeString;
 use DeepL\TranslatorOptions;
 use Prism\Prism\Enums\Provider;
 
@@ -25,6 +26,12 @@ return [
             '@lang',
             '@choice',
             '__',
+        ],
+    ],
+
+    'eloquent' => [
+        'translatable-models' => [
+            TranslatableCodeString::class,
         ],
     ],
 

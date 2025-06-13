@@ -52,9 +52,9 @@ class Language extends Model
         return $path::new();
     }
 
-    public function translations(): HasMany
+    public function translatableAttributes(): HasMany
     {
-        return $this->hasMany(Translation::class);
+        return $this->hasMany(TranslatedAttribute::class, 'locale', 'code');
     }
 
     public function getLanguageCodeAttribute()
