@@ -3,6 +3,7 @@
 namespace Backstage\Translations\Laravel\Base;
 
 use Backstage\Translations\Laravel\Models\TranslatableCodeString;
+use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Translation\FileLoader;
 
@@ -13,13 +14,13 @@ class TranslationLoader extends FileLoader
         $fileTranslations = parent::load($locale, $group, $namespace);
 
         if (
-            ! Schema::hasTable((new TranslatableCodeString)->getTable()) ||
+            ! Schema::hasTable((new TranslatableCodeString())->getTable()) ||
             (! is_null($namespace) && $namespace !== '*')
         ) {
             return $fileTranslations;
         }
 
-        return array_replace_recursive($fileTranslations, once(fn () => $this->getTranslationsFromDatabase($locale, $group, $namespace)));
+        return array_replace_recursive($fileTranslations, cache()->rememberForever('translations', fn() => $this->getTranslationsFromDatabase($locale, $group, $namespace)));
     }
 
     protected function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
