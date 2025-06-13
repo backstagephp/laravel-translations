@@ -2,16 +2,17 @@
 
 namespace Backstage\Translations\Laravel\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Backstage\Translations\Laravel\Models\TranslatedAttribute;
-use Backstage\Translations\Laravel\Models\TranslatableCodeString;
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
+use Backstage\Translations\Laravel\Models\TranslatableCodeString;
+use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 class SyncTranslations extends Command
 {
     protected $signature = 'translations:sync';
+
     protected $description = 'Sync translations for all translatable models';
 
     public function handle(): void
@@ -34,13 +35,13 @@ class SyncTranslations extends Command
         ]));
 
         return $models
-            ->flatMap(fn(string $model) => $model::all())
-            ->filter(fn($item) => $item instanceof TranslatesAttributes);
+            ->flatMap(fn (string $model) => $model::all())
+            ->filter(fn ($item) => $item instanceof TranslatesAttributes);
     }
 
     protected function syncItems(Collection $items): void
     {
-        $this->withProgressBar($items, fn(TranslatesAttributes $item) => $item->syncTranslations());
+        $this->withProgressBar($items, fn (TranslatesAttributes $item) => $item->syncTranslations());
     }
 
     protected function cleanOrphanedTranslations(): void
@@ -51,10 +52,11 @@ class SyncTranslations extends Command
 
         if ($orphans->isEmpty()) {
             $this->info('No unused translations found.');
+
             return;
         }
 
-        $this->withProgressBar($orphans, fn(TranslatedAttribute $attr) => $attr->delete());
+        $this->withProgressBar($orphans, fn (TranslatedAttribute $attr) => $attr->delete());
     }
 
     protected function getOrphanedAttributes(): Collection
@@ -63,7 +65,7 @@ class SyncTranslations extends Command
             $type = $attr->translatable_type;
             $id = $attr->translatable_id;
 
-            if (!class_exists($type)) {
+            if (! class_exists($type)) {
                 return true;
             }
 
@@ -73,7 +75,7 @@ class SyncTranslations extends Command
                 $query->withTrashed();
             }
 
-            return !$query->whereKey($id)->exists();
+            return ! $query->whereKey($id)->exists();
         });
     }
 }
