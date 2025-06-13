@@ -2,10 +2,10 @@
 
 namespace Backstage\Translations\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
 use Backstage\Translations\Laravel\Models\Concerns\HasTranslatableAttributes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TranslatableCodeString extends Model implements TranslatesAttributes
 {

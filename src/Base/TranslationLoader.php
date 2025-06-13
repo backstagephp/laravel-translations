@@ -14,13 +14,13 @@ class TranslationLoader extends FileLoader
         $fileTranslations = parent::load($locale, $group, $namespace);
 
         if (
-            ! Schema::hasTable((new TranslatableCodeString())->getTable()) ||
+            ! Schema::hasTable((new TranslatableCodeString)->getTable()) ||
             (! is_null($namespace) && $namespace !== '*')
         ) {
             return $fileTranslations;
         }
 
-        return array_replace_recursive($fileTranslations, once(fn() => $this->getTranslationsFromDatabase($locale, $group, $namespace)));
+        return array_replace_recursive($fileTranslations, once(fn () => $this->getTranslationsFromDatabase($locale, $group, $namespace)));
     }
 
     protected function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
@@ -33,7 +33,7 @@ class TranslationLoader extends FileLoader
 
         $translations = $cachedData[$locale][$group][$namespace];
 
-        return collect($translations)->mapWithKeys(function ($text, $key) use ($locale) {
+        return collect($translations)->mapWithKeys(function ($text, $key) {
             return [$key => $text];
         })->toArray();
     }

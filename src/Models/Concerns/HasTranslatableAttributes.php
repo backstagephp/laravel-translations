@@ -90,12 +90,12 @@ trait HasTranslatableAttributes
     {
         $this->translatableAttributes()->updateOrCreate([
             'translatable_type' => static::class,
-            'translatable_id'   => $this->getKey(),
-            'attribute'         => $attribute,
-            'code'              => $locale,
+            'translatable_id' => $this->getKey(),
+            'attribute' => $attribute,
+            'code' => $locale,
         ], [
             'translated_attribute' => $translation,
-            'translated_at'        => now(),
+            'translated_at' => now(),
         ]);
     }
 
@@ -104,7 +104,7 @@ trait HasTranslatableAttributes
      */
     public function getTranslatedAttribute(string $attribute, ?string $locale): ?string
     {
-        if (!in_array($attribute, $this->getTranslatableAttributes())) {
+        if (! in_array($attribute, $this->getTranslatableAttributes())) {
             return $this->getAttribute($attribute);
         }
 

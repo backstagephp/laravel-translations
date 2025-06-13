@@ -24,14 +24,15 @@ class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
             return [
                 $locale => collect($groups)->mapWithKeys(function ($group) use ($locale, $namespaces) {
                     $groupKey = $group ?? '*';
+
                     return [
                         $groupKey => collect($namespaces)->mapWithKeys(function ($namespace) use ($locale, $groupKey) {
                             return [
-                                $namespace => $this->getTranslationsFromDatabase($locale, $groupKey, $namespace)
+                                $namespace => $this->getTranslationsFromDatabase($locale, $groupKey, $namespace),
                             ];
-                        })->toArray()
+                        })->toArray(),
                     ];
-                })->toArray()
+                })->toArray(),
             ];
         })->toArray();
 

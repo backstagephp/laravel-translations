@@ -42,7 +42,7 @@ class TranslationServiceProvider extends PackageServiceProvider
 
     public function registeringPackage()
     {
-        $this->app->singleton(TranslatorContract::class, fn($app) => new TranslatorManager($app));
+        $this->app->singleton(TranslatorContract::class, fn ($app) => new TranslatorManager($app));
     }
 
     public function bootingPackage()
@@ -51,7 +51,7 @@ class TranslationServiceProvider extends PackageServiceProvider
         Event::listen(LanguageCodeChanged::class, HandleLanguageCodeChanges::class);
 
         PermanentCache::caches([
-            TranslationStringsCache::class
+            TranslationStringsCache::class,
         ]);
 
         Schedule::command(SyncTranslations::class)
