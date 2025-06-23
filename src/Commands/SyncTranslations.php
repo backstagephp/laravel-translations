@@ -50,13 +50,13 @@ class SyncTranslations extends Command
         $models = collect(config('translations.eloquent.translatable-models', []));
 
         return $models
-            ->flatMap(fn (string $model) => $model::all())
-            ->filter(fn ($item) => $item instanceof TranslatesAttributes);
+            ->flatMap(fn(string $model) => $model::all())
+            ->filter(fn($item) => $item instanceof TranslatesAttributes);
     }
 
     protected static function syncItems(Collection $items): void
     {
-        progress('Syncing translatable items', $items, fn (TranslatesAttributes $item) => $item->syncTranslations());
+        progress('Syncing translatable items', $items, fn(TranslatesAttributes $item) => $item->syncTranslations());
     }
 
     protected static function cleanOrphanedTranslations($orphans): void
@@ -68,21 +68,23 @@ class SyncTranslations extends Command
 
     protected static function getOrphanedAttributes(): Collection
     {
-        return TranslatedAttribute::query()->get()->filter(function ($attr) {
-            $type = $attr->translatable_type;
-            $id = $attr->translatable_id;
+        return TranslatedAttribute::query()
+            ->get()
+            ->filter(function (TranslatedAttribute $attr) {
+                $type = $attr->translatable_type;
+                $id = $attr->translatable_id;
 
-            if (! class_exists($type)) {
-                return true;
-            }
+                if (! class_exists($type)) {
+                    return true;
+                }
 
-            $query = $type::query();
+                $query = $type::query();
 
-            if (in_array(SoftDeletes::class, class_uses_recursive($type))) {
-                $query->withTrashed();
-            }
+                if (in_array(SoftDeletes::class, class_uses_recursive($type))) {
+                    $query->withTrashed();
+                }
 
-            return ! $query->whereKey($id)->exists();
-        });
+                return ! $query->whereKey($id)->exists();
+            });
     }
 }
