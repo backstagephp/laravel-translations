@@ -1,6 +1,6 @@
 <?php
 
-namespace Backstage\Translations\Laravel\Actions\Translatables;
+namespace Backstage\Translations\Laravel\Domain\Translatables\Actions;
 
 use Backstage\Translations\Laravel\Facades\Translator;
 use Backstage\Translations\Laravel\Models\Concerns\HasTranslatableAttributes;

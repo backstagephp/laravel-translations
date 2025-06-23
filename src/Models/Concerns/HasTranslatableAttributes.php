@@ -2,15 +2,15 @@
 
 namespace Backstage\Translations\Laravel\Models\Concerns;
 
-use Backstage\Translations\Laravel\Actions\Translatables\GetTranslatedAttribute;
-use Backstage\Translations\Laravel\Actions\Translatables\IsTranslatableAttribute;
-use Backstage\Translations\Laravel\Actions\Translatables\PushTranslatedAttribute;
-use Backstage\Translations\Laravel\Actions\Translatables\SyncTranslations;
-use Backstage\Translations\Laravel\Actions\Translatables\TranslateAttribute;
-use Backstage\Translations\Laravel\Actions\Translatables\TranslateAttributeForAllLanguages;
-use Backstage\Translations\Laravel\Actions\Translatables\TranslateAttributesForAllLanguages;
-use Backstage\Translations\Laravel\Actions\Translatables\UpdateAttributesIfTranslatable;
-use Backstage\Translations\Laravel\Actions\Translatables\UpdateTranslateAttributes;
+use Backstage\Translations\Laravel\Domain\Translatables\Actions\GetTranslatedAttribute;
+use Backstage\Translations\Laravel\Domain\Translatables\Actions\IsTranslatableAttribute;
+use Backstage\Translations\Laravel\Domain\Translatables\Actions\PushTranslatedAttribute;
+use Backstage\Translations\Laravel\Domain\Translatables\Actions\SyncTranslations;
+use Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttribute;
+use Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttributeForAllLanguages;
+use Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttributesForAllLanguages;
+use Backstage\Translations\Laravel\Domain\Translatables\Actions\UpdateAttributesIfTranslatable;
+use Backstage\Translations\Laravel\Domain\Translatables\Actions\UpdateTranslateAttributes;
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -26,7 +26,7 @@ trait HasTranslatableAttributes
          * @param  self  $model
          */
         static::created(function (TranslatesAttributes $model) {
-            $model->syncTranslations();
+            dispatch(fn () => $model->syncTranslations());
         });
 
         /**
@@ -40,14 +40,14 @@ trait HasTranslatableAttributes
                 $model->getTranslatableAttributes()
             );
 
-            $model->updateAttributesIfTranslatable($translatableAttributes);
+            dispatch(fn () => $model->updateAttributesIfTranslatable($translatableAttributes));
         });
 
         /**
          * @param  self  $model
          */
         static::deleting(function (TranslatesAttributes $model) {
-            $model->translatableAttributes->each->forceDelete();
+            dispatch(fn () => $model->translatableAttributes->each->delete());
         });
     }
 

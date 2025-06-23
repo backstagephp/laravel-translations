@@ -2,17 +2,17 @@
 
 namespace Backstage\Translations\Laravel\Jobs;
 
-use Backstage\Translations\Laravel\Domain\Actions\FindTranslatables;
-use Backstage\Translations\Laravel\Models\Language;
-use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Translation\FileLoader;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Models\Translation;
+use Backstage\Translations\Laravel\Domain\Scanner\Actions\FindTranslatables;
 
 class ScanTranslationStrings implements ShouldQueue
 {
@@ -38,7 +38,7 @@ class ScanTranslationStrings implements ShouldQueue
             return new FileLoader($app['files'], $app['path.lang']);
         });
 
-        $translations = collect((new FindTranslatables)())->unique();
+        $translations = collect(FindTranslatables::scan())->unique();
 
         $locales = $this->locale ? collect([$this->locale->code]) : $this->getLocales();
 
