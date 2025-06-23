@@ -4,7 +4,6 @@ namespace Backstage\Translations\Laravel\Domain\Scanner\Actions;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
 
@@ -27,30 +26,30 @@ class FindTranslatables
         $functions = collect(config('translations.scan.functions'));
 
         $pattern =
-            '[^\w]' .
-            '(?<!->)' . // Ignore method chaining
-            '(?:' . implode('|', $functions->toArray()) . ')' .
-            '\(\s*' .
-            '(?:' .
-            "'((?:[^'\\\\]|\\\\.)+)'" .  // Match single-quoted keys
-            '|' .
-            '`((?:[^`\\\\]|\\\\.)+)`' .  // Match backtick-quoted keys
-            '|' .
-            '"((?:[^"\\\\]|\\\\.)+)"' .  // Match double-quoted keys
-            '|' .
-            '(\$[a-zA-Z_][a-zA-Z0-9_]*)' . // Match variables
-            ')' .
-            '\s*' .
-            '(?:,([^)]*))?' .  // Capture second argument (parameters)
-            '\s*' .
+            '[^\w]'.
+            '(?<!->)'. // Ignore method chaining
+            '(?:'.implode('|', $functions->toArray()).')'.
+            '\(\s*'.
+            '(?:'.
+            "'((?:[^'\\\\]|\\\\.)+)'".  // Match single-quoted keys
+            '|'.
+            '`((?:[^`\\\\]|\\\\.)+)`'.  // Match backtick-quoted keys
+            '|'.
+            '"((?:[^"\\\\]|\\\\.)+)"'.  // Match double-quoted keys
+            '|'.
+            '(\$[a-zA-Z_][a-zA-Z0-9_]*)'. // Match variables
+            ')'.
+            '\s*'.
+            '(?:,([^)]*))?'.  // Capture second argument (parameters)
+            '\s*'.
             '[\),]';
 
         foreach ($finder as $file) {
             if (preg_match_all("/$pattern/siU", $file->getContents(), $matches, PREG_SET_ORDER)) {
                 foreach ($matches as $match) {
-                    $key = $match[1] ?: $match[2] ?: $match[3] ?: $match[4]; 
+                    $key = $match[1] ?: $match[2] ?: $match[3] ?: $match[4];
 
-                    $params = $match[5] ?? null; 
+                    $params = $match[5] ?? null;
 
                     static::addMatch($file, $key, $params);
                 }
@@ -59,14 +58,14 @@ class FindTranslatables
 
         return collect(static::$allMatches)
             ->collapse()
-            ->map(fn($match) => [
+            ->map(fn ($match) => [
                 'key' => $match['key'],
                 'namespace' => $match['namespace'],
                 'group' => $match['group'],
                 'text' => __($match['key']),
                 'params' => $match['params'],
             ])
-            ->when($mergeKeys, fn($collection) => $this->mergeExistingKeys($collection));
+            ->when($mergeKeys, fn ($collection) => $this->mergeExistingKeys($collection));
     }
 
     protected static function addMatch($file, $key, $params = null): void
@@ -96,6 +95,6 @@ class FindTranslatables
     {
         $existingKeys = collect(json_decode(File::get(static::$baseFilename), true) ?? []);
 
-        return $existingKeys->union($newKeys->filter(fn($key) => ! $existingKeys->has($key)));
+        return $existingKeys->union($newKeys->filter(fn ($key) => ! $existingKeys->has($key)));
     }
 }

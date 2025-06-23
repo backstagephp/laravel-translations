@@ -50,13 +50,13 @@ class SyncTranslations extends Command
         $models = collect(config('translations.eloquent.translatable-models', []));
 
         return $models
-            ->flatMap(fn(string $model) => $model::all())
-            ->filter(fn($item) => $item instanceof TranslatesAttributes);
+            ->flatMap(fn (string $model) => $model::all())
+            ->filter(fn ($item) => $item instanceof TranslatesAttributes);
     }
 
     protected static function syncItems(Collection $items): void
     {
-        progress('Syncing translatable items', $items, fn(TranslatesAttributes $item) => $item->syncTranslations());
+        progress('Syncing translatable items', $items, fn (TranslatesAttributes $item) => $item->syncTranslations());
     }
 
     protected static function cleanOrphanedTranslations($orphans): void

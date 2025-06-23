@@ -2,6 +2,7 @@
 
 namespace Backstage\Translations\Laravel\Models\Concerns;
 
+use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\GetTranslatedAttribute;
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\IsTranslatableAttribute;
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\PushTranslatedAttribute;
@@ -11,7 +12,6 @@ use Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttribu
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttributesForAllLanguages;
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\UpdateAttributesIfTranslatable;
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\UpdateTranslateAttributes;
-use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
