@@ -2,6 +2,7 @@
 
 namespace Backstage\Translations\Laravel\Models;
 
+use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -27,6 +28,15 @@ class Translation extends Model
         'namespace' => 'string',
         'translated_at' => 'datetime',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function (Translation $translation) {
+            dispatch(fn() => TranslationStringsCache::update());
+        });
+    }
 
     public function language(): BelongsTo
     {

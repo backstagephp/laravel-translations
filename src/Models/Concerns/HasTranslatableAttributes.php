@@ -12,7 +12,6 @@ use Backstage\Translations\Laravel\Actions\Translatables\TranslateAttributesForA
 use Backstage\Translations\Laravel\Actions\Translatables\UpdateTranslateAttributes;
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasTranslatableAttributes
@@ -23,14 +22,14 @@ trait HasTranslatableAttributes
     public static function bootHasTranslatableAttributes(): void
     {
         /**
-         * @var static<Model>
+         * @param self  $model
          */
         static::created(function (TranslatesAttributes $model) {
             $model->syncTranslations();
         });
 
         /**
-         * @param  self  $model
+         * @param self  $model
          */
         static::updated(function (TranslatesAttributes $model) {
             $dirtyAttributes = $model->getDirty();
@@ -41,6 +40,13 @@ trait HasTranslatableAttributes
             );
 
             $model->updateAttributesIfTranslatable($translatableAttributes);
+        });
+
+        /**
+         * @param self  $model
+         */
+        static::deleting(function (TranslatesAttributes $model) {
+            $model->translatableAttributes->each->forceDelete();
         });
     }
 

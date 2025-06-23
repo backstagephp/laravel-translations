@@ -3,6 +3,7 @@
 namespace Backstage\Translations\Laravel\Commands;
 
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
+use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,39 +21,18 @@ class SyncTranslations extends Command
 
     public function handle(): void
     {
-        $items = $this->getTranslatableItems();
+        $items = static::getTranslatableItems();
 
         info("Found {$items->count()} translatable items to sync.");
 
+        $this->newLine();
+
         $this->syncItems($items);
+
+        $this->newLine();
 
         info('Translations synced successfully.');
 
-        $this->cleanOrphanedTranslations();
-    }
-
-    protected function getTranslatableItems(): Collection
-    {
-        $models = collect(config('translations.eloquent.translatable-models', [
-            //
-        ]));
-
-        return $models
-            ->flatMap(fn (string $model) => $model::all())
-            ->filter(fn ($item) => $item instanceof TranslatesAttributes);
-    }
-
-    protected function syncItems(Collection $items): void
-    {
-        $this->newLine();
-
-        progress('Syncing translatable items', $items, fn (TranslatesAttributes $item) => $item->syncTranslations());
-
-        $this->newLine();
-    }
-
-    protected function cleanOrphanedTranslations(): void
-    {
         note('Cleaning unused translations...');
 
         $orphans = static::getOrphanedAttributes();
@@ -61,10 +41,29 @@ class SyncTranslations extends Command
             note('No unused translations found.');
 
             return;
+        } else {
+            static::cleanOrphanedTranslations($orphans);
         }
+    }
 
+    protected static function getTranslatableItems(): Collection
+    {
+        $models = collect(config('translations.eloquent.translatable-models', []));
+
+        return $models
+            ->flatMap(fn(string $model) => $model::all())
+            ->filter(fn($item) => $item instanceof TranslatesAttributes);
+    }
+
+    protected static function syncItems(Collection $items): void
+    {
+        progress('Syncing translatable items', $items, fn(TranslatesAttributes $item) => $item->syncTranslations());
+    }
+
+    protected static function cleanOrphanedTranslations($orphans): void
+    {
         progress('Deleting unused translations', $orphans, function (TranslatedAttribute $attr) {
-            $attr->delete();
+            $attr->forceDelete();
         });
     }
 
