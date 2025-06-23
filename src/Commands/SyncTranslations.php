@@ -8,6 +8,10 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\note;
+use function Laravel\Prompts\progress;
+
 class SyncTranslations extends Command
 {
     protected $signature = 'translations:sync';
@@ -18,11 +22,11 @@ class SyncTranslations extends Command
     {
         $items = $this->getTranslatableItems();
 
-        $this->info("Found {$items->count()} translatable items to sync.");
+        info("Found {$items->count()} translatable items to sync.");
 
         $this->syncItems($items);
 
-        $this->info('Translations synced successfully.');
+        info('Translations synced successfully.');
 
         $this->cleanOrphanedTranslations();
     }
@@ -40,25 +44,31 @@ class SyncTranslations extends Command
 
     protected function syncItems(Collection $items): void
     {
-        $this->withProgressBar($items, fn (TranslatesAttributes $item) => $item->syncTranslations());
+        $this->newLine();
+
+        progress('Syncing translatable items', $items, fn (TranslatesAttributes $item) => $item->syncTranslations());
+
+        $this->newLine();
     }
 
     protected function cleanOrphanedTranslations(): void
     {
-        $this->info('Cleaning unused translations...');
+        note('Cleaning unused translations...');
 
-        $orphans = $this->getOrphanedAttributes();
+        $orphans = static::getOrphanedAttributes();
 
         if ($orphans->isEmpty()) {
-            $this->info('No unused translations found.');
+            note('No unused translations found.');
 
             return;
         }
 
-        $this->withProgressBar($orphans, fn (TranslatedAttribute $attr) => $attr->delete());
+        progress('Deleting unused translations', $orphans, function (TranslatedAttribute $attr) {
+            $attr->delete();
+        });
     }
 
-    protected function getOrphanedAttributes(): Collection
+    protected static function getOrphanedAttributes(): Collection
     {
         return TranslatedAttribute::query()->get()->filter(function ($attr) {
             $type = $attr->translatable_type;

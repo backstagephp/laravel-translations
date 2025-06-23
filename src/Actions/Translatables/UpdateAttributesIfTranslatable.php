@@ -1,0 +1,25 @@
+<?php
+
+namespace Backstage\Translations\Laravel\Actions\Translatables;
+
+use Backstage\Translations\Laravel\Models\Concerns\HasTranslatableAttributes;
+use Backstage\Translations\Laravel\Models\Language;
+use Illuminate\Database\Eloquent\Model;
+use Lorisleiva\Actions\Concerns\AsAction;
+
+class UpdateAttributesIfTranslatable
+{
+    use AsAction;
+
+    /**
+     * @param  HasTranslatableAttributes|Model  $model
+     */
+    public function handle(object $model, array $translatableAttributes): void
+    {
+        $languages = Language::all();
+
+        foreach ($translatableAttributes as $attribute) {
+            $model->translateAttributeForAllLanguages(attribute: $attribute, overwrite: true);
+        }
+    }
+}
