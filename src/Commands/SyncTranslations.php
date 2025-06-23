@@ -34,13 +34,13 @@ class SyncTranslations extends Command
         ]));
 
         return $models
-            ->flatMap(fn(string $model) => $model::all())
-            ->filter(fn($item) => $item instanceof TranslatesAttributes);
+            ->flatMap(fn (string $model) => $model::all())
+            ->filter(fn ($item) => $item instanceof TranslatesAttributes);
     }
 
     protected function syncItems(Collection $items): void
     {
-        $this->withProgressBar($items, fn(TranslatesAttributes $item) => $item->syncTranslations());
+        $this->withProgressBar($items, fn (TranslatesAttributes $item) => $item->syncTranslations());
     }
 
     protected function cleanOrphanedTranslations(): void
@@ -55,7 +55,7 @@ class SyncTranslations extends Command
             return;
         }
 
-        $this->withProgressBar($orphans, fn(TranslatedAttribute $attr) => $attr->delete());
+        $this->withProgressBar($orphans, fn (TranslatedAttribute $attr) => $attr->delete());
     }
 
     protected function getOrphanedAttributes(): Collection
