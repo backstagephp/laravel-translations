@@ -3,7 +3,6 @@
 namespace Backstage\Translations\Laravel\Actions\Translatables;
 
 use Backstage\Translations\Laravel\Models\Concerns\HasTranslatableAttributes;
-use Backstage\Translations\Laravel\Models\Language;
 use Illuminate\Database\Eloquent\Model;
 use Lorisleiva\Actions\Concerns\AsAction;
 
