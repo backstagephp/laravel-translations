@@ -29,11 +29,9 @@ class TranslationLoader extends FileLoader
             return [];
         }
 
-        $translations = $cachedData[$locale][$group][$namespace];
+        $translations = $cachedData[$locale][$group][$namespace] ?? [];
 
-        return collect($translations)->mapWithKeys(function ($text, $key) {
-            return [$key => $text];
-        })->toArray();
+        return $translations;
     }
 
     protected static function checkTableExists(): bool
@@ -42,7 +40,7 @@ class TranslationLoader extends FileLoader
             return Schema::hasTable((new Translation)->getTable());
         }
 
-        return Cache::remember('translations:table_exists', 60, function () {
+        return Cache::remember('translations:table_exists', 3600, function () {
             return Schema::hasTable((new Translation)->getTable());
         });
     }
