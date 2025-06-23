@@ -28,6 +28,12 @@ return [
         ],
     ],
 
+    'eloquent' => [
+        'translatable-models' => [
+            //
+        ],
+    ],
+
     'translators' => [
         'default' => env('TRANSLATION_DRIVER', 'google-translate'),
 
