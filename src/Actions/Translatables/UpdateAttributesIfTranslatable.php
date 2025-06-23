@@ -16,8 +16,6 @@ class UpdateAttributesIfTranslatable
      */
     public function handle(object $model, array $translatableAttributes): void
     {
-        $languages = Language::all();
-
         foreach ($translatableAttributes as $attribute) {
             $model->translateAttributeForAllLanguages(attribute: $attribute, overwrite: true);
         }

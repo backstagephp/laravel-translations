@@ -2,17 +2,18 @@
 
 namespace Backstage\Translations\Laravel\Models\Concerns;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
+use Backstage\Translations\Laravel\Actions\Translatables\SyncTranslations;
+use Backstage\Translations\Laravel\Actions\Translatables\TranslateAttribute;
 use Backstage\Translations\Laravel\Actions\Translatables\GetTranslatedAttribute;
 use Backstage\Translations\Laravel\Actions\Translatables\IsTranslatableAttribute;
 use Backstage\Translations\Laravel\Actions\Translatables\PushTranslatedAttribute;
-use Backstage\Translations\Laravel\Actions\Translatables\SyncTranslations;
-use Backstage\Translations\Laravel\Actions\Translatables\TranslateAttribute;
+use Backstage\Translations\Laravel\Actions\Translatables\UpdateTranslateAttributes;
+use Backstage\Translations\Laravel\Actions\Translatables\UpdateAttributesIfTranslatable;
 use Backstage\Translations\Laravel\Actions\Translatables\TranslateAttributeForAllLanguages;
 use Backstage\Translations\Laravel\Actions\Translatables\TranslateAttributesForAllLanguages;
-use Backstage\Translations\Laravel\Actions\Translatables\UpdateTranslateAttributes;
-use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
-use Backstage\Translations\Laravel\Models\TranslatedAttribute;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasTranslatableAttributes
 {
@@ -159,9 +160,9 @@ trait HasTranslatableAttributes
 
     public function updateAttributesIfTranslatable(array $translatableAttributes): void
     {
-        UpdateTranslateAttributes::run(
+        UpdateAttributesIfTranslatable::run(
             model: $this,
-            attributes: $translatableAttributes
+            translatableAttributes: $translatableAttributes
         );
     }
 }
