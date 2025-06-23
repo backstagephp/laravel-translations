@@ -2,6 +2,7 @@
 
 namespace Backstage\Translations\Laravel\Base;
 
+use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
 use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Translation\FileLoader;
@@ -19,23 +20,21 @@ class TranslationLoader extends FileLoader
             return $fileTranslations;
         }
 
-        return array_replace_recursive($fileTranslations, $this->getTranslationsFromDatabase($locale, $group, $namespace));
+        return array_replace_recursive($fileTranslations, once(fn () => $this->getTranslationsFromDatabase($locale, $group, $namespace)));
     }
 
     protected function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
     {
-        $translations = Translation::select('key', 'text');
+        $cachedData = TranslationStringsCache::updateAndGet();
 
-        if ($namespace !== '*') {
-            $translations->where('namespace', $namespace);
+        if (! isset($cachedData[$locale][$group][$namespace])) {
+            return [];
         }
 
-        if ($group !== '*') {
-            $translations->where('group', $group);
-        }
+        $translations = $cachedData[$locale][$group][$namespace];
 
-        return $translations->where(fn ($query) => $query->where('code', 'LIKE', $locale.'_%')->orWhere('code', $locale))
-            ->pluck('text', 'key')
-            ->toArray();
+        return collect($translations)->mapWithKeys(function ($text, $key) {
+            return [$key => $text];
+        })->toArray();
     }
 }
