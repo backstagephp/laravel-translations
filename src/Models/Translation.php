@@ -34,7 +34,7 @@ class Translation extends Model
         parent::boot();
 
         static::saved(function (Translation $translation) {
-            dispatch(fn() => TranslationStringsCache::update());
+            dispatch(fn () => TranslationStringsCache::update());
         });
     }
 
