@@ -15,7 +15,7 @@ interface TranslatesAttributes
     /**
      * Translate the given attributes to a target language.
      *
-     * @param string|null $targetLanguage ISO 639-1 code or null for default language.
+     * @param  string|null  $targetLanguage  ISO 639-1 code or null for default language.
      * @return array<string, string> Associative array of translated attributes.
      *
      * @see \Backstage\Translations\Laravel\Actions\Translatables\TranslateAttribute
@@ -34,7 +34,7 @@ interface TranslatesAttributes
     /**
      * Translate a specific attribute to all available languages.
      *
-     * @param string $attribute The attribute to translate.
+     * @param  string  $attribute  The attribute to translate.
      * @return array<string, string> Translations keyed by locale.
      *
      * @see \Backstage\Translations\Laravel\Actions\Translatables\TranslateAttributeForAllLanguages
@@ -44,8 +44,8 @@ interface TranslatesAttributes
     /**
      * Translate a specific attribute to a target language.
      *
-     * @param string $attribute The attribute to translate.
-     * @param string $targetLanguage ISO 639-1 code.
+     * @param  string  $attribute  The attribute to translate.
+     * @param  string  $targetLanguage  ISO 639-1 code.
      * @return string The translated value.
      *
      * @see \Backstage\Translations\Laravel\Actions\Translatables\TranslateAttribute
@@ -55,10 +55,9 @@ interface TranslatesAttributes
     /**
      * Persist a translation for a given attribute and locale.
      *
-     * @param string $attribute The attribute name.
-     * @param string $translation The translated value.
-     * @param string $locale The locale code (ISO 639-1).
-     * @return void
+     * @param  string  $attribute  The attribute name.
+     * @param  string  $translation  The translated value.
+     * @param  string  $locale  The locale code (ISO 639-1).
      *
      * @see \Backstage\Translations\Laravel\Actions\Translatables\PushTranslatedAttribute
      */
@@ -67,8 +66,8 @@ interface TranslatesAttributes
     /**
      * Retrieve the translation of a specific attribute for a locale.
      *
-     * @param string $attribute The attribute name.
-     * @param string|null $locale Locale to fetch translation for, or null for fallback/default.
+     * @param  string  $attribute  The attribute name.
+     * @param  string|null  $locale  Locale to fetch translation for, or null for fallback/default.
      * @return string|null The translated value or null if not found.
      *
      * @see \Backstage\Translations\Laravel\Actions\Translatables\GetTranslatedAttribute
@@ -85,7 +84,7 @@ interface TranslatesAttributes
     /**
      * Check if an attribute is translatable.
      *
-     * @param string $attribute Attribute to check.
+     * @param  string  $attribute  Attribute to check.
      * @return bool True if translatable, false otherwise.
      *
      * @see \Backstage\Translations\Laravel\Actions\Translatables\IsTranslatableAttribute
@@ -102,7 +101,6 @@ interface TranslatesAttributes
     /**
      * Sync translations, typically after creation or update.
      *
-     * @return void
      *
      * @see \Backstage\Translations\Laravel\Actions\Translatables\SyncTranslations
      */
