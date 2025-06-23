@@ -18,7 +18,7 @@ class TranslationLoader extends FileLoader
             return $fileTranslations;
         }
 
-        return array_replace_recursive($fileTranslations, once(fn() => static::getTranslationsFromDatabase($locale, $group, $namespace)));
+        return array_replace_recursive($fileTranslations, once(fn () => static::getTranslationsFromDatabase($locale, $group, $namespace)));
     }
 
     protected static function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
@@ -38,7 +38,7 @@ class TranslationLoader extends FileLoader
 
     protected static function checkTableExists(): bool
     {
-        if (!app()->isProduction()) {
+        if (! app()->isProduction()) {
             return Schema::hasTable((new Translation)->getTable());
         }
 

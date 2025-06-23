@@ -17,13 +17,12 @@ class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
         $groups = Translation::distinct('group')->pluck('group');
         $namespaces = Translation::distinct('namespace')->pluck('namespace');
 
-        return $locales->mapWithKeys(fn($locale) => [
-            $locale => $groups->mapWithKeys(fn($group) => [
+        return $locales->mapWithKeys(fn ($locale) => [
+            $locale => $groups->mapWithKeys(fn ($group) => [
                 $group ?? '*' => $namespaces->mapWithKeys(
-                    fn($namespace) =>
-                    [$namespace => $this->getTranslations($locale, $group ?? '*', $namespace)]
-                )->all()
-            ])->all()
+                    fn ($namespace) => [$namespace => $this->getTranslations($locale, $group ?? '*', $namespace)]
+                )->all(),
+            ])->all(),
         ])->all();
     }
 
@@ -32,10 +31,14 @@ class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
         $query = Translation::query()
             ->where('code', $locale);
 
-        if ($namespace !== '*') $query->where('namespace', $namespace);
-        if ($group !== '*') $query->where('group', $group);
+        if ($namespace !== '*') {
+            $query->where('namespace', $namespace);
+        }
+        if ($group !== '*') {
+            $query->where('group', $group);
+        }
 
-        return $query->get()->mapWithKeys(fn(Translation $t) =>[$t->key => $t->text])->all();
+        return $query->get()->mapWithKeys(fn (Translation $t) => [$t->key => $t->text])->all();
     }
 
     public static function schedule($callback)
