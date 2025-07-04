@@ -11,7 +11,6 @@ use Backstage\Translations\Laravel\Commands\TranslationsScan;
 use Backstage\Translations\Laravel\Contracts\TranslatorContract;
 use Backstage\Translations\Laravel\Events\LanguageCodeChanged;
 use Backstage\Translations\Laravel\Events\LanguageDeleted;
-use Backstage\Translations\Laravel\Events\TranslationsCacheNeedsRefresh;
 use Backstage\Translations\Laravel\Listners\DeleteTranslations;
 use Backstage\Translations\Laravel\Listners\HandleLanguageCodeChanges;
 use Backstage\Translations\Laravel\Managers\TranslatorManager;
@@ -42,7 +41,7 @@ class TranslationServiceProvider extends PackageServiceProvider
 
     public function registeringPackage()
     {
-        $this->app->singleton(TranslatorContract::class, fn($app) => new TranslatorManager($app));
+        $this->app->singleton(TranslatorContract::class, fn ($app) => new TranslatorManager($app));
     }
 
     public function bootingPackage()
