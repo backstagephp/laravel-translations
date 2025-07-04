@@ -61,6 +61,6 @@ class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
 
     public static function schedule($callback)
     {
-        return $callback->everyMinute(); // Adjust to everyTenMinutes() in real usage
+        return $callback->everyTenMinutes(); // Adjust to everyTenMinutes() in real usage
     }
 }
