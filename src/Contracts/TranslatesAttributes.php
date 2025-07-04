@@ -18,9 +18,9 @@ interface TranslatesAttributes
      * @param  string|null  $targetLanguage  ISO 639-1 code or null for default language.
      * @return array<string, string> Associative array of translated attributes.
      *
-     * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttribute
+     * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttributes
      */
-    public function translateAttributes(?string $targetLanguage): array;
+    public function translateAttributes(?string $targetLanguage = null): array;
 
     /**
      * Translate all translatable attributes to all available languages.
@@ -35,22 +35,24 @@ interface TranslatesAttributes
      * Translate a specific attribute to all available languages.
      *
      * @param  string  $attribute  The attribute to translate.
+     * @param  bool  $overwrite Whether to overwrite existing translations.
      * @return array<string, string> Translations keyed by locale.
      *
      * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttributeForAllLanguages
      */
-    public function translateAttributeForAllLanguages(string $attribute): array;
+    public function translateAttributeForAllLanguages(string $attribute, bool $overwrite = false): array;
 
     /**
      * Translate a specific attribute to a target language.
      *
      * @param  string  $attribute  The attribute to translate.
      * @param  string  $targetLanguage  ISO 639-1 code.
-     * @return string The translated value.
+     * @param  bool  $overwrite Whether to overwrite existing translation.
+     * @return mixed The translated value.
      *
      * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttribute
      */
-    public function translateAttribute(string $attribute, string $targetLanguage): string;
+    public function translateAttribute(mixed $attribute, string $targetLanguage, bool $overwrite = false): mixed;
 
     /**
      * Persist a translation for a given attribute and locale.
@@ -68,12 +70,21 @@ interface TranslatesAttributes
      *
      * @param  string  $attribute  The attribute name.
      * @param  string|null  $locale  Locale to fetch translation for, or null for fallback/default.
-     * @return string|null The translated value or null if not found.
+     * @return mixed The translated value or null if not found.
      *
      * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\GetTranslatedAttribute
      */
-    public function getTranslatedAttribute(string $attribute, ?string $locale): ?string;
+    public function getTranslatedAttribute(string $attribute, ?string $locale = null): mixed;
 
+    /**
+     * Get all translated attributes for the model in a specific locale.
+     * 
+     * @param  string|null  $locale  Locale to fetch translations for, or null for default.
+     * @return array<string, mixed> Associative array of translated attributes.
+     * 
+     * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\GetTranslatedAttributes
+     */
+    public function getTranslatedAttributes(?string $locale = null): array;
     /**
      * Return the list of attributes marked as translatable.
      *
@@ -101,8 +112,29 @@ interface TranslatesAttributes
     /**
      * Sync translations, typically after creation or update.
      *
+     * @return void
      *
      * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\SyncTranslations
      */
     public function syncTranslations(): void;
+
+    /**
+     * Update multiple translate attributes.
+     *
+     * @param  array<string, mixed>  $attributes  Attributes to update.
+     * @return void
+     *
+     * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\UpdateTranslateAttributes
+     */
+    public function updateTranslateAttributes(array $attributes): void;
+
+    /**
+     * Update only attributes that are translatable.
+     *
+     * @param  array<int, string>  $translatableAttributes  Attribute names to update.
+     * @return void
+     *
+     * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\UpdateAttributesIfTranslatable
+     */
+    public function updateAttributesIfTranslatable(array $translatableAttributes): void;
 }

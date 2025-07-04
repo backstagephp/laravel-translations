@@ -50,13 +50,19 @@ class SyncTranslations extends Command
         $models = collect(config('translations.eloquent.translatable-models', []));
 
         return $models
-            ->flatMap(fn (string $model) => $model::all())
-            ->filter(fn ($item) => $item instanceof TranslatesAttributes);
+            ->flatMap(fn(string $model) => $model::all())
+            ->filter(fn($item) => $item instanceof TranslatesAttributes);
     }
 
     protected static function syncItems(Collection $items): void
     {
-        progress('Syncing translatable items', $items, fn (TranslatesAttributes $item) => $item->syncTranslations());
+        if ($items->isEmpty()) {
+            info('No translatable items found to sync.');
+
+            return;
+        }
+
+        progress('Syncing translatable items', $items, fn(TranslatesAttributes $item) => $item->syncTranslations());
     }
 
     protected static function cleanOrphanedTranslations($orphans): void
@@ -71,13 +77,21 @@ class SyncTranslations extends Command
         return TranslatedAttribute::query()
             ->get()
             ->filter(function (TranslatedAttribute $attr) {
+                /**
+                 * @var \Illuminate\Database\Eloquent\Model $type
+                 */
                 $type = $attr->translatable_type;
+
                 $id = $attr->translatable_id;
 
                 if (! class_exists($type)) {
                     return true;
                 }
 
+
+                /**
+                 * @var \Illuminate\Database\Eloquent\Builder $query
+                 */
                 $query = $type::query();
 
                 if (in_array(SoftDeletes::class, class_uses_recursive($type))) {

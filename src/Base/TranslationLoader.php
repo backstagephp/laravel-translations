@@ -14,33 +14,39 @@ class TranslationLoader extends FileLoader
     {
         $fileTranslations = parent::load($locale, $group, $namespace);
 
-        if (! static::checkTableExists() || (! is_null($namespace) && $namespace !== '*')) {
+        if (! static::checkTableExists() || ($namespace !== null && $namespace !== '*')) {
             return $fileTranslations;
         }
 
-        return array_replace_recursive($fileTranslations, once(fn () => static::getTranslationsFromDatabase($locale, $group, $namespace)));
+        $dbTranslations = static::getTranslationsFromDatabase($locale, $group, $namespace);
+
+        if (empty($dbTranslations)) {
+            return $fileTranslations;
+        }
+
+        return array_replace_recursive($fileTranslations, $dbTranslations);
     }
 
     protected static function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
     {
         $cachedData = TranslationStringsCache::get();
 
-        if (! isset($cachedData[$locale][$group][$namespace])) {
-            return [];
-        }
-
-        $translations = $cachedData[$locale][$group][$namespace] ?? [];
-
-        return $translations;
+        return $cachedData[$locale][$group][$namespace] ?? [];
     }
 
     protected static function checkTableExists(): bool
     {
-        if (! app()->isProduction()) {
-            return Schema::hasTable((new Translation)->getTable());
+        static $exists = null;
+
+        if ($exists !== null) {
+            return $exists;
         }
 
-        return Cache::remember('translations:table_exists', 3600, function () {
+        if (! app()->isProduction()) {
+            return $exists = Schema::hasTable((new Translation)->getTable());
+        }
+
+        return $exists = Cache::remember('translations:table_exists', 3600, function () {
             return Schema::hasTable((new Translation)->getTable());
         });
     }
