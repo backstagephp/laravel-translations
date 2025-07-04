@@ -3,7 +3,6 @@
 namespace Backstage\Translations\Laravel\Commands;
 
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
-use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -52,8 +51,8 @@ class SyncTranslations extends Command
         $models = collect(config('translations.eloquent.translatable-models', []));
 
         return $models
-            ->flatMap(fn(string $model) => $model::all())
-            ->filter(fn($item) => $item instanceof TranslatesAttributes);
+            ->flatMap(fn (string $model) => $model::all())
+            ->filter(fn ($item) => $item instanceof TranslatesAttributes);
     }
 
     protected function syncItems(Collection $items): void
@@ -75,7 +74,7 @@ class SyncTranslations extends Command
 
                     return true;
                 })
-                ->map(fn(TranslatesAttributes $item) => count($item->getTranslatableAttributes()))
+                ->map(fn (TranslatesAttributes $item) => count($item->getTranslatableAttributes()))
                 ->sum();
 
             $this->output->progressStart($itemsCount);
@@ -83,17 +82,17 @@ class SyncTranslations extends Command
             $chunckedItems = $items->chunk(4);
 
             $chuckedCallbacks = $chunckedItems->map(function (Collection $chunk) {
-                return fn() => static::syncChunk($chunk);
+                return fn () => static::syncChunk($chunk);
             });
 
             Concurrency::driver('fork')
                 ->run([
-                    ...$chuckedCallbacks
+                    ...$chuckedCallbacks,
                 ]);
         } catch (\Throwable $e) {
             info('Payload is too large, syncing items one by one.');
 
-            progress('Syncing translatable items', $items, fn(TranslatesAttributes $item) => $item->syncTranslations());
+            progress('Syncing translatable items', $items, fn (TranslatesAttributes $item) => $item->syncTranslations());
         }
     }
 
@@ -138,7 +137,6 @@ class SyncTranslations extends Command
                 if (! in_array($attribute, $model->getTranslatableAttributes())) {
                     return true;
                 }
-
 
                 /**
                  * @var \Illuminate\Database\Eloquent\Builder $query
