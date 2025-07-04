@@ -3,6 +3,7 @@
 namespace Backstage\Translations\Laravel\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TranslatedAttribute extends Model
@@ -22,7 +23,7 @@ class TranslatedAttribute extends Model
         'translated_at' => 'datetime',
     ];
 
-    public function translatable()
+    public function translatable(): MorphTo
     {
         return $this->morphTo();
     }

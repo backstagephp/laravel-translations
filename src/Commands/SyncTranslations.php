@@ -3,6 +3,7 @@
 namespace Backstage\Translations\Laravel\Commands;
 
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
+use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -51,8 +52,8 @@ class SyncTranslations extends Command
         $models = collect(config('translations.eloquent.translatable-models', []));
 
         return $models
-            ->flatMap(fn (string $model) => $model::all())
-            ->filter(fn ($item) => $item instanceof TranslatesAttributes);
+            ->flatMap(fn(string $model) => $model::all())
+            ->filter(fn($item) => $item instanceof TranslatesAttributes);
     }
 
     protected function syncItems(Collection $items): void
@@ -63,33 +64,37 @@ class SyncTranslations extends Command
             return;
         }
 
-        $itemsCount = $items
-            ->filter(function (TranslatesAttributes $item) {
-                $translations = $item->translatableAttributes()->count();
+        try {
+            $itemsCount = $items
+                ->filter(function (TranslatesAttributes $item) {
+                    $translations = $item->translatableAttributes()->count();
 
-                if ($translations === count($item->getTranslatableAttributes())) {
-                    return false;
-                }
+                    if ($translations === count($item->getTranslatableAttributes())) {
+                        return false;
+                    }
 
-                return true;
-            })
-            ->map(fn (TranslatesAttributes $item) => count($item->getTranslatableAttributes()))
-            ->sum();
+                    return true;
+                })
+                ->map(fn(TranslatesAttributes $item) => count($item->getTranslatableAttributes()))
+                ->sum();
 
-        $this->output->progressStart($itemsCount);
+            $this->output->progressStart($itemsCount);
 
-        $chunckedItems = $items->chunk(4);
+            $chunckedItems = $items->chunk(4);
 
-        $chuckedCallbacks = $chunckedItems->map(function (Collection $chunk) {
-            return fn () => static::syncChunk($chunk);
-        });
+            $chuckedCallbacks = $chunckedItems->map(function (Collection $chunk) {
+                return fn() => static::syncChunk($chunk);
+            });
 
-        Concurrency::driver('fork')
-            ->run([
-                ...$chuckedCallbacks,
-            ]);
+            Concurrency::driver('fork')
+                ->run([
+                    ...$chuckedCallbacks
+                ]);
+        } catch (\Throwable $e) {
+            info('Payload is too large, syncing items one by one.');
 
-        // progress('Syncing translatable items', $items, fn(TranslatesAttributes $item) => $item->syncTranslations());
+            progress('Syncing translatable items', $items, fn(TranslatesAttributes $item) => $item->syncTranslations());
+        }
     }
 
     public function syncChunk(Collection $chunk): void
@@ -121,6 +126,19 @@ class SyncTranslations extends Command
                 if (! class_exists($type)) {
                     return true;
                 }
+
+                $model = $attr->translatable()->get()->first();
+
+                $attribute = $attr->attribute;
+
+                if (! method_exists($model, 'translatableAttributes')) {
+                    return true;
+                }
+
+                if (! in_array($attribute, $model->getTranslatableAttributes())) {
+                    return true;
+                }
+
 
                 /**
                  * @var \Illuminate\Database\Eloquent\Builder $query
