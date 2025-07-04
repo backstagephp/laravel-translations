@@ -15,7 +15,7 @@ interface TranslatesAttributes
     /**
      * Translate the given attributes to a target language.
      *
-     * @param  string|null  $targetLanguage  ISO 639-1 code or null for default language.
+     * @param  string|null  $targetLanguage  Langauge code or null for default language.
      * @return array<string, string> Associative array of translated attributes.
      *
      * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttributes
@@ -135,4 +135,12 @@ interface TranslatesAttributes
      * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\UpdateAttributesIfTranslatable
      */
     public function updateAttributesIfTranslatable(array $translatableAttributes): void;
+
+    /**
+     * Get the translation rules for a specific attribute.
+     *
+     * @param  string  $attribute  Attribute name.
+     * @return array|string Rules array or '*' string for all.
+     */
+    public function getTranslatableAttributeRulesFor(string $attribute): array|string;
 }
