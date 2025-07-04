@@ -2,10 +2,10 @@
 
 namespace Backstage\Translations\Laravel\Caches;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Backstage\PermanentCache\Laravel\Cached;
 use Backstage\PermanentCache\Laravel\Scheduled;
 use Backstage\Translations\Laravel\Models\Translation;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
 {
@@ -28,10 +28,10 @@ class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
          */
         $namespaces = Translation::distinct('namespace')->pluck('namespace');
 
-        return $locales->mapWithKeys(fn ($locale) => [
-            $locale => $groups->mapWithKeys(fn ($group) => [
+        return $locales->mapWithKeys(fn($locale) => [
+            $locale => $groups->mapWithKeys(fn($group) => [
                 $group ?? '*' => $namespaces->mapWithKeys(
-                    fn ($namespace) => [$namespace => static::getTranslations($locale, $group ?? '*', $namespace)]
+                    fn($namespace) => [$namespace => static::getTranslations($locale, $group ?? '*', $namespace)]
                 )->all(),
             ])->all(),
         ])->all();
@@ -54,7 +54,7 @@ class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
 
         $results = $query->select('key', 'text')->get();
 
-        $mappedResult = $results->mapWithKeys(fn (Translation $t) => [$t->key => $t->text])->all();
+        $mappedResult = $results->mapWithKeys(fn(Translation $t) => [$t->key => $t->text])->all();
 
         return $mappedResult;
     }

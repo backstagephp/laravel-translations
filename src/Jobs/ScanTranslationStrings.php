@@ -2,6 +2,7 @@
 
 namespace Backstage\Translations\Laravel\Jobs;
 
+use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
 use Backstage\Translations\Laravel\Domain\Scanner\Actions\FindTranslatables;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Translation;
@@ -11,6 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Translation\FileLoader;
 
@@ -98,6 +100,8 @@ class ScanTranslationStrings implements ShouldQueue
 
     protected function storeTranslations($translations): void
     {
+        Event::fake();
+
         $translations->each(function ($translation) {
             if (! is_array($translation['text'])) {
                 Translation::firstOrCreate([
@@ -112,5 +116,7 @@ class ScanTranslationStrings implements ShouldQueue
                 ]);
             }
         });
+
+        TranslationStringsCache::update();
     }
 }
