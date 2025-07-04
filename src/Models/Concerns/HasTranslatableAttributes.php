@@ -28,7 +28,7 @@ trait HasTranslatableAttributes
          * @param  self  $model
          */
         static::created(function (TranslatesAttributes $model) {
-            dispatch(fn() => $model->syncTranslations());
+            dispatch(fn () => $model->syncTranslations());
         });
 
         /**
@@ -42,14 +42,14 @@ trait HasTranslatableAttributes
                 $model->getTranslatableAttributes()
             );
 
-            dispatch(fn() => $model->updateAttributesIfTranslatable($translatableAttributes));
+            dispatch(fn () => $model->updateAttributesIfTranslatable($translatableAttributes));
         });
 
         /**
          * @param  self  $model
          */
         static::deleting(function (TranslatesAttributes $model) {
-            dispatch(fn() => $model->translatableAttributes->each->delete());
+            dispatch(fn () => $model->translatableAttributes->each->delete());
         });
     }
 
@@ -181,7 +181,7 @@ trait HasTranslatableAttributes
 
     public function getTranslatableAttributeRulesFor(string $attribute): array|string
     {
-        $methodName = 'getTranslatableAttributeRulesFor' . str($attribute)->studly();
+        $methodName = 'getTranslatableAttributeRulesFor'.str($attribute)->studly();
 
         if (! method_exists($this, $methodName)) {
             return '*';

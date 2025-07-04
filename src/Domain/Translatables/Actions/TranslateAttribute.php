@@ -15,10 +15,10 @@ class TranslateAttribute
 
         if (
             ! $overwrite && $model->translatableAttributes()
-            ->getQuery()
-            ->where('attribute', $attribute)
-            ->where('code', $targetLanguage)
-            ->exists()
+                ->getQuery()
+                ->where('attribute', $attribute)
+                ->where('code', $targetLanguage)
+                ->exists()
         ) {
             return $model->getTranslatedAttribute($attribute, $targetLanguage);
         }
@@ -88,13 +88,13 @@ class TranslateAttribute
 
     protected static function translateKeyAtRoot(array $data, string $key, string $targetLanguage): array
     {
-        if (!array_key_exists($key, $data)) {
+        if (! array_key_exists($key, $data)) {
             return $data;
         }
 
         $value = $data[$key];
 
-        if (!is_string($value) && !is_numeric($value)) {
+        if (! is_string($value) && ! is_numeric($value)) {
             return $data;
         }
 
@@ -151,7 +151,7 @@ class TranslateAttribute
                 continue;
             }
 
-            if (!is_string($value) && !is_numeric($value)) {
+            if (! is_string($value) && ! is_numeric($value)) {
                 continue;
             }
 
