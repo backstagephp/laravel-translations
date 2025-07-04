@@ -2,6 +2,7 @@
 
 namespace Backstage\Translations\Laravel\Contracts;
 
+use Illuminate\Console\OutputStyle;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -116,7 +117,7 @@ interface TranslatesAttributes
      *
      * @see \Backstage\Translations\Laravel\Domain\Translatables\Actions\SyncTranslations
      */
-    public function syncTranslations(): void;
+    public function syncTranslations(?OutputStyle $output = null): void;
 
     /**
      * Update multiple translate attributes.

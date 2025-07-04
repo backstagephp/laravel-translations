@@ -18,6 +18,12 @@ class TranslateAttributeForAllLanguages
     {
         $languages = Language::all();
 
+        if ($languages->isEmpty()) {
+            throw new \RuntimeException('No languages available for translation.');
+
+            return [];
+        }
+
         $translations = $languages->mapWithKeys(function (Language $language) use ($attribute, $overwrite, $model) {
             return [$language->code => $model->translateAttribute($attribute, $language->code, $overwrite)];
         });

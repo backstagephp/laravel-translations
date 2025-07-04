@@ -3,10 +3,12 @@
 namespace Backstage\Translations\Laravel\Commands;
 
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
+use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Concurrency;
 
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
@@ -20,7 +22,7 @@ class SyncTranslations extends Command
 
     public function handle(): void
     {
-        $items = static::getTranslatableItems();
+        $items = $this->getTranslatableItems();
 
         info("Found {$items->count()} translatable items to sync.");
 
@@ -45,16 +47,16 @@ class SyncTranslations extends Command
         }
     }
 
-    protected static function getTranslatableItems(): Collection
+    protected function getTranslatableItems(): Collection
     {
         $models = collect(config('translations.eloquent.translatable-models', []));
 
         return $models
-            ->flatMap(fn (string $model) => $model::all())
-            ->filter(fn ($item) => $item instanceof TranslatesAttributes);
+            ->flatMap(fn(string $model) => $model::all())
+            ->filter(fn($item) => $item instanceof TranslatesAttributes);
     }
 
-    protected static function syncItems(Collection $items): void
+    protected function syncItems(Collection $items): void
     {
         if ($items->isEmpty()) {
             info('No translatable items found to sync.');
@@ -62,7 +64,40 @@ class SyncTranslations extends Command
             return;
         }
 
-        progress('Syncing translatable items', $items, fn (TranslatesAttributes $item) => $item->syncTranslations());
+        $itemsCount = $items
+            ->filter(function (TranslatesAttributes $item) {
+                $translations = $item->translatableAttributes()->count();
+
+                if ($translations === count($item->getTranslatableAttributes())) {
+                    return false;
+                }
+
+                return true;
+            })
+            ->map(fn(TranslatesAttributes $item) => count($item->getTranslatableAttributes()))
+            ->sum();
+
+        $this->output->progressStart($itemsCount);
+
+        $chunckedItems = $items->chunk(4);
+
+        $chuckedCallbacks = $chunckedItems->map(function (Collection $chunk) {
+            return fn() => static::syncChunk($chunk);
+        });
+
+        Concurrency::driver('fork')
+            ->run([
+                ...$chuckedCallbacks
+            ]);
+
+        // progress('Syncing translatable items', $items, fn(TranslatesAttributes $item) => $item->syncTranslations());
+    }
+
+    public function syncChunk(Collection $chunk): void
+    {
+        $chunk->each(function (TranslatesAttributes $item) {
+            $item->syncTranslations($this->output);
+        });
     }
 
     protected static function cleanOrphanedTranslations($orphans): void

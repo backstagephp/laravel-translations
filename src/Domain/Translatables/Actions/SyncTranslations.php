@@ -13,12 +13,16 @@ class SyncTranslations
     /**
      * @param  HasTranslatableAttributes|Model  $model
      */
-    public function handle(object $model): void
+    public function handle(object $model, ?\Illuminate\Console\OutputStyle $output = null): void
     {
         $designatedAttributes = $model->getTranslatableAttributes();
 
         foreach ($designatedAttributes as $attribute) {
             $model->translateAttributeForAllLanguages($attribute);
+
+            if ($output) {
+                $output->progressAdvance();
+            }
         }
     }
 }

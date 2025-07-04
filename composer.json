@@ -27,6 +27,7 @@
         "echolabsdev/prism": ">0.65",
         "illuminate/contracts": "^10.0||^11.0||^12.0",
         "lorisleiva/laravel-actions": ">=2.0",
+        "spatie/fork": "^1.2",
         "spatie/laravel-package-tools": "^1.16",
         "stichoza/google-translate-php": "^5.2"
     },

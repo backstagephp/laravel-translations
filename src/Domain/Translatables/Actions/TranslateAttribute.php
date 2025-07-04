@@ -15,19 +15,17 @@ class TranslateAttribute
 
         if (
             ! $overwrite && $model->translatableAttributes()
-                ->getQuery()
-                ->where('attribute', $attribute)
-                ->where('code', $targetLanguage)
-                ->exists()
+            ->getQuery()
+            ->where('attribute', $attribute)
+            ->where('code', $targetLanguage)
+            ->exists()
         ) {
             return $model->getTranslatedAttribute($attribute, $targetLanguage);
         }
 
         $attributeValue = $model->getAttribute($attribute);
 
-        $translated = is_array($attributeValue)
-            ? static::translateArray($model, $attributeValue, $attribute, $targetLanguage)
-            : static::translate($attributeValue, $targetLanguage);
+        $translated = is_array($attributeValue) ? static::translateArray($model, $attributeValue, $attribute, $targetLanguage) : static::translate($attributeValue, $targetLanguage);
 
         if ($translated === null) {
             $translated = $model->translatableAttributes()
@@ -43,9 +41,11 @@ class TranslateAttribute
 
     protected static function translate(mixed $value, string $targetLanguage): mixed
     {
-        return is_string($value) || is_numeric($value)
-            ? Translator::with(config('translations.translators.default'))->translate($value, $targetLanguage)
-            : $value;
+        if (is_string($value) || is_numeric($value)) {
+            return Translator::with(config('translations.translators.default'))->translate($value, $targetLanguage);
+        }
+
+        return $value;
     }
 
     protected static function translateArray(object $model, array $data, string $attribute, string $targetLanguage): array
@@ -56,40 +56,49 @@ class TranslateAttribute
             return static::translateAllStringsInArray($data, $targetLanguage);
         }
 
-        foreach ($rules as $path) {
+        collect($rules)->each(function ($path) use (&$data, $targetLanguage) {
             $segments = explode('.', $path);
+
             if (count($segments) === 1) {
                 $data = static::translateAllByKey($data, $segments[0], $targetLanguage);
-            } else {
-                $data = static::translatePath($data, $segments, $targetLanguage);
+
+                return;
             }
-        }
+
+            $data = static::translatePath($data, $segments, $targetLanguage);
+        });
 
         return $data;
     }
 
     protected static function translateAllByKey(array $data, string $key, string $targetLanguage): array
     {
-        foreach ($data as $k => $value) {
+        return collect($data)->map(function ($value, $k) use ($key, $targetLanguage) {
             if (is_array($value)) {
-                $data[$k] = static::translateAllByKey($value, $key, $targetLanguage);
-            } elseif ($k === $key && (is_string($value) || is_numeric($value))) {
-                $data = static::translateKeyAtRoot($data, $key, $targetLanguage);
-                break;
+                return static::translateAllByKey($value, $key, $targetLanguage);
             }
-        }
 
-        return $data;
+            if ($k === $key && (is_string($value) || is_numeric($value))) {
+                return static::translate($value, $targetLanguage);
+            }
+
+            return $value;
+        })->toArray();
     }
 
     protected static function translateKeyAtRoot(array $data, string $key, string $targetLanguage): array
     {
-        if (array_key_exists($key, $data)) {
-            $value = $data[$key];
-            if (is_string($value) || is_numeric($value)) {
-                $data[$key] = static::translate($value, $targetLanguage);
-            }
+        if (!array_key_exists($key, $data)) {
+            return $data;
         }
+
+        $value = $data[$key];
+
+        if (!is_string($value) && !is_numeric($value)) {
+            return $data;
+        }
+
+        $data[$key] = static::translate($value, $targetLanguage);
 
         return $data;
     }
@@ -118,6 +127,7 @@ class TranslateAttribute
 
         if ($segments === []) {
             $value = $data[$segment];
+
             if (is_string($value) || is_numeric($value)) {
                 $data[$segment] = static::translate($value, $targetLanguage);
             }
@@ -137,9 +147,15 @@ class TranslateAttribute
         foreach ($data as $key => $value) {
             if (is_array($value)) {
                 $data[$key] = static::translateAllStringsInArray($value, $targetLanguage);
-            } elseif (is_string($value) || is_numeric($value)) {
-                $data[$key] = static::translate($value, $targetLanguage);
+
+                continue;
             }
+
+            if (!is_string($value) && !is_numeric($value)) {
+                continue;
+            }
+
+            $data[$key] = static::translate($value, $targetLanguage);
         }
 
         return $data;
