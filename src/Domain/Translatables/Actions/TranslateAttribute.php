@@ -3,7 +3,6 @@
 namespace Backstage\Translations\Laravel\Domain\Translatables\Actions;
 
 use Backstage\Translations\Laravel\Facades\Translator;
-use Illuminate\Database\Eloquent\Model;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class TranslateAttribute
@@ -16,10 +15,10 @@ class TranslateAttribute
 
         if (
             ! $overwrite && $model->translatableAttributes()
-            ->getQuery()
-            ->where('attribute', $attribute)
-            ->where('code', $targetLanguage)
-            ->exists()
+                ->getQuery()
+                ->where('attribute', $attribute)
+                ->where('code', $targetLanguage)
+                ->exists()
         ) {
             return $model->getTranslatedAttribute($attribute, $targetLanguage);
         }
@@ -79,6 +78,7 @@ class TranslateAttribute
                 break;
             }
         }
+
         return $data;
     }
 
@@ -90,9 +90,9 @@ class TranslateAttribute
                 $data[$key] = static::translate($value, $targetLanguage);
             }
         }
+
         return $data;
     }
-
 
     protected static function translatePath(array $data, array $segments, string $targetLanguage): array
     {
@@ -112,7 +112,7 @@ class TranslateAttribute
             return $data;
         }
 
-        if (!array_key_exists($segment, $data)) {
+        if (! array_key_exists($segment, $data)) {
             return $data;
         }
 
@@ -121,6 +121,7 @@ class TranslateAttribute
             if (is_string($value) || is_numeric($value)) {
                 $data[$segment] = static::translate($value, $targetLanguage);
             }
+
             return $data;
         }
 

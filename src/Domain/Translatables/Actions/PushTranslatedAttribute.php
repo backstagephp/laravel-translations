@@ -2,11 +2,11 @@
 
 namespace Backstage\Translations\Laravel\Domain\Translatables\Actions;
 
-use Locale;
-use Illuminate\Database\Eloquent\Model;
-use Lorisleiva\Actions\Concerns\AsAction;
-use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Concerns\HasTranslatableAttributes;
+use Backstage\Translations\Laravel\Models\Language;
+use Illuminate\Database\Eloquent\Model;
+use Locale;
+use Lorisleiva\Actions\Concerns\AsAction;
 
 class PushTranslatedAttribute
 {
@@ -31,7 +31,6 @@ class PushTranslatedAttribute
             $attribute,
             $translation
         );
-
 
         $model->translatableAttributes()->updateOrCreate([
             'translatable_type' => get_class($model),

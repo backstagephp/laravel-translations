@@ -22,7 +22,7 @@ class GetTranslatedAttribute
 
         $locale = $locale ?: App::getLocale();
 
-        $value =  $model->translatableAttributes()
+        $value = $model->translatableAttributes()
             ->where('attribute', $attribute)
             ->where('code', $locale)
             ->first()
@@ -37,7 +37,7 @@ class GetTranslatedAttribute
         return $resultingAttribute;
     }
 
-    public static function getMutatedAttribute(Model $model,  $resultingAttribute, $resultingAttributeValue): mixed
+    public static function getMutatedAttribute(Model $model, $resultingAttribute, $resultingAttributeValue): mixed
     {
         $model->setRawAttributes([$resultingAttribute => $resultingAttributeValue] + $model->getAttributes());
 

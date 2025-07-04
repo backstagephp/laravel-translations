@@ -4,7 +4,6 @@ namespace Backstage\Translations\Laravel\Domain\Translatables\Actions;
 
 use Backstage\Translations\Laravel\Models\Concerns\HasTranslatableAttributes;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class GetTranslatedAttributes
