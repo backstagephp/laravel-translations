@@ -1,18 +1,33 @@
 <div id="top">
 
-<!-- HEADER STYLE: CLASSIC -->
 <div align="center">
 
 
-# LARAVEL-TRANSLATIONS
+# Laravel Translations package
+
+ Nice to meet you, we're [Vormkracht10](https://vormrkacht10.nl)
 
 <em>Break Language Barriers, Empower Global Success</em>
 
-<!-- BADGES -->
 <img src="https://img.shields.io/github/license/backstagephp/laravel-translations?style=flat&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
 <img src="https://img.shields.io/github/last-commit/backstagephp/laravel-translations?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
 <img src="https://img.shields.io/github/languages/top/backstagephp/laravel-translations?style=flat&color=0080ff" alt="repo-top-language">
 <img src="https://img.shields.io/github/languages/count/backstagephp/laravel-translations?style=flat&color=0080ff" alt="repo-language-count">
+<span>
+    <a href="https://packagist.org/packages/backstage/laravel-translations">
+        <img src="https://img.shields.io/packagist/v/backstage/laravel-translations.svg?style=flat-square" alt="Latest Version on Packagist">
+    </a>
+    <a href="https://github.com/backstagephp/laravel-translations/actions?query=workflow%3Arun-tests+branch%3Amain">
+        <img src="https://img.shields.io/github/actions/workflow/status/backstagephp/laravel-translations/run-tests.yml?branch=main&label=tests&style=flat-square" alt="GitHub Tests Action Status">
+    </a>
+    <a href="https://github.com/backstagephp/laravel-translations/actions?query=workflow%3A%22Fix+PHP+code+style+issues%22+branch%3Amain">
+        <img src="https://img.shields.io/github/actions/workflow/status/backstagephp/laravel-translations/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square" alt="GitHub Code Style Action Status">
+    </a>
+    <a href="https://packagist.org/packages/backstage/laravel-translations">
+        <img src="https://img.shields.io/packagist/dt/backstage/laravel-translations.svg?style=flat-square" alt="Total Downloads">
+    </a>
+</span>
+
 
 <em>Built with the tools and technologies:</em>
 
