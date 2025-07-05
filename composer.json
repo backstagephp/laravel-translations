@@ -22,9 +22,12 @@
     ],
     "require": {
         "php": "^8.2",
+        "backstage/laravel-permanent-cache": "dev-main",
         "deeplcom/deepl-php": ">=1.12",
         "echolabsdev/prism": ">0.65",
         "illuminate/contracts": "^10.0||^11.0||^12.0",
+        "lorisleiva/laravel-actions": ">=2.0",
+        "spatie/fork": "^1.2",
         "spatie/laravel-package-tools": "^1.16",
         "stichoza/google-translate-php": "^5.2"
     },
@@ -55,7 +58,9 @@
         }
     },
     "scripts": {
-        "post-autoload-dump": "@composer run prepare",
+        "post-autoload-dump": [
+            "@composer run prepare"
+        ],
         "clear": "@php vendor/bin/testbench package:purge-laravel-translations --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": [
