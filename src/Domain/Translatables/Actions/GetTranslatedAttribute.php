@@ -20,8 +20,14 @@ class GetTranslatedAttribute
             return $model->getAttribute($attribute);
         }
 
+        /**
+         * @var string $locale
+         */
         $locale = $locale ?: App::getLocale();
 
+        /**
+         * @var mixed $value
+         */
         $value = $model->translatableAttributes()
             ->where('attribute', $attribute)
             ->where('code', $locale)
@@ -32,6 +38,9 @@ class GetTranslatedAttribute
             return $model->getAttribute($attribute);
         }
 
+        /**
+         * @var mixed $resultingAttribute
+         */
         $resultingAttribute = static::getMutatedAttribute($model, $attribute, $value);
 
         return $resultingAttribute;
@@ -46,10 +55,13 @@ class GetTranslatedAttribute
 
     public static function getReversedMutatedAttribute(Model $model, string $key, mixed $value): mixed
     {
-        $clone = clone $model;
+        /**
+         * @var Model $clonedModel
+         */
+        $clonedModel = clone $model;
 
-        $clone->setAttribute($key, $value);
+        $clonedModel->setAttribute($key, $value);
 
-        return $clone->getAttributes()[$key] ?? null;
+        return $clonedModel->getAttributes()[$key] ?? null;
     }
 }

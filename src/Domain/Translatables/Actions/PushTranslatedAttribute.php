@@ -17,6 +17,9 @@ class PushTranslatedAttribute
      */
     public function handle(object $model, string $attribute, mixed $translation, string $locale): void
     {
+        /**
+         * @var bool $localExists
+         */
         $localExists = Language::query()->where('code', $locale)->exists();
 
         if (! $localExists) {
@@ -26,6 +29,9 @@ class PushTranslatedAttribute
             ]);
         }
 
+        /**
+         * @var mixed $reverseMutatedAttributeValue
+         */
         $reverseMutatedAttributeValue = GetTranslatedAttribute::getReversedMutatedAttribute(
             $model,
             $attribute,
