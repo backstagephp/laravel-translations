@@ -38,7 +38,6 @@
 - [Features](#features)
 - [Project Structure](#project-structure)
     - [Project Index](#project-index)
-- [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgment](#acknowledgment)
