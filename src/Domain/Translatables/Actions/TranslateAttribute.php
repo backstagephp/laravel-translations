@@ -18,10 +18,10 @@ class TranslateAttribute
 
         if (
             ! $overwrite && $model->translatableAttributes()
-            ->getQuery()
-            ->where('attribute', $attribute)
-            ->where('code', $targetLanguage)
-            ->exists()
+                ->getQuery()
+                ->where('attribute', $attribute)
+                ->where('code', $targetLanguage)
+                ->exists()
         ) {
             return $model->getTranslatedAttribute($attribute, $targetLanguage);
         }

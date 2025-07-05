@@ -35,22 +35,22 @@ class FindTranslatables
          * @var string $pattern
          */
         $pattern =
-            '[^\w]' .
-            '(?<!->)' . // Ignore method chaining
-            '(?:' . implode('|', $functions->toArray()) . ')' .
-            '\(\s*' .
-            '(?:' .
-            "'((?:[^'\\\\]|\\\\.)+)'" .  // Match single-quoted keys
-            '|' .
-            '`((?:[^`\\\\]|\\\\.)+)`' .  // Match backtick-quoted keys
-            '|' .
-            '"((?:[^"\\\\]|\\\\.)+)"' .  // Match double-quoted keys
-            '|' .
-            '(\$[a-zA-Z_][a-zA-Z0-9_]*)' . // Match variables
-            ')' .
-            '\s*' .
-            '(?:,([^)]*))?' .  // Capture second argument (parameters)
-            '\s*' .
+            '[^\w]'.
+            '(?<!->)'. // Ignore method chaining
+            '(?:'.implode('|', $functions->toArray()).')'.
+            '\(\s*'.
+            '(?:'.
+            "'((?:[^'\\\\]|\\\\.)+)'".  // Match single-quoted keys
+            '|'.
+            '`((?:[^`\\\\]|\\\\.)+)`'.  // Match backtick-quoted keys
+            '|'.
+            '"((?:[^"\\\\]|\\\\.)+)"'.  // Match double-quoted keys
+            '|'.
+            '(\$[a-zA-Z_][a-zA-Z0-9_]*)'. // Match variables
+            ')'.
+            '\s*'.
+            '(?:,([^)]*))?'.  // Capture second argument (parameters)
+            '\s*'.
             '[\),]';
 
         foreach ($finder as $file) {
@@ -73,14 +73,14 @@ class FindTranslatables
 
         return collect(static::$allMatches)
             ->collapse()
-            ->map(fn($match) => [
+            ->map(fn ($match) => [
                 'key' => $match['key'],
                 'namespace' => $match['namespace'],
                 'group' => $match['group'],
                 'text' => __($match['key']),
                 'params' => $match['params'],
             ])
-            ->when($mergeKeys, fn($collection) => $this->mergeExistingKeys($collection));
+            ->when($mergeKeys, fn ($collection) => $this->mergeExistingKeys($collection));
     }
 
     protected static function addMatch($file, $key, $params = null): void
@@ -133,7 +133,7 @@ class FindTranslatables
         /**
          * @var \Illuminate\Support\Collection $unionAble
          */
-        $unionAble = $newKeys->filter(fn($key) => ! $existingKeys->has($key));
+        $unionAble = $newKeys->filter(fn ($key) => ! $existingKeys->has($key));
 
         /**
          * @var \Illuminate\Support\Collection $union
