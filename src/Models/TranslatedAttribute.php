@@ -3,6 +3,7 @@
 namespace Backstage\Translations\Laravel\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -28,7 +29,7 @@ class TranslatedAttribute extends Model
         return $this->morphTo();
     }
 
-    public function language()
+    public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class, 'code', 'code');
     }

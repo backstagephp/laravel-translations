@@ -108,7 +108,7 @@ class FindTranslatables
         /**
          * @var string|null $string
          */
-        $string =  Str::contains($key, '::') ? explode('::', $key)[0] : null;
+        $string = Str::contains($key, '::') ? explode('::', $key)[0] : null;
 
         return $string;
     }
