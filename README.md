@@ -37,7 +37,7 @@
 <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF.svg?style=flat&logo=GitHub-Actions&logoColor=white" alt="GitHub%20Actions">
 <img src="https://img.shields.io/badge/PHP-777BB4.svg?style=flat&logo=PHP&logoColor=white" alt="PHP">
 <img src="https://img.shields.io/badge/Laravel-FF2D20.svg?style=flat&logo=Laravel&logoColor=white" alt="Laravel">
-<img src="https://img.shields.io/badge/Backstage-a4d6b9" alt="Backstage">
+<img src="https://img.shields.io/badge/Backstage-a4d6b9&color=white" alt="Backstage">
 </div>
 <br>
 
