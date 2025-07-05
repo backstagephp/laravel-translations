@@ -279,13 +279,13 @@ $translatedDescription = $modelInstance->getTranslatedAttribute(
 If needed to get all translated attributes, use:
 
 ```php
-$translatedDescription = $modelInstance->getTranslatedAttributes();
+$translatedAttributes = $modelInstance->getTranslatedAttributes();
 ```
 
 If needed to get all translated attributes a specific locale use:
 
 ```php
-$translatedDescription = $modelInstance->getTranslatedAttributes(
+$translatedAttributes = $modelInstance->getTranslatedAttributes(
     locale: 'de' 
  );
 ```
