@@ -16,6 +16,9 @@ class TranslateAttributeForAllLanguages
      */
     public function handle(object $model, string $attribute, bool $overwrite = false): array
     {
+        /**
+         * @var \Illuminate\Database\Eloquent\Collection $languages
+         */
         $languages = Language::all();
 
         if ($languages->isEmpty()) {
@@ -24,6 +27,9 @@ class TranslateAttributeForAllLanguages
             return [];
         }
 
+        /**
+         * @var \Illuminate\Database\Eloquent\Collection $translations
+         */
         $translations = $languages->mapWithKeys(function (Language $language) use ($attribute, $overwrite, $model) {
             return [$language->code => $model->translateAttribute($attribute, $language->code, $overwrite)];
         });

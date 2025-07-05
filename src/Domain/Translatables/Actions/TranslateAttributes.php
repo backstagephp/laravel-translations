@@ -16,8 +16,14 @@ class TranslateAttributes
      */
     public function handle(object $model, ?string $targetLanguage): array
     {
+        /**
+         * @var string $targetLanguage
+         */
         $targetLanguage = $targetLanguage ?: App::getLocale();
 
+        /**
+         * @var array $translatedAttributes
+         */
         $translatedAttributes = [];
 
         foreach ($model->getTranslatableAttributes() as $attribute) {

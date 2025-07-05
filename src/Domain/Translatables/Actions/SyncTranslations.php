@@ -15,6 +15,9 @@ class SyncTranslations
      */
     public function handle(object $model, ?\Illuminate\Console\OutputStyle $output = null): void
     {
+        /**
+         * @var array $designatedAttributes
+         */
         $designatedAttributes = $model->getTranslatableAttributes();
 
         foreach ($designatedAttributes as $attribute) {

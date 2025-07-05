@@ -16,8 +16,14 @@ class TranslateAttributesForAllLanguages
      */
     public function handle(object $model): array
     {
+        /**
+         * @var \Illuminate\Database\Eloquent\Collection $languages
+         */
         $languages = Language::all();
 
+        /**
+         * @var \Illuminate\Database\Eloquent\Collection $translations
+         */
         $translations = $languages->mapWithKeys(function (Language $language) use ($model) {
             return [$language->code => $model->translateAttributes($language->code)];
         });

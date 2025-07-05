@@ -11,20 +11,29 @@ class TranslateAttribute
 
     public function handle(object $model, string $attribute, string $targetLanguage, bool $overwrite = false): mixed
     {
+        /**
+         * @var mixed $originalValue
+         */
         $originalValue = $model->getAttribute($attribute);
 
         if (
             ! $overwrite && $model->translatableAttributes()
-                ->getQuery()
-                ->where('attribute', $attribute)
-                ->where('code', $targetLanguage)
-                ->exists()
+            ->getQuery()
+            ->where('attribute', $attribute)
+            ->where('code', $targetLanguage)
+            ->exists()
         ) {
             return $model->getTranslatedAttribute($attribute, $targetLanguage);
         }
 
+        /**
+         * @var mixed $attributeValue
+         */
         $attributeValue = $model->getAttribute($attribute);
 
+        /**
+         * @var mixed $translated
+         */
         $translated = is_array($attributeValue) ? static::translateArray($model, $attributeValue, $attribute, $targetLanguage) : static::translate($attributeValue, $targetLanguage);
 
         if ($translated === null) {
@@ -42,7 +51,12 @@ class TranslateAttribute
     protected static function translate(mixed $value, string $targetLanguage): mixed
     {
         if (is_string($value) || is_numeric($value)) {
-            return Translator::with(config('translations.translators.default'))->translate($value, $targetLanguage);
+            /**
+             * @var mixed $translated
+             */
+            $translated = Translator::with(config('translations.translators.default'))->translate($value, $targetLanguage);
+
+            return $translated;
         }
 
         return $value;
@@ -50,6 +64,9 @@ class TranslateAttribute
 
     protected static function translateArray(object $model, array $data, string $attribute, string $targetLanguage): array
     {
+        /**
+         * @var array $rules
+         */
         $rules = $model->getTranslatableAttributeRulesFor($attribute);
 
         if ($rules === '*') {
@@ -65,6 +82,9 @@ class TranslateAttribute
                 return;
             }
 
+            /**
+             * @var array $data
+             */
             $data = static::translatePath($data, $segments, $targetLanguage);
         });
 
@@ -92,6 +112,9 @@ class TranslateAttribute
             return $data;
         }
 
+        /**
+         * @var mixed $value
+         */
         $value = $data[$key];
 
         if (! is_string($value) && ! is_numeric($value)) {
@@ -126,6 +149,9 @@ class TranslateAttribute
         }
 
         if ($segments === []) {
+            /**
+             * @var mixed $value
+             */
             $value = $data[$segment];
 
             if (is_string($value) || is_numeric($value)) {

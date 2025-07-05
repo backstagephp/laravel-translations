@@ -16,6 +16,9 @@ class UpdateTranslateAttributes
      */
     public function handle(object $model, array $attributes): void
     {
+        /**
+         * @var \Illuminate\Database\Eloquent\Collection $languages
+         */
         $languages = Language::all();
 
         foreach ($languages as $language) {
