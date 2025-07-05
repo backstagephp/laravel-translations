@@ -11,7 +11,7 @@ class GetTranslatedAttributes
     use AsAction;
 
     /**
-     * @param HasTranslatableAttributes|Model  $model
+     * @param  HasTranslatableAttributes|Model  $model
      */
     public function handle($model, string $locale): array
     {
