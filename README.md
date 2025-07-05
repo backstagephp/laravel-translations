@@ -92,52 +92,6 @@ This project helps developers build scalable, maintainable multilingual systems 
 
 ---
 
-## Project Structure
-
-```sh
-└── laravel-translations/
-    ├── .github
-    │   ├── FUNDING.yml
-    │   ├── ISSUE_TEMPLATE
-    │   ├── dependabot.yml
-    │   └── workflows
-    ├── CHANGELOG.md
-    ├── LICENSE.md
-    ├── README.md
-    ├── composer.json
-    ├── config
-    │   └── translations.php
-    ├── database
-    │   └── migrations
-    ├── phpstan-baseline.neon
-    ├── phpstan.neon.dist
-    ├── phpunit.xml.dist
-    ├── src
-    │   ├── Base
-    │   ├── Caches
-    │   ├── Commands
-    │   ├── Contracts
-    │   ├── Domain
-    │   ├── Drivers
-    │   ├── Events
-    │   ├── Facades
-    │   ├── Jobs
-    │   ├── Listners
-    │   ├── Managers
-    │   ├── Models
-    │   ├── Observers
-    │   ├── TranslationLoaderServiceProvider.php
-    │   ├── TranslationServiceProvider.php
-    │   └── helpers.php
-    └── tests
-        ├── ArchTest.php
-        ├── ExampleTest.php
-        ├── Pest.php
-        └── TestCase.php
-```
-
----
-
 ### Project Index
 
 <details open>
