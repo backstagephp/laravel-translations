@@ -5,7 +5,6 @@ namespace Backstage\Translations\Laravel\Drivers;
 use Backstage\Translations\Laravel\Contracts\TranslatorContract;
 use DeepL\DeepLClient;
 use DeepL\TextResult;
-use Locale;
 
 class DeepLTranslator implements TranslatorContract
 {
@@ -35,7 +34,7 @@ class DeepLTranslator implements TranslatorContract
     {
         $authkey = config('services.deepl.auth_key');
 
-        if (!$authkey) {
+        if (! $authkey) {
             throw new \RuntimeException('DeepL auth key is not set in the configuration.');
         }
 
