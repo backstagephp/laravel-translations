@@ -50,7 +50,7 @@ return [
 
             'deep-l' => [
                 'options' => [
-                    TranslatorOptions::SERVER_URL => env('DEEPL_SERVER_URL', 'https://api-free.deepl.com'),
+                    TranslatorOptions::SERVER_URL => env('DEEPL_SERVER_URL', 'https://api.deepl.com/'),
                 ],
             ],
         ],
