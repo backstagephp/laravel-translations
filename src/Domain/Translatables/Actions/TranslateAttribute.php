@@ -2,6 +2,7 @@
 
 namespace Backstage\Translations\Laravel\Domain\Translatables\Actions;
 
+use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
 use Backstage\Translations\Laravel\Facades\Translator;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -9,7 +10,7 @@ class TranslateAttribute
 {
     use AsAction;
 
-    public function handle(object $model, string $attribute, string $targetLanguage, bool $overwrite = false): mixed
+    public function handle(TranslatesAttributes $model, string $attribute, string $targetLanguage, bool $overwrite = false): mixed
     {
         /**
          * @var mixed $originalValue
@@ -32,7 +33,6 @@ class TranslateAttribute
         $attributeValue = $model->getAttribute($attribute);
 
         $attributeValue = json_decode($attributeValue, true) ?? $attributeValue;
-
         /**
          * @var mixed $translated
          */
@@ -56,7 +56,36 @@ class TranslateAttribute
             /**
              * @var mixed $translated
              */
-            $translated = Translator::with(config('translations.translators.default'))->translate($value, $targetLanguage);
+            try {
+                $translated = Translator::with(config('translations.translators.default'))->translate($value, $targetLanguage);
+            } catch (\Throwable $e) {
+                $avaiableDrivers = collect(config('translations.translators.drivers', []))
+                    ->filter(function ($x, $driver) {
+                        $textQuery = 'Test query';
+
+                        try {
+                            $translation = Translator::with($driver)->translate($textQuery, 'ru');
+
+                            if ($translation === $textQuery) {
+                                return false;
+                            }
+
+                            return true;
+                        } catch (\Throwable $e) {
+                            return false;
+                        }
+                    })
+                    ->keys();
+
+                if ($avaiableDrivers->isEmpty()) {
+                    info('No available translation drivers found.');
+
+                    return $value;
+                }
+
+                info('Translation failed, using default driver.');
+                $translated = Translator::with($avaiableDrivers->first())->translate($value, $targetLanguage);
+            }
 
             return $translated;
         }
@@ -64,31 +93,55 @@ class TranslateAttribute
         return $value;
     }
 
-    protected static function translateArray(object $model, array $data, string $attribute, string $targetLanguage): array
+    protected static function translateArray(TranslatesAttributes $model, array $data, string $attribute, string $targetLanguage): array
     {
-        /**
-         * @var array $rules
-         */
         $rules = $model->getTranslatableAttributeRulesFor($attribute);
 
         if ($rules === '*') {
             return static::translateAllStringsInArray($data, $targetLanguage);
         }
 
-        collect($rules)->each(function ($path) use (&$data, $targetLanguage) {
-            $segments = explode('.', $path);
+        collect($rules)
+            ->filter(fn ($rule) => str_starts_with($rule, '*'))
+            ->each(function ($rule) use (&$data, $targetLanguage) {
+                $key = ltrim($rule, '*');
+                $data = static::translateAllKeysValuesFor($data, $key, $targetLanguage);
+            });
 
-            if (count($segments) === 1) {
-                $data = static::translateAllByKey($data, $segments[0], $targetLanguage);
+        collect($rules)
+            ->reject(fn ($rule) => str_starts_with($rule, '*'))
+            ->each(function ($path) use (&$data, $targetLanguage) {
+                $segments = explode('.', $path);
 
-                return;
+                if (count($segments) === 1) {
+                    $data = static::translateAllByKey($data, $segments[0], $targetLanguage);
+
+                    return;
+                }
+
+                $data = static::translatePath($data, $segments, $targetLanguage);
+            });
+
+        return $data;
+    }
+
+    protected static function translateAllKeysValuesFor(array $data, string $targetKey, string $targetLanguage): array
+    {
+        foreach ($data as $key => $value) {
+            if ($key === $targetKey && is_array($value)) {
+                foreach ($value as $innerKey => $innerValue) {
+                    if (is_string($innerValue) || is_numeric($innerValue)) {
+                        $value[$innerKey] = static::translate($innerValue, $targetLanguage);
+                    } elseif (is_array($innerValue)) {
+                        $value[$innerKey] = static::translateAllStringsInArray($innerValue, $targetLanguage);
+                    }
+                }
+
+                $data[$key] = $value;
+            } elseif (is_array($value)) {
+                $data[$key] = static::translateAllKeysValuesFor($value, $targetKey, $targetLanguage);
             }
-
-            /**
-             * @var array $data
-             */
-            $data = static::translatePath($data, $segments, $targetLanguage);
-        });
+        }
 
         return $data;
     }

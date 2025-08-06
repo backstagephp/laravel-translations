@@ -23,11 +23,13 @@ class GetTranslatedAttributes
         /**
          * @var array $translatedAttributes
          */
-        $translatedAttributes = collect($translatableAttributes)->mapWithKeys(function ($attribute) use ($model, $locale) {
-            return $model->getTranslatedAttribute($attribute, $locale) !== null
-                ? [$attribute => $model->getTranslatedAttribute($attribute, $locale)]
-                : [];
-        })->toArray();
+        $translatedAttributes = collect($translatableAttributes)
+            ->keys()
+            ->mapWithKeys(function ($attribute) use ($model, $locale) {
+                return $model->getTranslatedAttribute($attribute, $locale) !== null
+                    ? [$attribute => $model->getTranslatedAttribute($attribute, $locale)]
+                    : [];
+            })->toArray();
 
         return array_merge(
             $translatedAttributes

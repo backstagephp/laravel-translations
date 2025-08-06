@@ -5,9 +5,10 @@ namespace Backstage\Translations\Laravel\Commands;
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Concurrency;
 
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
@@ -65,7 +66,7 @@ class SyncTranslations extends Command
 
         try {
             $itemsCount = $items
-                ->filter(function (TranslatesAttributes $item) {
+                ->filter(function (TranslatesAttributes|Model $item) {
                     $translations = $item->translatableAttributes()->count();
 
                     if ($translations === count($item->getTranslatableAttributes())) {
@@ -74,33 +75,29 @@ class SyncTranslations extends Command
 
                     return true;
                 })
-                ->map(fn (TranslatesAttributes $item) => count($item->getTranslatableAttributes()))
+                ->map(fn (TranslatesAttributes|Model $item) => count($item->getTranslatableAttributes()))
                 ->sum();
 
             $this->output->progressStart($itemsCount);
 
-            $chunckedItems = $items->chunk(4);
-
-            $chuckedCallbacks = $chunckedItems->map(function (Collection $chunk) {
-                return fn () => static::syncChunk($chunk);
+            $items->each(function (TranslatesAttributes|Model $item) {
+                try {
+                    $item->syncTranslations($this->output);
+                } catch (\Throwable $e) {
+                    info("Failed to sync translations for item: {$item->getKey()} - {$e->getMessage()}");
+                }
             });
-
-            Concurrency::driver('fork')
-                ->run([
-                    ...$chuckedCallbacks,
-                ]);
         } catch (\Throwable $e) {
             info('Payload is too large, syncing items one by one.');
 
-            progress('Syncing translatable items', $items, fn (TranslatesAttributes $item) => $item->syncTranslations());
+            progress('Syncing translatable items', $items, function (TranslatesAttributes|Model $item) {
+                try {
+                    $item->syncTranslations($this->output);
+                } catch (\Throwable $e) {
+                    info("Failed to sync translations for item: {$item->getKey()} - {$e->getMessage()}");
+                }
+            });
         }
-    }
-
-    public function syncChunk(Collection $chunk): void
-    {
-        $chunk->each(function (TranslatesAttributes $item) {
-            $item->syncTranslations($this->output);
-        });
     }
 
     protected static function cleanOrphanedTranslations($orphans): void
@@ -122,7 +119,7 @@ class SyncTranslations extends Command
 
                 $id = $attr->translatable_id;
 
-                if (! class_exists($type)) {
+                if (! class_exists($type) && Relation::getMorphedModel($type) === null) {
                     return true;
                 }
 
@@ -141,9 +138,9 @@ class SyncTranslations extends Command
                 /**
                  * @var \Illuminate\Database\Eloquent\Builder $query
                  */
-                $query = $type::query();
+                $query = get_class($model)::query();
 
-                if (in_array(SoftDeletes::class, class_uses_recursive($type))) {
+                if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
                     $query->withTrashed();
                 }
 

@@ -5,16 +5,25 @@ namespace Backstage\Translations\Laravel\Drivers;
 use Backstage\Translations\Laravel\Contracts\TranslatorContract;
 use DeepL\DeepLClient;
 use DeepL\TextResult;
+use DeepL\TranslateTextOptions;
 
 class DeepLTranslator implements TranslatorContract
 {
     public function translate(string $text, string $targetLanguage): string
     {
+        if (str($text)->isUlid()) {
+            dump('Skipping translation for ULID: '.$text);
+
+            return $text;
+        }
+
         $deeplClient = static::initializeDeepLClient();
 
         $targetLanguage = static::normalizeLanguageCode($targetLanguage);
 
-        $result = $deeplClient->translateText($text, null, $targetLanguage);
+        $result = $deeplClient->translateText($text, null, $targetLanguage, [
+            TranslateTextOptions::PRESERVE_FORMATTING => true,
+        ]);
 
         return static::parseText($result);
     }

@@ -38,6 +38,19 @@ class PushTranslatedAttribute
             $translation
         );
 
+        if (is_array($reverseMutatedAttributeValue)) {
+            $reverseMutatedAttributeValue = json_encode($reverseMutatedAttributeValue, JSON_UNESCAPED_UNICODE);
+        }
+
+        if (env('APP_LOCALE') === $locale) {
+            static::modifyOriginalAttributeValue($model, $attribute, $reverseMutatedAttributeValue);
+        } else {
+            static::modifyTranslatedAttributeValue($model, $attribute, $reverseMutatedAttributeValue, $locale);
+        }
+    }
+
+    public static function modifyTranslatedAttributeValue(Model $model, string $attribute, mixed $reverseMutatedAttributeValue, string $locale): void
+    {
         $model->translatableAttributes()->updateOrCreate([
             'translatable_type' => get_class($model),
             'translatable_id' => $model->getKey(),
@@ -46,6 +59,13 @@ class PushTranslatedAttribute
         ], [
             'translated_attribute' => $reverseMutatedAttributeValue,
             'translated_at' => now(),
+        ]);
+    }
+
+    public static function modifyOriginalAttributeValue(Model $model, string $attribute, mixed $value): void
+    {
+        $model->updateQuietly([
+            $attribute => $value,
         ]);
     }
 }

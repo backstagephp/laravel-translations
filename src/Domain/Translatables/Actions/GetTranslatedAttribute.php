@@ -4,7 +4,6 @@ namespace Backstage\Translations\Laravel\Domain\Translatables\Actions;
 
 use Backstage\Translations\Laravel\Models\Concerns\HasTranslatableAttributes;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class GetTranslatedAttribute
@@ -16,14 +15,14 @@ class GetTranslatedAttribute
      */
     public function handle(object $model, string $attribute, string $locale): mixed
     {
-        if (! in_array($attribute, $model->getTranslatableAttributes())) {
+        if (! in_array($attribute, $model->getTranslatableAttributes()) || $locale === env('APP_LOCALE')) {
             return $model->getAttribute($attribute);
         }
 
         /**
          * @var string $locale
          */
-        $locale = $locale ?: App::getLocale();
+        $locale = $locale ?: env('APP_LOCALE');
 
         /**
          * @var mixed $value
