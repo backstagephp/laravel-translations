@@ -12,8 +12,6 @@ class DeepLTranslator implements TranslatorContract
     public function translate(string $text, string $targetLanguage): string
     {
         if (str($text)->isUlid()) {
-            dump('Skipping translation for ULID: '.$text);
-
             return $text;
         }
 

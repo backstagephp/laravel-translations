@@ -2,9 +2,10 @@
 
 namespace Backstage\Translations\Laravel\Domain\Translatables\Actions;
 
-use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
-use Backstage\Translations\Laravel\Facades\Translator;
+use Illuminate\Support\Arr;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Backstage\Translations\Laravel\Facades\Translator;
+use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
 
 class TranslateAttribute
 {
@@ -19,10 +20,10 @@ class TranslateAttribute
 
         if (
             ! $overwrite && $model->translatableAttributes()
-                ->getQuery()
-                ->where('attribute', $attribute)
-                ->where('code', $targetLanguage)
-                ->exists()
+            ->getQuery()
+            ->where('attribute', $attribute)
+            ->where('code', $targetLanguage)
+            ->exists()
         ) {
             return $model->getTranslatedAttribute($attribute, $targetLanguage);
         }
@@ -93,33 +94,45 @@ class TranslateAttribute
         return $value;
     }
 
-    protected static function translateArray(TranslatesAttributes $model, array $data, string $attribute, string $targetLanguage): array
+    /**
+     * Translate an array of attributes.
+     * 
+     * @param TranslatesAttributes|null $model
+     * @param array $data
+     * @param string $attribute
+     * @param string $targetLanguage
+     * @param string|array $rules
+     */
+    public static function translateArray(?TranslatesAttributes $model = null, array $data, ?string $attribute = null, string $targetLanguage, $rules = null): array
     {
-        $rules = $model->getTranslatableAttributeRulesFor($attribute);
+        $rules = $model?->getTranslatableAttributeRulesFor($attribute ?? throw new \InvalidArgumentException('Attribute is required')) ?? $rules;
 
-        if ($rules === '*') {
+        if (in_array('*', $rules, true)) {
             return static::translateAllStringsInArray($data, $targetLanguage);
         }
 
         collect($rules)
-            ->filter(fn ($rule) => str_starts_with($rule, '*'))
+            ->filter(fn($rule) => str_starts_with($rule, '!'))
+            ->map(fn($rule) => ltrim($rule, '!'))
+            ->each(fn($key) => \Illuminate\Support\Arr::forget($data, $key));
+
+        collect($rules)
+            ->filter(fn($rule) => str_starts_with($rule, '*'))
             ->each(function ($rule) use (&$data, $targetLanguage) {
                 $key = ltrim($rule, '*');
                 $data = static::translateAllKeysValuesFor($data, $key, $targetLanguage);
             });
 
         collect($rules)
-            ->reject(fn ($rule) => str_starts_with($rule, '*'))
+            ->reject(fn($rule) => str_starts_with($rule, '!'))
+            ->reject(fn($rule) => str_starts_with($rule, '*'))
             ->each(function ($path) use (&$data, $targetLanguage) {
                 $segments = explode('.', $path);
-
                 if (count($segments) === 1) {
                     $data = static::translateAllByKey($data, $segments[0], $targetLanguage);
-
-                    return;
+                } else {
+                    $data = static::translatePath($data, $segments, $targetLanguage);
                 }
-
-                $data = static::translatePath($data, $segments, $targetLanguage);
             });
 
         return $data;
@@ -193,6 +206,12 @@ class TranslateAttribute
             foreach ($data as $key => $item) {
                 if (is_array($item)) {
                     $data[$key] = static::translatePath($item, $segments, $targetLanguage);
+                } else {
+                    if (is_string($item) || is_numeric($item)) {
+                        $data[$key] = static::translate($item, $targetLanguage);
+                    } else {
+                        continue;
+                    }
                 }
             }
 
