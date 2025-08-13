@@ -23,7 +23,7 @@ class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
                     return [
                         $group ?? '*' => $namespaces->mapWithKeys(function (?string $namespace) use ($locale, $group) {
                             return [
-                                $namespace => static::getTranslations($locale, $group ?? '*', $namespace)
+                                $namespace => static::getTranslations($locale, $group ?? '*', $namespace),
                             ];
                         })->all(),
                     ];

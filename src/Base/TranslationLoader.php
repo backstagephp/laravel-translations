@@ -36,12 +36,12 @@ class TranslationLoader extends FileLoader
             return $exists;
         }
 
-        $table = (new Translation())->getTable();
+        $table = (new Translation)->getTable();
 
         if (! app()->isProduction()) {
             return $exists = Schema::hasTable($table);
         }
 
-        return $exists = Cache::remember("translations:table_exists", 3600, fn() => Schema::hasTable($table));
+        return $exists = Cache::remember('translations:table_exists', 3600, fn () => Schema::hasTable($table));
     }
 }
