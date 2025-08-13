@@ -3,7 +3,6 @@
 namespace Backstage\Translations\Laravel\Jobs;
 
 use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
-use Backstage\Translations\Laravel\Domain\Loaders\InitLaravelTranslationModule;
 use Backstage\Translations\Laravel\Domain\Scanner\Actions\FindTranslatables;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Translation;
@@ -14,8 +13,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Translation\FileLoader;
 
 class ScanTranslationStrings implements ShouldQueue
 {
@@ -99,7 +96,7 @@ class ScanTranslationStrings implements ShouldQueue
                 ], [
                     'text' => $translation['text'] ?? $translation['key'],
                     'source_text' => $translation['text'] !== $translation['key'] ? $translation['text'] : null,
-                    'translated_at' => $translation['text'] === __($translation['key'], [], $translation['code'])  && $translation['namespace'] !== '*' ? now() : null,
+                    'translated_at' => $translation['text'] === __($translation['key'], [], $translation['code']) && $translation['namespace'] !== '*' ? now() : null,
                 ]);
             }
         });
