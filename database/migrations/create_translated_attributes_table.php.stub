@@ -12,17 +12,16 @@ return new class extends Migration
             $table->id();
             $table->string('code', 5);
 
-            $table->foreign('code')->references('code')->on('languages')->onDelete('cascade');
+            $table->foreign('code')
+                ->references('code')
+                ->on('languages')
+                ->onDelete('cascade');
 
-            $table->morphs('translatable', 'translatable_type', 'translatable_id');
+            $table->morphs('translatable');
 
             $table->longText('attribute');
-            
-            $table->longText('translated_attribute')
-                ->nullable();
-
-            $table->timestamp('translated_at')
-                ->nullable();
+            $table->longText('translated_attribute')->nullable();
+            $table->timestamp('translated_at')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
