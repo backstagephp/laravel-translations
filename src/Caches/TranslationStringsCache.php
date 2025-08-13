@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
 {
-    protected $store = 'redis:translations';
+    protected $store = 'file:translations';
 
     public function run(): array
     {

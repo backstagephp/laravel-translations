@@ -42,6 +42,6 @@ class TranslationLoader extends FileLoader
             return $exists = Schema::hasTable($table);
         }
 
-        return $exists = Cache::remember('translations:table_exists', 3600, fn () => Schema::hasTable($table));
+        return $exists = Cache::remember('translations:table_exists', 3600, fn() => Schema::hasTable($table));
     }
 }
