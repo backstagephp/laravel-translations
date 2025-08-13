@@ -13,54 +13,42 @@ class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
 
     public function run(): array
     {
-        /**
-         * @var \Illuminate\Support\Collection $locales
-         */
-        $locales = Translation::distinct('code')->pluck('code');
+        $locales = Translation::query()->distinct()->pluck('code');
+        $groups = Translation::query()->distinct()->pluck('group');
+        $namespaces = Translation::query()->distinct()->pluck('namespace');
 
-        /**
-         * @var \Illuminate\Support\Collection $groups
-         */
-        $groups = Translation::distinct('group')->pluck('group');
-
-        /**
-         * @var \Illuminate\Support\Collection $namespaces
-         */
-        $namespaces = Translation::distinct('namespace')->pluck('namespace');
-
-        return $locales->mapWithKeys(fn ($locale) => [
-            $locale => $groups->mapWithKeys(fn ($group) => [
-                $group ?? '*' => $namespaces->mapWithKeys(
-                    fn ($namespace) => [$namespace => static::getTranslations($locale, $group ?? '*', $namespace)]
-                )->all(),
-            ])->all(),
-        ])->all();
+        return $locales->mapWithKeys(function (string $locale) use ($groups, $namespaces) {
+            return [
+                $locale => $groups->mapWithKeys(function (?string $group) use ($locale, $namespaces) {
+                    return [
+                        $group ?? '*' => $namespaces->mapWithKeys(function (?string $namespace) use ($locale, $group) {
+                            return [
+                                $namespace => static::getTranslations($locale, $group ?? '*', $namespace)
+                            ];
+                        })->all(),
+                    ];
+                })->all(),
+            ];
+        })->all();
     }
 
     protected static function getTranslations(string $locale, string $group = '*', ?string $namespace = null): array
     {
-        /**
-         * @var \Illuminate\Database\Eloquent\Builder $query
-         */
-        $query = Translation::query()
-            ->where('code', $locale);
+        $query = Translation::query()->where('code', $locale);
 
-        if ($namespace !== '*') {
+        if ($namespace !== null && $namespace !== '*') {
             $query->where('namespace', $namespace);
         }
+
         if ($group !== '*') {
             $query->where('group', $group);
         }
 
-        $results = $query->select('key', 'text')->get();
-
-        $mappedResult = $results->mapWithKeys(fn (Translation $t) => [$t->key => $t->text])->all();
-
-        return $mappedResult;
+        return $query->pluck('text', 'key')->toArray();
     }
 
     public static function schedule($callback)
     {
-        return $callback->everyTenMinutes(); // Adjust to everyTenMinutes() in real usage
+        return $callback->everyTenMinutes(); // Adjust as needed
     }
 }

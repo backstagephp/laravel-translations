@@ -3,6 +3,7 @@
 namespace Backstage\Translations\Laravel\Jobs;
 
 use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
+use Backstage\Translations\Laravel\Domain\Loaders\InitLaravelTranslationModule;
 use Backstage\Translations\Laravel\Domain\Scanner\Actions\FindTranslatables;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Translation;
@@ -13,6 +14,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Translation\FileLoader;
 
 class ScanTranslationStrings implements ShouldQueue
 {
@@ -59,13 +62,18 @@ class ScanTranslationStrings implements ShouldQueue
                     'namespace' => $translation['namespace'] ?? '*',
                 ];
 
-                if ($data['namespace'] !== '*') {
-                    $data['text'] = __(key: $translation['key'], locale: $locale);
-                } else {
-                    $data['text'] = __($translation['key'], [], $locale);
+                if (! $this->redo) {
+                    if ($data['namespace'] !== '*') {
+                        $data['text'] = Lang::get(key: $translation['key'], locale: $locale);
+                    } else {
+                        $data['text'] = Lang::get(key: $translation['key'], locale: $locale);
+                    }
+
+                    return $data;
                 }
 
-                $oldTranslation = Translation::where('key', $translation['key'])
+                $oldTranslation = Translation::query()
+                    ->where('key', $translation['key'])
                     ->where('group', $translation['group'])
                     ->where('namespace', $translation['namespace'] ?? '*')
                     ->where('code', $baseLocale)
@@ -74,7 +82,7 @@ class ScanTranslationStrings implements ShouldQueue
                 if ($oldTranslation) {
                     $data['text'] = $oldTranslation->text;
                 } else {
-                    $data['text'] = __($translation['key'], [], $locale);
+                    $data['text'] = Lang::get(key: $translation['key'], locale: $locale);
                 }
 
                 return $data;
@@ -96,11 +104,38 @@ class ScanTranslationStrings implements ShouldQueue
                 ], [
                     'text' => $translation['text'] ?? $translation['key'],
                     'source_text' => $translation['text'] !== $translation['key'] ? $translation['text'] : null,
-                    'translated_at' => $translation['text'] === __($translation['key'], [], $translation['code']) && $translation['namespace'] !== '*' ? now() : null,
+                    'translated_at' => static::translationIsTranslated($translation) ? now() : null
                 ]);
             }
         });
 
         TranslationStringsCache::update();
+    }
+
+    protected static function translationIsTranslated(array $translation): bool
+    {
+        $locale = $translation['code'];
+        $key = $translation['key'];
+
+        $missingKey = '__MISSING_';
+
+        Lang::handleMissingKeysUsing(fn() => $missingKey);
+
+        $value = Lang::get($key, [], $locale);
+
+        $fallbackLocale = config('app.fallback_locale');
+        $fallbackValue = Lang::get($key, [], $fallbackLocale);
+
+        Lang::handleMissingKeysUsing(null);
+
+        if ($value === $missingKey) {
+            return false;
+        }
+
+        if ($value === $fallbackValue && $fallbackLocale !== $locale) {
+            return false;
+        }
+
+        return true;
     }
 }

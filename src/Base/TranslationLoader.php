@@ -18,13 +18,7 @@ class TranslationLoader extends FileLoader
             return $fileTranslations;
         }
 
-        $dbTranslations = static::getTranslationsFromDatabase($locale, $group, $namespace);
-
-        if (empty($dbTranslations)) {
-            return $fileTranslations;
-        }
-
-        return array_replace_recursive($fileTranslations, $dbTranslations);
+        return array_replace_recursive($fileTranslations, static::getTranslationsFromDatabase($locale, $group, $namespace));
     }
 
     protected static function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
@@ -42,12 +36,12 @@ class TranslationLoader extends FileLoader
             return $exists;
         }
 
+        $table = (new Translation())->getTable();
+
         if (! app()->isProduction()) {
-            return $exists = Schema::hasTable((new Translation)->getTable());
+            return $exists = Schema::hasTable($table);
         }
 
-        return $exists = Cache::remember('translations:table_exists', 3600, function () {
-            return Schema::hasTable((new Translation)->getTable());
-        });
+        return $exists = Cache::remember("translations:table_exists", 3600, fn() => Schema::hasTable($table));
     }
 }
