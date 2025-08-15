@@ -112,30 +112,14 @@ class ScanTranslationStrings implements ShouldQueue
 
     protected static function translationIsTranslated(array $translation): bool
     {
-        $locale = $translation['code'];
-        $key = $translation['key'];
-
-        $missingKey = '__MISSING_';
-
-        Lang::handleMissingKeysUsing(fn() => $missingKey);
-
-        $value = Lang::get($key, [], $locale);
-
-        $fallbackLocale = config('app.fallback_locale');
-        $fallbackValue = Lang::get($key, [], $fallbackLocale);
-
-        Lang::handleMissingKeysUsing(null);
-
-        if ($value === $missingKey) {
+        if ($translation['namespace'] === '*') {
             return false;
         }
 
-        if ($value === $fallbackValue && $fallbackLocale !== $locale) {
+        if ($translation['key'] === $translation['text']) {
             return false;
         }
 
-        $isTranslated = $value !== $key;
-
-        return $isTranslated;
+        return true;
     }
 }
