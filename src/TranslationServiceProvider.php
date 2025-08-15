@@ -3,6 +3,7 @@
 namespace Backstage\Translations\Laravel;
 
 use Backstage\PermanentCache\Laravel\Facades\PermanentCache;
+use Backstage\Translations\Laravel\Base\TranslationLoader;
 use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
 use Backstage\Translations\Laravel\Commands\SyncTranslations;
 use Backstage\Translations\Laravel\Commands\TranslateTranslations;
@@ -14,6 +15,7 @@ use Backstage\Translations\Laravel\Events\LanguageDeleted;
 use Backstage\Translations\Laravel\Listners\DeleteTranslations;
 use Backstage\Translations\Laravel\Listners\HandleLanguageCodeChanges;
 use Backstage\Translations\Laravel\Managers\TranslatorManager;
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schedule;
 use Spatie\LaravelPackageTools\Package;

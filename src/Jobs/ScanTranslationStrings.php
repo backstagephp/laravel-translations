@@ -117,7 +117,7 @@ class ScanTranslationStrings implements ShouldQueue
 
         $missingKey = '__MISSING_';
 
-        Lang::handleMissingKeysUsing(fn () => $missingKey);
+        Lang::handleMissingKeysUsing(fn() => $missingKey);
 
         $value = Lang::get($key, [], $locale);
 
@@ -134,6 +134,8 @@ class ScanTranslationStrings implements ShouldQueue
             return false;
         }
 
-        return true;
+        $isTranslated = $value !== $key;
+
+        return $isTranslated;
     }
 }
