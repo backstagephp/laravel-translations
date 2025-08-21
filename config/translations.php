@@ -28,6 +28,8 @@ return [
         ],
     ],
 
+    'use_permanent_cache' => false,
+
     'eloquent' => [
         'translatable-models' => [
             //

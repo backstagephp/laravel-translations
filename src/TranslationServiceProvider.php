@@ -41,7 +41,7 @@ class TranslationServiceProvider extends PackageServiceProvider
 
     public function registeringPackage()
     {
-        $this->app->singleton(TranslatorContract::class, fn ($app) => new TranslatorManager($app));
+        $this->app->singleton(TranslatorContract::class, fn($app) => new TranslatorManager($app));
     }
 
     public function bootingPackage()
@@ -49,9 +49,11 @@ class TranslationServiceProvider extends PackageServiceProvider
         Event::listen(LanguageDeleted::class, DeleteTranslations::class);
         Event::listen(LanguageCodeChanged::class, HandleLanguageCodeChanges::class);
 
-        PermanentCache::caches([
-            TranslationStringsCache::class,
-        ]);
+        if (config('translations.use_permanent_cache')) {
+            PermanentCache::caches([
+                TranslationStringsCache::class,
+            ]);
+        }
 
         Schedule::command(SyncTranslations::class)
             ->dailyAt('00:00')

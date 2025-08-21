@@ -13,38 +13,29 @@ class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
 
     public function run(): array
     {
-        $locales = Translation::query()->distinct()->pluck('code');
-        $groups = Translation::query()->distinct()->pluck('group');
-        $namespaces = Translation::query()->distinct()->pluck('namespace');
-
-        return $locales->mapWithKeys(function (string $locale) use ($groups, $namespaces) {
-            return [
-                $locale => $groups->mapWithKeys(function (?string $group) use ($locale, $namespaces) {
-                    return [
-                        $group ?? '*' => $namespaces->mapWithKeys(function (?string $namespace) use ($locale, $group) {
-                            return [
-                                $namespace => static::getTranslations($locale, $group ?? '*', $namespace),
-                            ];
-                        })->all(),
-                    ];
-                })->all(),
-            ];
-        })->all();
+        return static::collect();
     }
 
-    protected static function getTranslations(string $locale, string $group = '*', ?string $namespace = null): array
+    public static function collect()
     {
-        $query = Translation::query()->where('code', $locale);
+        $translations = Translation::query()
+            ->select(['code', 'group', 'namespace', 'key', 'text'])
+            ->get();
 
-        if ($namespace !== null && $namespace !== '*') {
-            $query->where('namespace', $namespace);
-        }
-
-        if ($group !== '*') {
-            $query->where('group', $group);
-        }
-
-        return $query->pluck('text', 'key')->toArray();
+        return $translations
+            ->groupBy('code')
+            ->map(function ($byLocale) {
+                return $byLocale->groupBy(fn($row) => $row->group ?? '*')
+                    ->map(function ($byGroup) {
+                        return $byGroup->groupBy(fn($row) => $row->namespace)
+                            ->map(function ($byNamespace) {
+                                return $byNamespace->mapWithKeys(fn($row) => [
+                                    $row->key => $row->text,
+                                ]);
+                            });
+                    });
+            })
+            ->toArray();
     }
 
     public static function schedule($callback)
