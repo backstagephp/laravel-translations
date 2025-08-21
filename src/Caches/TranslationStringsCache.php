@@ -25,11 +25,11 @@ class TranslationStringsCache extends Cached implements Scheduled, ShouldQueue
         return $translations
             ->groupBy('code')
             ->map(function ($byLocale) {
-                return $byLocale->groupBy(fn($row) => $row->group ?? '*')
+                return $byLocale->groupBy(fn ($row) => $row->group ?? '*')
                     ->map(function ($byGroup) {
-                        return $byGroup->groupBy(fn($row) => $row->namespace)
+                        return $byGroup->groupBy(fn ($row) => $row->namespace)
                             ->map(function ($byNamespace) {
-                                return $byNamespace->mapWithKeys(fn($row) => [
+                                return $byNamespace->mapWithKeys(fn ($row) => [
                                     $row->key => $row->text,
                                 ]);
                             });
