@@ -2,7 +2,6 @@
 
 namespace Backstage\Translations\Laravel\Base;
 
-use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
 use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
@@ -21,18 +20,23 @@ class TranslationLoader extends FileLoader
         return array_replace_recursive($fileTranslations, static::getTranslationsFromDatabase($locale, $group, $namespace));
     }
 
-    protected static function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
+    protected function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
     {
-        if (config('translations.use_permanent_cache')) {
-            $cachedData = TranslationStringsCache::get();
+        $translations = Translation::select('key', 'text', 'namespace', 'group');
 
-            return $cachedData[$locale][$group][$namespace] ?? [];
+        if ($namespace !== '*') {
+            $translations->where('namespace', $namespace);
         }
 
-        $data = TranslationStringsCache::collect();
+        if ($group !== '*') {
+            $translations->where('group', $group);
+        }
 
-        return $data[$locale][$group][$namespace] ?? [];
+        return $translations->where(fn ($query) => $query->where('code', 'LIKE', $locale.'_%')->orWhere('code', $locale))
+            ->pluck('text', 'key')
+            ->toArray();
     }
+
 
     protected static function checkTableExists(): bool
     {
