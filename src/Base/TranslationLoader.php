@@ -37,7 +37,6 @@ class TranslationLoader extends FileLoader
             ->toArray();
     }
 
-
     protected static function checkTableExists(): bool
     {
         static $exists = null;
