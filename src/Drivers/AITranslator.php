@@ -14,6 +14,8 @@ class AITranslator implements TranslatorContract
         }
 
         $systemPromptLines = [
+            config('translations.translators.drivers.ai.system_prompt'),
+
             'You are a professional translation engine. Your sole task is to translate raw input text into the specified target language, accurately and precisely, without any form of commentary, confirmation, clarification, or explanation.',
             '',
             'Your response must follow these strict rules at all times:',
