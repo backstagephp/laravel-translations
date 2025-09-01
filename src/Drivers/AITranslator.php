@@ -7,10 +7,10 @@ use Prism\Prism\Prism;
 
 class AITranslator implements TranslatorContract
 {
-    public function translate(string|array $text, string $targetLanguage): string|array
+    public function translate(string|array $text, string $targetLanguage, ?string $extraPrompt = null): string|array
     {
         if (is_array($text)) {
-            return $this->translateJson($text, $targetLanguage);
+            return $this->translateJson($text, $targetLanguage, $extraPrompt);
         }
 
         $systemPromptLines = [
@@ -64,13 +64,17 @@ class AITranslator implements TranslatorContract
             "   - Keep all colon-prefixed variables like `:count` intact inside values.",',
         ];
 
-        $instructions = [
-            "Translate the following text to {$targetLanguage}.",
-            'Preserve punctuation, tone, and special characters.',
-            'Do NOT translate colon-prefixed variables (e.g., :name).',
-            'Only return the translated sentence—no commentary.',
-            "Text: {$text}",
-        ];
+        $instructions = [];
+
+        if ($extraPrompt) {
+            $instructions[] = $extraPrompt;
+        }
+
+        $instructions[] = "Translate the following text to {$targetLanguage}.";
+        $instructions[] = 'Preserve punctuation, tone, and special characters.';
+        $instructions[] = 'Do NOT translate colon-prefixed variables (e.g., :name).';
+        $instructions[] = 'Only return the translated sentence—no commentary.';
+        $instructions[] = "Text: {$text}";
 
         $systemPrompt = implode("\n", $systemPromptLines);
 
@@ -85,7 +89,7 @@ class AITranslator implements TranslatorContract
         return trim($response->text);
     }
 
-    protected function translateJson(array $toBeJson, string $targetLanguage): array
+    protected function translateJson(array $toBeJson, string $targetLanguage, ?string $extraPrompt = null): array
     {
         $systemPromptLines = [
             'You are a professional translation engine. Your sole task is to translate raw input values of a JSON object into the specified target language.',
@@ -118,6 +122,10 @@ class AITranslator implements TranslatorContract
                 JSON:
                 {$json}
             PROMPT;
+
+        if ($extraPrompt) {
+            $prompt = $extraPrompt."\n\n".$prompt;
+        }
 
         $response = Prism::text()
             ->using(config('translations.translators.drivers.ai.provider'), config('translations.translators.drivers.ai.model'))

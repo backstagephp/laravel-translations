@@ -86,13 +86,14 @@ trait HasTranslatableAttributes
     /**
      * Translate a single attribute.
      */
-    public function translateAttribute(mixed $attribute, string $targetLanguage, bool $overwrite = false): mixed
+    public function translateAttribute(mixed $attribute, string $targetLanguage, bool $overwrite = false, ?string $extraPrompt = null): mixed
     {
         return TranslateAttribute::run(
             model: $this,
             attribute: $attribute,
             targetLanguage: $targetLanguage,
-            overwrite: $overwrite
+            overwrite: $overwrite,
+            extraPrompt: $extraPrompt
         );
     }
 
