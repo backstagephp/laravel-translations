@@ -49,4 +49,12 @@ return [
             ],
         ],
     ],
+
+    'eloquent' => [
+        'models' => [
+            'user' => [
+                'language-relation' => 'locale',
+            ],
+        ],
+    ],
 ];

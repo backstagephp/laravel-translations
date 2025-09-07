@@ -40,7 +40,7 @@ class Language extends Model
 
     public static function default(): ?Language
     {
-        return static::firstWhere('default', true);
+        return static::query()->firstWhere('default', true);
     }
 
     protected static function newFactory()
@@ -55,6 +55,11 @@ class Language extends Model
     public function translations(): HasMany
     {
         return $this->hasMany(Translation::class);
+    }
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(config('auth.providers.users.model'), config('translations.eloquent.models.user.language-relation', 'locale'), 'code');
     }
 
     public function getLanguageCodeAttribute()
