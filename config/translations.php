@@ -28,6 +28,14 @@ return [
         ],
     ],
 
+    'use_permanent_cache' => false,
+
+    'eloquent' => [
+        'translatable-models' => [
+            //
+        ],
+    ],
+
     'translators' => [
         'default' => env('TRANSLATION_DRIVER', 'google-translate'),
 

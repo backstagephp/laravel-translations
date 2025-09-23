@@ -53,9 +53,16 @@ class TranslateKeys implements ShouldQueue
 
         $translator = Translator::with(config('translations.translators.default'));
 
-        Translation::whereIn('code', $locales)
+        /**
+         * @var \Illuminate\Database\Eloquent\Builder $query
+         */
+        $query = Translation::query();
+
+        $results = $query->whereIn('code', $locales)
             ->whereNull('translated_at')
-            ->get()
+            ->get();
+
+        $results
             ->each(function (Translation $translation) use ($translator) {
                 $newText = $translator->translate($translation->text, $translation->languageCode);
 
