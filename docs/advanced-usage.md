@@ -40,57 +40,6 @@ class TranslationHelper
 }
 ```
 
-## Custom Model Translation Rules
-
-### Attribute-Specific Rules
-
-Define custom rules for specific attributes:
-
-```php
-class Post extends Model implements TranslatesAttributes
-{
-    use HasTranslatableAttributes;
-
-    public function getTranslatableAttributes(): array
-    {
-        return ['title', 'content', 'excerpt', 'meta_description'];
-    }
-
-    // Custom rules for title attribute
-    public function getTranslatableAttributeRulesForTitle(): array
-    {
-        return [
-            'max_length' => 100,
-            'preserve_formatting' => false,
-            'seo_friendly' => true,
-        ];
-    }
-
-    // Custom rules for content attribute
-    public function getTranslatableAttributeRulesForContent(): array
-    {
-        return [
-            'preserve_html' => true,
-            'preserve_formatting' => true,
-            'maintain_tone' => true,
-        ];
-    }
-}
-```
-
-### Using Custom Rules
-
-```php
-$post = Post::find(1);
-
-// Get rules for specific attribute
-$titleRules = $post->getTranslatableAttributeRulesFor('title');
-// Returns: ['max_length' => 100, 'preserve_formatting' => false, 'seo_friendly' => true]
-
-// Use rules in translation
-$translatedTitle = $post->translateAttribute('title', 'es', false, 'SEO-friendly blog title');
-```
-
 ## Custom Translation Prompts
 
 ### AI Provider Customization
@@ -149,56 +98,6 @@ class Post extends Model implements TranslatesAttributes
         
         return $context;
     }
-}
-```
-
-## Custom Translation Providers
-
-### Creating Custom Providers
-
-Create a custom translation provider:
-
-```php
-<?php
-
-namespace App\Translations\Providers;
-
-use Backstage\Translations\Laravel\Contracts\TranslatorContract;
-
-class CustomTranslator implements TranslatorContract
-{
-    public function translate(string $text, string $targetLanguage, string $sourceLanguage = 'en'): string
-    {
-        // Your custom translation logic
-        return $this->callCustomAPI($text, $targetLanguage, $sourceLanguage);
-    }
-
-    private function callCustomAPI(string $text, string $targetLanguage, string $sourceLanguage): string
-    {
-        // Implementation using your preferred translation service
-        $response = Http::post('https://your-api.com/translate', [
-            'text' => $text,
-            'source' => $sourceLanguage,
-            'target' => $targetLanguage,
-            'api_key' => config('services.custom_translator.api_key'),
-        ]);
-
-        return $response->json('translation');
-    }
-}
-```
-
-### Registering Custom Providers
-
-Register your custom provider:
-
-```php
-// In a service provider
-public function register()
-{
-    $this->app->bind(TranslatorContract::class, function ($app) {
-        return new CustomTranslator();
-    });
 }
 ```
 
