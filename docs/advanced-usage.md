@@ -461,6 +461,48 @@ class TenantPost extends Model implements TranslatesAttributes
 }
 ```
 
+## Translating Array Values
+
+When your translation payload contains arrays, you can declare rules to translate array values. Use `'*'` to indicate that all items under a given key should be translated, or scope it to a particular nested key.
+
+```php
+// Translate all items under the "data" key
+return [
+    'data' => ['*'],
+];
+```
+
+```php
+// Translate all items under a specific nested key within "data"
+return [
+    'data' => [
+        'special-key' => ['*'],
+    ],
+];
+```
+
+This rule is nested under the `data` key. Array rules are hierarchical and mirror your array structure, so `special-key` here is resolved as `data.special-key`.
+
+### Per-attribute rules and defaults
+
+For model attribute translation, you can define rules per attribute by adding a method on your model named `getTranslatableAttributeRulesFor{Attribute}`. If this method does not exist, the default rule is `'*'` (translate the entire attribute).
+
+```php
+// Example on a model using content attribute:
+
+public function getTranslatableAttributeRulesForContent(): array|string
+{
+    return [
+        'data' => [
+            'special-key' => ['*'],
+        ],
+    ];
+}
+
+// If the method is absent, it behaves as if:
+// return '*';
+```
+
 ## Next Steps
 
 - [Configuration](configuration.md) - Complete configuration options
