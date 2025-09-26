@@ -506,9 +506,6 @@ public function getTranslatableAttributeRulesForContent(): array|string
 #### Example use case
 
 ```php
-// Given a Post model with an array attribute `content`
-// and using the rule above:
-
 public function getTranslatableAttributeRulesForContent(): array|string
 {
     return [
@@ -517,8 +514,9 @@ public function getTranslatableAttributeRulesForContent(): array|string
         ],
     ];
 }
+
 // Effect:
-// - Translates all items in content.data.special-key [0..*]
+// - Translates all items in content.metadata.tags [0..*]
 // - Leaves content.data.other unchanged
 ```
 
