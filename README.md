@@ -1,6 +1,6 @@
-# Laravel Translations
-
 <div align="center">
+
+# Laravel Translations
 
  Nice to meet you, we're [Vormkracht10](https://vormrkacht10.nl)
 
