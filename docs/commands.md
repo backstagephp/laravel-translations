@@ -384,5 +384,3 @@ tail -f storage/logs/laravel.log | grep translation
 ## Next Steps
 
 - [Advanced Usage](advanced-usage.md) - Advanced features and customization
-- [API Reference](api-reference.md) - Complete API documentation
-- [Troubleshooting](troubleshooting.md) - Common issues and solutions

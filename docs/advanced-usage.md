@@ -620,6 +620,4 @@ class TranslationController extends Controller
 
 ## Next Steps
 
-- [API Reference](api-reference.md) - Complete API documentation
-- [Troubleshooting](troubleshooting.md) - Common issues and solutions
 - [Configuration](configuration.md) - Complete configuration options

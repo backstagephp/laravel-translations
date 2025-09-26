@@ -10,9 +10,7 @@ Welcome to the Laravel Translations package documentation. This package provides
 - [Model Attributes](model-attributes.md) - Translate Eloquent model attributes
 - [Translation Providers](providers.md) - Google Translate, DeepL, AI providers
 - [Commands](commands.md) - Artisan commands reference
-- [API Reference](api-reference.md) - Complete API documentation
 - [Advanced Usage](advanced-usage.md) - Advanced features and customization
-- [Troubleshooting](troubleshooting.md) - Common issues and solutions
 
 ## What This Package Does
 
@@ -66,8 +64,6 @@ That's it! Your translations are now managed automatically.
 
 ## Need Help?
 
-- Check the [Troubleshooting](troubleshooting.md) guide for common issues
-- Review the [API Reference](api-reference.md) for detailed method documentation
 - Look at the [Advanced Usage](advanced-usage.md) for complex scenarios
 
 ---

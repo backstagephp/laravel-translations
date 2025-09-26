@@ -180,5 +180,3 @@ Check that everything is working:
 **Translation driver errors**: Check your API keys and configuration for the selected driver.
 
 **Performance issues**: Consider enabling permanent caching in the configuration.
-
-For more troubleshooting help, see the [Troubleshooting](troubleshooting.md) guide.

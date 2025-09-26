@@ -387,4 +387,3 @@ foreach ($translations as $translation) {
 
 - [Commands](commands.md) - Complete command reference
 - [Advanced Usage](advanced-usage.md) - Advanced features and customization
-- [API Reference](api-reference.md) - Complete API documentation

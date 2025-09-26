@@ -110,9 +110,7 @@ Supports Google Translate, DeepL, and AI providers. See the [Translation Provide
 - [Model Attributes](docs/model-attributes.md)
 - [Translation Providers](docs/providers.md)
 - [Commands Reference](docs/commands.md)
-- [API Reference](docs/api-reference.md)
 - [Advanced Usage](docs/advanced-usage.md)
-- [Troubleshooting](docs/troubleshooting.md)
 
 ## Requirements
 

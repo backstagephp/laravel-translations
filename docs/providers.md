@@ -459,4 +459,3 @@ LOG_LEVEL=debug
 
 - [Configuration](configuration.md) - Complete configuration options
 - [Advanced Usage](advanced-usage.md) - Advanced features and customization
-- [Troubleshooting](troubleshooting.md) - Common issues and solutions
