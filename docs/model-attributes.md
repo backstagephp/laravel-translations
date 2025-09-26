@@ -326,19 +326,7 @@ protected $casts = [
 ];
 ```
 
-### 3. Handle Missing Translations
-
-Always provide fallbacks:
-
-```php
-public function getTranslatedTitleAttribute()
-{
-    return $this->getTranslatedAttribute('title') 
-        ?? $this->title; // Fallback to original
-}
-```
-
-### 4. Validate Translations
+### 3. Validate Translations
 
 Add validation for translated content:
 
