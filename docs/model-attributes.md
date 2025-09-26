@@ -295,7 +295,7 @@ foreach ($posts as $post) {
 
 ## Best Practices
 
-### 1. Choose Translatable Attributes Wisely
+### Choose Translatable Attributes Wisely
 
 Only translate attributes that need translation:
 
@@ -313,7 +313,7 @@ public function getTranslatableAttributes(): array
 }
 ```
 
-### 2. Use Appropriate Casts
+### Use Appropriate Casts
 
 Define proper casts for translatable attributes:
 
@@ -326,19 +326,6 @@ protected $casts = [
 ];
 ```
 
-### 3. Validate Translations
-
-Add validation for translated content:
-
-```php
-public function rules()
-{
-    return [
-        'title' => 'required|string|max:255',
-        'content' => 'required|string',
-    ];
-}
-```
 
 ## Troubleshooting
 
