@@ -503,6 +503,25 @@ public function getTranslatableAttributeRulesForContent(): array|string
 // return '*';
 ```
 
+#### Example use case
+
+```php
+// Given a Post model with an array attribute `content`
+// and using the rule above:
+
+public function getTranslatableAttributeRulesForContent(): array|string
+{
+    return [
+        'metadata' => [
+            'tags' => ['*'],
+        ],
+    ];
+}
+// Effect:
+// - Translates all items in content.data.special-key [0..*]
+// - Leaves content.data.other unchanged
+```
+
 ## Next Steps
 
 - [Configuration](configuration.md) - Complete configuration options
