@@ -127,7 +127,6 @@ MIT License. See [LICENSE](LICENSE.md) for details.
 
 - 🐛 [Report Issues](https://github.com/backstagephp/laravel-translations/issues)
 - 💡 [Submit Pull Requests](https://github.com/backstagephp/laravel-translations/pulls)
-- 💬 [Join Discussions](https://github.com/backstagephp/laravel-translations/discussions)
 
 ---
 
