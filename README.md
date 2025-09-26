@@ -35,7 +35,9 @@ Laravel Translations makes multilingual Laravel applications simple. Scan, trans
 
 ```bash
 composer require backstage/laravel-translations
+
 php artisan vendor:publish --provider="Backstage\Translations\Laravel\TranslationServiceProvider"
+
 php artisan migrate
 ```
 
@@ -43,7 +45,9 @@ php artisan migrate
 
 ```bash
 php artisan translations:languages:add en English
+
 php artisan translations:languages:add es Spanish
+
 php artisan translations:languages:add fr French
 ```
 
@@ -83,7 +87,9 @@ php artisan translations:scan
 
 # Translate strings
 php artisan translations:translate
+
 php artisan translations:translate --code=es
+
 php artisan translations:translate --update
 
 # Sync translations
