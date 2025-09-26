@@ -24,7 +24,7 @@ class GetTranslatedAttributes
          * @var array $translatedAttributes
          */
         $translatedAttributes = collect($translatableAttributes)
-            ->keys()
+            ->values()
             ->mapWithKeys(function ($attribute) use ($model, $locale) {
                 return $model->getTranslatedAttribute($attribute, $locale) !== null
                     ? [$attribute => $model->getTranslatedAttribute($attribute, $locale)]
