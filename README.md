@@ -102,7 +102,7 @@ Supports Google Translate, DeepL, and AI providers. See the [Translation Provide
 
 ## Documentation
 
-📚 **[Complete Documentation](docs/README.md)** - Detailed guides and API reference
+📚 **[Complete Documentation](docs/index.md)** - Detailed guides and API reference
 
 - [Installation & Setup](docs/installation.md)
 - [Configuration](docs/configuration.md)
