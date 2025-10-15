@@ -8,8 +8,6 @@
 
 <img src="https://img.shields.io/github/license/backstagephp/laravel-translations?style=flat&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
 <img src="https://img.shields.io/github/last-commit/backstagephp/laravel-translations?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
-<img src="https://img.shields.io/github/languages/top/backstagephp/laravel-translations?style=flat&color=0080ff" alt="repo-top-language">
-<img src="https://img.shields.io/github/languages/count/backstagephp/laravel-translations?style=flat&color=0080ff" alt="repo-language-count">
 <span>
     <a href="https://packagist.org/packages/backstage/laravel-translations">
         <img src="https://img.shields.io/packagist/v/backstage/laravel-translations.svg?style=flat-square" alt="Latest Version on Packagist">
