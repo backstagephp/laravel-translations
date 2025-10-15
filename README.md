@@ -12,10 +12,10 @@
     <a href="https://packagist.org/packages/backstage/laravel-translations">
         <img src="https://img.shields.io/packagist/v/backstage/laravel-translations.svg?style=flat-square" alt="Latest Version on Packagist">
     </a>
-    <a href="https://github.com/backstagephp/laravel-translations/actions?query=workflow%3Arun-tests+branch%3Amain">
+    <a href="https://github.com/backstagephp/laravel-translations/actions?query=tests">
         <img src="https://img.shields.io/github/actions/workflow/status/backstagephp/laravel-translations/run-tests.yml?branch=main&label=tests&style=flat-square" alt="GitHub Tests Action Status">
     </a>
-    <a href="https://github.com/backstagephp/laravel-translations/actions?query=workflow%3A%22Fix+PHP+code+style+issues%22+branch%3Amain">
+    <a href="https://github.com/backstagephp/laravel-translations/actions?query=pint">
         <img src="https://img.shields.io/github/actions/workflow/status/backstagephp/laravel-translations/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square" alt="GitHub Code Style Action Status">
     </a>
     <a href="https://packagist.org/packages/backstage/laravel-translations">
