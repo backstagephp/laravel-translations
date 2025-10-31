@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Backstage\Translations\Laravel\Enums\LanguageRuleConditionType;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::create('language_rules', function (Blueprint $table) {
+            $table->id();
+
+            $table->string('code', 5);
+
+            $table->string('name');
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('language_rules_conditions', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('language_rule_id')->constrained('language_rules');
+            
+            $table->string('key');
+            $table->enum('type', LanguageRuleConditionType::values());
+            $table->longText('value');
+
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('language_rules_conditions');
+
+        Schema::dropIfExists('language_rules');
+    }
+};
