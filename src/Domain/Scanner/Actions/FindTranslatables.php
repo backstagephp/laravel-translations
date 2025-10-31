@@ -13,7 +13,7 @@ class FindTranslatables
 
     public static string $baseFilename;
 
-    protected static array $allMatches = [];
+    public static array $allMatches = [];
 
     public static function scan(bool $mergeKeys = false): Collection
     {
@@ -83,7 +83,7 @@ class FindTranslatables
             ->when($mergeKeys, fn ($collection) => $this->mergeExistingKeys($collection));
     }
 
-    protected static function addMatch($file, $key, $params = null): void
+    public static function addMatch($file, $key, $params = null): void
     {
         /**
          * @var string $namespace
@@ -103,7 +103,7 @@ class FindTranslatables
         ];
     }
 
-    protected static function extractNamespace(string $key): ?string
+    public static function extractNamespace(string $key): ?string
     {
         /**
          * @var string|null $string
@@ -113,7 +113,7 @@ class FindTranslatables
         return $string;
     }
 
-    protected static function extractGroup(string $key): ?string
+    public static function extractGroup(string $key): ?string
     {
         /**
          * @var string|null $string
@@ -123,7 +123,7 @@ class FindTranslatables
         return $string;
     }
 
-    protected static function mergeExistingKeys(Collection $newKeys): Collection
+    public static function mergeExistingKeys(Collection $newKeys): Collection
     {
         /**
          * @var \Illuminate\Support\Collection $existingKeys
