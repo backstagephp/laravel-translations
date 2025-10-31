@@ -21,35 +21,35 @@ class FindRegisteredTranslationStrings
         $availableLangs = collect($disk->directories(base_path('lang')))
             ->map(fn ($dir) => basename($dir))
             ->all();
-        
+
         foreach ($locales as $locale) {
             $language = in_array($locale, $availableLangs)
                 ? $locale
                 : (count($availableLangs) ? $availableLangs[0] : null);
-        
-            if (!$language) {
+
+            if (! $language) {
                 continue;
             }
-        
+
             collect($disk->allFiles(base_path("lang/{$language}")))
                 ->filter(fn ($file) => $disk->extension($file) === 'php')
-                ->each(function ($file) use (&$translationFiles, $locale, $language) {
+                ->each(function ($file) use (&$translationFiles, $locale) {
                     $relativePath = $file->getRelativePathname();
                     $group = str_replace('.php', '', basename($relativePath));
                     $lines = File::getRequire($file->getPathname());
-        
+
                     foreach ($lines as $key => $value) {
                         if ($value !== null) {
-                            $translationFiles[$locale][$group . '.' . $key] = $value;
+                            $translationFiles[$locale][$group.'.'.$key] = $value;
                         }
                     }
                 });
-        
+
             if (isset($translationFiles[$locale])) {
                 $translationFiles[$locale] = Arr::dot($translationFiles[$locale]);
             }
         }
-        
+
         $translationFiles = collect($translationFiles);
 
         $loadedProviders = App::getLoadedProviders();
@@ -97,13 +97,12 @@ class FindRegisteredTranslationStrings
             $translator->addNamespace($namespace, $path);
 
             $all = collect($locales)
-            ->mapWithKeys(function ($locale) use ($translator) {
-                return [$locale => $translator->get(key:'*', locale:$locale)];
-            });
+                ->mapWithKeys(function ($locale) use ($translator) {
+                    return [$locale => $translator->get(key: '*', locale: $locale)];
+                });
 
             return $all;
         });
-
 
         $mergedNamespaceTranslations = collect($locales)->mapWithKeys(function ($locale) use ($namespaceBasedTranslations) {
             return [
@@ -111,7 +110,7 @@ class FindRegisteredTranslationStrings
                     ->pluck($locale)
                     ->filter()
                     ->reduce(function ($carry, $translations) {
-                        if(is_string($translations)) {
+                        if (is_string($translations)) {
                             return [
                                 'key' => '*',
                                 'namespace' => '*',
@@ -119,6 +118,7 @@ class FindRegisteredTranslationStrings
                                 'text' => $translations,
                             ];
                         }
+
                         return array_merge($carry, $translations);
                     }, []),
             ];
@@ -130,18 +130,17 @@ class FindRegisteredTranslationStrings
 
             $merged = collect(array_merge($namespaceTranslations, $fileTranslations))
                 ->map(function ($value, $key) {
-                   return [
+                    return [
                         'key' => $key,
                         'namespace' => FindTranslatables::extractNamespace($key),
                         'group' => FindTranslatables::extractGroup($key),
                         'text' => $value,
-                   ];
+                    ];
                 });
 
-            
             return [$locale => $merged];
         });
-    
+
         return $finalTranslations;
     }
 }
