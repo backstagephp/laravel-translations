@@ -2,18 +2,19 @@
 
 namespace Backstage\Translations\Laravel\Jobs;
 
-use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
-use Backstage\Translations\Laravel\Domain\Scanner\Actions\FindTranslatables;
-use Backstage\Translations\Laravel\Models\Language;
-use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Lang;
+use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Models\Translation;
+use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
+use Backstage\Translations\Laravel\Domain\Scanner\Actions\FindTranslatables;
+use Backstage\Translations\Laravel\Domain\Scanner\Actions\FindRegisteredTranslationStrings;
 
 class ScanTranslationStrings implements ShouldQueue
 {
@@ -31,11 +32,12 @@ class ScanTranslationStrings implements ShouldQueue
         $translations = collect(FindTranslatables::scan())->unique();
 
         $locales = $this->locale ? collect([$this->locale->code]) : $this->getLocales();
-
         $baseLocale = App::getLocale();
 
-        $localizedTranslations = $this->mapTranslations($translations, $locales);
+        $translations = $translations->merge(FindRegisteredTranslationStrings::scan($locales)->first());
 
+        $localizedTranslations = $this->mapTranslations($translations, $locales);
+        
         App::setLocale($baseLocale);
 
         $this->storeTranslations($localizedTranslations);
@@ -61,26 +63,16 @@ class ScanTranslationStrings implements ShouldQueue
                 ];
 
                 if (! $this->redo) {
-                    if ($data['namespace'] !== '*') {
-                        $data['text'] = Lang::get(key: $translation['key'], locale: $locale);
-                    } else {
-                        $data['text'] = Lang::get(key: $translation['key'], locale: $locale);
-                    }
-
-                    return $data;
-                }
-
-                $oldTranslation = Translation::query()
-                    ->where('key', $translation['key'])
-                    ->where('group', $translation['group'])
-                    ->where('namespace', $translation['namespace'] ?? '*')
-                    ->where('code', $baseLocale)
-                    ->first();
-
-                if ($oldTranslation) {
-                    $data['text'] = $oldTranslation->text;
+                    $data['text'] = Lang::get($translation['key'], [], $locale);
                 } else {
-                    $data['text'] = Lang::get(key: $translation['key'], locale: $locale);
+                    $oldTranslation = Translation::query()
+                        ->where('key', $translation['key'])
+                        ->where('group', $translation['group'])
+                        ->where('namespace', $translation['namespace'] ?? '*')
+                        ->where('code', $baseLocale)
+                        ->first();
+
+                    $data['text'] = $oldTranslation?->text ?? Lang::get($translation['key'], [], $locale);
                 }
 
                 return $data;
@@ -112,14 +104,6 @@ class ScanTranslationStrings implements ShouldQueue
 
     protected static function translationIsTranslated(array $translation): bool
     {
-        if ($translation['namespace'] === '*') {
-            return false;
-        }
-
-        if ($translation['key'] === $translation['text']) {
-            return false;
-        }
-
-        return true;
+        return $translation['namespace'] !== '*' && $translation['key'] !== $translation['text'];
     }
 }
