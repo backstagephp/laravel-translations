@@ -66,7 +66,7 @@ class Language extends Model
     {
         return $this->hasMany(LanguageRule::class, 'code', 'code');
     }
-    
+
     public function getLanguageCodeAttribute()
     {
         return explode('-', $this->attributes['code'])[0];

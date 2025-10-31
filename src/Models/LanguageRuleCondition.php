@@ -2,8 +2,8 @@
 
 namespace Backstage\Translations\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Backstage\Translations\Laravel\Enums\LanguageRuleConditionType;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property LanguageRuleConditionType $type
@@ -32,4 +32,4 @@ class LanguageRuleCondition extends Model
     {
         return $this->belongsTo(LanguageRule::class);
     }
-}   
+}

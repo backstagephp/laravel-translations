@@ -10,7 +10,7 @@ class LanguageRule extends Model
     use SoftDeletes;
 
     protected $table = 'language_rules';
-    
+
     protected $fillable = [
         'name',
     ];
