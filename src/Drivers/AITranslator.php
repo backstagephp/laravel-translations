@@ -2,8 +2,8 @@
 
 namespace Backstage\Translations\Laravel\Drivers;
 
-use Backstage\Translations\Laravel\Contracts\TranslatorContract;
 use Prism\Prism\Facades\Prism;
+use Backstage\Translations\Laravel\Contracts\TranslatorContract;
 
 class AITranslator implements TranslatorContract
 {
