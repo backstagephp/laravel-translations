@@ -33,4 +33,9 @@ class LanguageRuleCondition extends Model
     {
         return $this->belongsTo(LanguageRule::class);
     }
+
+    public function getTextualQuery(): string
+    {
+        return $this->type->buildTextualQuery($this->key, $this->value ?? $this->multiple_value);
+    }
 }

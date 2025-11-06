@@ -16,6 +16,8 @@ return new class extends Migration
 
             $table->string('name');
 
+            $table->longText('global_instructions')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });
