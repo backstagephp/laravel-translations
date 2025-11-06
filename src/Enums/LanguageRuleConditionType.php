@@ -45,4 +45,13 @@ enum LanguageRuleConditionType: string
 
         return implode("\n", $resultingQuery);
     }
+
+    public function getLabel(): string {
+        return match ($this) {
+            self::MUST => __('Must'),
+            self::MUST_NOT => __('Must Not'),
+            self::MUST_MULTIPLE => __('Must Multiple'),
+            self::MUST_NOT_MULTIPLE => __('Must Not Multiple'),
+        };
+    }
 }
