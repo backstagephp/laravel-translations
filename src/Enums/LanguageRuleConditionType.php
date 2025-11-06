@@ -34,9 +34,6 @@ enum LanguageRuleConditionType: string
 
         if ($this === self::MUST_MULTIPLE) {
             $values = $value;
-            if (! is_array($values)) {
-                dd($values);
-            }
 
             $resultingQuery[] = "{$key} must translate to one of these options: '".implode("', '", $values)."'";
         }
