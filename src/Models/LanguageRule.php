@@ -12,6 +12,7 @@ class LanguageRule extends Model
     protected $table = 'language_rules';
 
     protected $fillable = [
+        'code',
         'name',
     ];
 
@@ -19,4 +20,9 @@ class LanguageRule extends Model
     {
         return $this->hasMany(LanguageRuleCondition::class);
     }
+
+    public function language()
+    {
+        return $this->belongsTo(Language::class, 'code', 'code');
+    }   
 }
