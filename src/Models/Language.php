@@ -2,14 +2,13 @@
 
 namespace Backstage\Translations\Laravel\Models;
 
-use Locale;
-use DOMDocument;
-use Illuminate\Support\Str;
+use Backstage\Translations\Laravel\Observers\LanguageObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Backstage\Translations\Laravel\Observers\LanguageObserver;
+use Illuminate\Support\Str;
+use Locale;
 
 #[ObservedBy(LanguageObserver::class)]
 class Language extends Model
@@ -80,7 +79,7 @@ class Language extends Model
 
     public function getTextualRulesQuery(): string
     {
-        $baseRules = <<<HTML
+        $baseRules = <<<'HTML'
             <translation-rules-query-base-rules>
                 Important: Always treat singular, plural, diminutives, and common English equivalents as identical before translating. 
                 For example: 'Worst', 'worstjes', 'Sausage', 'Sausages' are all equivalent. 
@@ -94,13 +93,12 @@ class Language extends Model
                 If a translation *must be* a certain text, it cannot equal the source.
             </translation-rules-query-base-rules>
         HTML;
-            
 
-        $rules = $this->load('languageRules')->languageRules->map(function(LanguageRule $languageRule) {
-            return '<translation-rules-query>' . $languageRule->getTextualQuery() . '</translation-rules-query>';
+        $rules = $this->load('languageRules')->languageRules->map(function (LanguageRule $languageRule) {
+            return '<translation-rules-query>'.$languageRule->getTextualQuery().'</translation-rules-query>';
         })->filter()->implode("\n");
 
-        return $baseRules . "\n\n" . $rules;
+        return $baseRules."\n\n".$rules;
     }
 
     public function getLocalizedCountryNameAttribute($locale = null)

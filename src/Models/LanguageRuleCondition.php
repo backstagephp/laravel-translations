@@ -2,10 +2,10 @@
 
 namespace Backstage\Translations\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Backstage\Translations\Laravel\Enums\LanguageRuleConditionType;
 use Backstage\Translations\Laravel\Observers\LanguageRuleConditionObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property LanguageRuleConditionType $type
@@ -20,7 +20,7 @@ class LanguageRuleCondition extends Model
         'key',
         'type',
         'value',
-        'multiple_value'
+        'multiple_value',
     ];
 
     protected $casts = [
@@ -28,7 +28,7 @@ class LanguageRuleCondition extends Model
         'value' => 'string',
         'multiple_value' => 'array',
     ];
-   
+
     public function languageRule()
     {
         return $this->belongsTo(LanguageRule::class);

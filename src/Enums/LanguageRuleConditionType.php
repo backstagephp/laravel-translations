@@ -14,33 +14,34 @@ enum LanguageRuleConditionType: string
         return array_column(self::cases(), 'value');
     }
 
-    public function buildTextualQuery(string $key, string|array $value) {
+    public function buildTextualQuery(string $key, string|array $value)
+    {
         $resultingQuery = [];
 
-        if(is_array($value) && count($value) > 0 || !is_array($value) && $value !== '' || $value !== null) {
-        $resultingQuery[] = "The following rules must be applied while translating the text:";
+        if (is_array($value) && count($value) > 0 || ! is_array($value) && $value !== '' || $value !== null) {
+            $resultingQuery[] = 'The following rules must be applied while translating the text:';
         }
-       
-        if($this === self::MUST || $this === self::MUST_NOT) {
-            if($this===self::MUST) {
+
+        if ($this === self::MUST || $this === self::MUST_NOT) {
+            if ($this === self::MUST) {
                 $resultingQuery[] = "{$key} must translate to '{$value}'";
             }
 
-            if($this===self::MUST_NOT) {
+            if ($this === self::MUST_NOT) {
                 $resultingQuery[] = "{$key} must not translate to '{$value}'";
             }
         }
 
-        if($this === self::MUST_MULTIPLE) {
+        if ($this === self::MUST_MULTIPLE) {
             $values = $value;
-            if(!is_array($values)) {
+            if (! is_array($values)) {
                 dd($values);
             }
-            
-                $resultingQuery[] = "{$key} must translate to one of these options: '".implode("', '", $values)."'";
+
+            $resultingQuery[] = "{$key} must translate to one of these options: '".implode("', '", $values)."'";
         }
 
-        if($this === self::MUST_NOT_MULTIPLE) {
+        if ($this === self::MUST_NOT_MULTIPLE) {
             $values = $value;
             $resultingQuery[] = "{$key} must not translate to any of these options: '".implode("', '", $values)."'";
         }
