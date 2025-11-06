@@ -1,9 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Backstage\Translations\Laravel\Enums\LanguageRuleConditionType;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -26,11 +25,11 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('language_rule_id')->constrained('language_rules');
-            
+
             $table->string('key');
 
-            $table->enum('type', LanguageRuleConditionType::values());
-            
+            $table->string('type'); // must, must_not, must_multiple, must_not_multiple
+
             $table->text('value')->nullable();
 
             $table->json('multiple_value');
