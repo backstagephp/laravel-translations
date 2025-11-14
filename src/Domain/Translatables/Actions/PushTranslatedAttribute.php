@@ -42,11 +42,7 @@ class PushTranslatedAttribute
             $reverseMutatedAttributeValue = json_encode($reverseMutatedAttributeValue, JSON_UNESCAPED_UNICODE);
         }
 
-        if (env('APP_LOCALE') === $locale) {
-            static::modifyOriginalAttributeValue($model, $attribute, $reverseMutatedAttributeValue);
-        } else {
-            static::modifyTranslatedAttributeValue($model, $attribute, $reverseMutatedAttributeValue, $locale);
-        }
+        static::modifyTranslatedAttributeValue($model, $attribute, $reverseMutatedAttributeValue, $locale);
     }
 
     public static function modifyTranslatedAttributeValue(Model $model, string $attribute, mixed $reverseMutatedAttributeValue, string $locale): void
