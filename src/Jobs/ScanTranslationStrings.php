@@ -17,7 +17,10 @@ use Illuminate\Support\Facades\Lang;
 
 class ScanTranslationStrings implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     protected ?Language $locale;
 
