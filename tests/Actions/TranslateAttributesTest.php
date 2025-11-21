@@ -1,14 +1,14 @@
 <?php
 
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttributes;
-use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 
 it('translates all translatable attributes to target language', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->description = 'World';
     $model->save();
@@ -25,7 +25,7 @@ it('uses app locale when target language is null', function () {
 
     app()->setLocale('en');
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->description = 'World';
     $model->save();
@@ -34,4 +34,3 @@ it('uses app locale when target language is null', function () {
 
     expect($result)->toBeArray();
 })->skip('Requires translation service');
-

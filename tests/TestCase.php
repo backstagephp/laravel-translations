@@ -4,7 +4,6 @@ namespace Backstage\Translations\Laravel\Tests;
 
 use Backstage\Translations\Laravel\TranslationServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -31,13 +30,12 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         $dbPath = database_path('database.sqlite');
-        
-            if (file_exists($dbPath)) {
-                unlink($dbPath);
-            }
-            
-            touch($dbPath);
 
+        if (file_exists($dbPath)) {
+            unlink($dbPath);
+        }
+
+        touch($dbPath);
 
         config()->set('database.default', 'testing');
         config()->set('database.connections.testing', [
@@ -52,14 +50,15 @@ class TestCase extends Orchestra
     {
         if (Schema::hasTable('languages')) {
             $this->createTestTables();
+
             return;
         }
 
         $migrations = [
-            __DIR__.'/../database/migrations/create_languages_table.php.stub',
-            __DIR__.'/../database/migrations/create_translations_table.php.stub',
-            __DIR__.'/../database/migrations/create_translated_attributes_table.php.stub',
-            __DIR__.'/../database/migrations/create_language_rules_tables.php.stub',
+            __DIR__ . '/../database/migrations/create_languages_table.php.stub',
+            __DIR__ . '/../database/migrations/create_translations_table.php.stub',
+            __DIR__ . '/../database/migrations/create_translated_attributes_table.php.stub',
+            __DIR__ . '/../database/migrations/create_language_rules_tables.php.stub',
         ];
 
         foreach ($migrations as $migration) {

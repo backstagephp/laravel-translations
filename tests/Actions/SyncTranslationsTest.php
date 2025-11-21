@@ -1,15 +1,15 @@
 <?php
 
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\SyncTranslations;
-use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 
 it('syncs translations for all translatable attributes', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->description = 'World';
     $model->save();
@@ -25,7 +25,7 @@ it('calls translateAttributeForAllLanguages for each attribute', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->description = 'World';
     $model->save();
@@ -43,4 +43,3 @@ it('calls translateAttributeForAllLanguages for each attribute', function () {
     expect($titleTranslations->count())->toBeGreaterThan(0)
         ->and($descriptionTranslations->count())->toBeGreaterThan(0);
 })->skip('Requires translation service');
-

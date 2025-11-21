@@ -42,4 +42,3 @@ it('localized_language_name uses app locale when not provided', function () {
 
     expect($result)->toBeString();
 });
-

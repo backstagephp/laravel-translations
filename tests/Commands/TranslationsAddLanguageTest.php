@@ -39,4 +39,3 @@ it('creates language with correct attributes', function () {
         ->and($language->name)->toBe('French')
         ->and($language->native)->not->toBeEmpty();
 });
-

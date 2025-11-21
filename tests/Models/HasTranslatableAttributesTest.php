@@ -1,15 +1,14 @@
 <?php
 
-use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
-use Backstage\Translations\Laravel\Facades\Translator;
+use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Illuminate\Support\Facades\Event;
 
 it('can get translatable attributes', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
-    
-    $model = new TestTranslatableModel();
+
+    $model = new TestTranslatableModel;
     $model->title = 'Test Title';
     $model->description = 'Test Description';
     $model->save();
@@ -19,8 +18,8 @@ it('can get translatable attributes', function () {
 
 it('can check if attribute is translatable', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
-    
-    $model = new TestTranslatableModel();
+
+    $model = new TestTranslatableModel;
     $model->title = 'Test Title';
     $model->save();
 
@@ -32,7 +31,7 @@ it('can get translated attribute', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
     Language::create(['code' => 'fr', 'name' => 'French']);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -50,7 +49,7 @@ it('can get translated attribute', function () {
 it('returns original attribute when translation does not exist', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -61,7 +60,7 @@ it('can get all translated attributes', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
     Language::create(['code' => 'fr', 'name' => 'French']);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->description = 'World';
     $model->save();
@@ -84,7 +83,7 @@ it('can push translated attribute', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
     Language::create(['code' => 'fr', 'name' => 'French']);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -101,11 +100,11 @@ it('can push translated attribute', function () {
 
 it('has translatableAttributes relationship', function () {
     Language::create(['code' => 'fr', 'name' => 'French']);
-    
-    $model = new TestTranslatableModel();
+
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
-    
+
     TranslatedAttribute::where('translatable_id', $model->id)->delete();
 
     TranslatedAttribute::create([
@@ -122,8 +121,8 @@ it('has translatableAttributes relationship', function () {
 
 it('can get translatable attribute rules for attribute', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
-    
-    $model = new TestTranslatableModel();
+
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -135,7 +134,7 @@ it('can sync translations on model creation', function () {
 
     Event::fake();
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->description = 'World';
     $model->save();
@@ -147,7 +146,7 @@ it('can update translate attributes', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
     Language::create(['code' => 'fr', 'name' => 'French']);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -160,7 +159,7 @@ it('can update attributes if translatable', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
     Language::create(['code' => 'fr', 'name' => 'French']);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -171,8 +170,8 @@ it('can update attributes if translatable', function () {
 
 it('deletes translated attributes when model is deleted', function () {
     Language::create(['code' => 'fr', 'name' => 'French']);
-    
-    $model = new TestTranslatableModel();
+
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -188,4 +187,3 @@ it('deletes translated attributes when model is deleted', function () {
 
     expect(TranslatedAttribute::where('translatable_id', $model->id)->count())->toBe(0);
 });
-

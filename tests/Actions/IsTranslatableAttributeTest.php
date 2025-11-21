@@ -1,14 +1,13 @@
 <?php
 
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\IsTranslatableAttribute;
-use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Backstage\Translations\Laravel\Models\Language;
-use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 
 it('returns true for translatable attribute', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
-    
-    $model = new TestTranslatableModel();
+
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->description = 'World';
     $model->save();
@@ -20,8 +19,8 @@ it('returns true for translatable attribute', function () {
 
 it('returns false for non-translatable attribute', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
-    
-    $model = new TestTranslatableModel();
+
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->description = 'World';
     $model->save();
@@ -30,4 +29,3 @@ it('returns false for non-translatable attribute', function () {
 
     expect($result)->toBeFalse();
 });
-

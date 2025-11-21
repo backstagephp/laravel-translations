@@ -3,16 +3,14 @@
 use Backstage\Translations\Laravel\Jobs\ScanTranslationStrings;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Translation;
-use Backstage\Translations\Laravel\Domain\Scanner\Actions\FindTranslatables;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Lang;
 
 it('scans and stores translation strings', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
 
     Event::fake();
 
-    $job = new ScanTranslationStrings();
+    $job = new ScanTranslationStrings;
     $job->handle();
 
     expect(Translation::count())->toBeGreaterThanOrEqual(0);
@@ -56,7 +54,7 @@ it('preserves existing translations when redo is false', function () {
 it('updates cache after storing translations', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
 
-    $job = new ScanTranslationStrings();
+    $job = new ScanTranslationStrings;
     $job->handle();
 
     expect(Translation::count())->toBeGreaterThanOrEqual(0);
@@ -67,7 +65,7 @@ it('handles array translations correctly', function () {
 
     Event::fake();
 
-    $job = new ScanTranslationStrings();
+    $job = new ScanTranslationStrings;
     $job->handle();
 
     $arrayTranslations = Translation::whereNotNull('text')
@@ -76,4 +74,3 @@ it('handles array translations correctly', function () {
 
     expect($arrayTranslations->count())->toBe(0);
 });
-

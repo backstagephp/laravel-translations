@@ -1,9 +1,9 @@
 <?php
 
-use Backstage\Translations\Laravel\Managers\TranslatorManager;
-use Backstage\Translations\Laravel\Drivers\GoogleTranslator;
 use Backstage\Translations\Laravel\Drivers\AITranslator;
 use Backstage\Translations\Laravel\Drivers\DeepLTranslator;
+use Backstage\Translations\Laravel\Drivers\GoogleTranslator;
+use Backstage\Translations\Laravel\Managers\TranslatorManager;
 use Illuminate\Support\Facades\Config;
 
 it('returns default driver from config', function () {
@@ -45,4 +45,3 @@ it('creates DeepL driver', function () {
 
     expect($driver)->toBeInstanceOf(DeepLTranslator::class);
 });
-

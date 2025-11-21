@@ -12,4 +12,3 @@ it('can create LanguageCodeChanged event', function () {
     expect($event->language)->toBe($language)
         ->and($event->language->code)->toBe('en');
 });
-

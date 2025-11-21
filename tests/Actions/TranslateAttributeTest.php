@@ -1,16 +1,15 @@
 <?php
 
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttribute;
-use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
-use Backstage\Translations\Laravel\Facades\Translator;
+use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 
 it('translates attribute to target language', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -29,7 +28,7 @@ it('does not overwrite existing translation when overwrite is false', function (
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -55,7 +54,7 @@ it('overwrites existing translation when overwrite is true', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -76,7 +75,7 @@ it('handles array attributes', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = json_encode(['key1' => 'Hello', 'key2' => 'World']);
     $model->save();
 
@@ -84,4 +83,3 @@ it('handles array attributes', function () {
 
     expect($result)->toBeArray();
 })->skip('Requires translation service');
-

@@ -2,7 +2,6 @@
 
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Translation;
-use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
 use Illuminate\Support\Facades\Event;
 
 it('can create a translation', function () {
@@ -82,4 +81,3 @@ it('casts translated_at to datetime', function () {
 
     expect($translation->translated_at)->toBeInstanceOf(\Illuminate\Support\Carbon::class);
 });
-

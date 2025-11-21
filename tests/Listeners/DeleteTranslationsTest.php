@@ -23,10 +23,9 @@ it('deletes translations when language is deleted', function () {
     ]);
 
     $event = new LanguageDeleted($language);
-    $listener = new DeleteTranslations();
+    $listener = new DeleteTranslations;
     $listener->handle($event);
 
     expect(Translation::where('code', 'en')->count())->toBe(0)
         ->and(Translation::where('code', 'fr')->count())->toBe(1);
 });
-

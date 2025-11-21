@@ -3,8 +3,6 @@
 use Backstage\Translations\Laravel\Jobs\TranslateKeys;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Translation;
-use Backstage\Translations\Laravel\Facades\Translator;
-use Backstage\Translations\Laravel\Jobs\ScanTranslationStrings;
 use Illuminate\Support\Facades\Queue;
 
 it('translates keys for all languages when no language provided', function () {
@@ -29,8 +27,8 @@ it('translates keys for all languages when no language provided', function () {
         'translated_at' => null,
     ]);
 
-    $job = new TranslateKeys();
-    
+    $job = new TranslateKeys;
+
     expect(fn () => $job->handle())->toThrow();
 })->skip('Requires translation service');
 
@@ -46,7 +44,7 @@ it('translates keys for specific language when provided', function () {
     ]);
 
     $job = new TranslateKeys($language);
-    
+
     expect(fn () => $job->handle())->toThrow();
 })->skip('Requires translation service');
 
@@ -70,15 +68,14 @@ it('only translates untranslated keys', function () {
     ]);
 
     $job = new TranslateKeys($language);
-    
+
     expect(fn () => $job->handle())->toThrow();
 })->skip('Requires translation service');
 
 it('has correct timeout and retry settings', function () {
-    $job = new TranslateKeys();
+    $job = new TranslateKeys;
 
     expect($job->timeout)->toBe(2200)
         ->and($job->tries())->toBe(5)
         ->and($job->backoff())->toBe(3);
 });
-

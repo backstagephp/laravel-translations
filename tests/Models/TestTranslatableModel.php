@@ -19,4 +19,3 @@ class TestTranslatableModel extends Model implements TranslatesAttributes
         return ['title', 'description'];
     }
 }
-

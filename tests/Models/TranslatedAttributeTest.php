@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 it('can create a translated attribute', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
-    
+
     $attribute = TranslatedAttribute::create([
         'code' => 'en',
         'translatable_type' => 'App\\Models\\Test',
@@ -24,8 +24,9 @@ it('can create a translated attribute', function () {
 
 it('has translatable morph relationship', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
-    
-    $testModel = new class extends Model {
+
+    $testModel = new class extends Model
+    {
         protected $table = 'test_models';
     };
     $testModel->save();
@@ -57,7 +58,7 @@ it('has language relationship', function () {
 
 it('supports soft deletes', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
-    
+
     $attribute = TranslatedAttribute::create([
         'code' => 'en',
         'translatable_type' => 'App\\Models\\Test',
@@ -75,7 +76,7 @@ it('supports soft deletes', function () {
 
 it('casts translated_at to datetime', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
-    
+
     $attribute = TranslatedAttribute::create([
         'code' => 'en',
         'translatable_type' => 'App\\Models\\Test',
@@ -87,4 +88,3 @@ it('casts translated_at to datetime', function () {
 
     expect($attribute->translated_at)->toBeInstanceOf(\Illuminate\Support\Carbon::class);
 });
-

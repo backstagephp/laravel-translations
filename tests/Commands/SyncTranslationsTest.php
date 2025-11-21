@@ -1,9 +1,9 @@
 <?php
 
 use Backstage\Translations\Laravel\Commands\SyncTranslations;
-use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 
@@ -13,7 +13,7 @@ it('syncs translations for translatable models', function () {
 
     Config::set('translations.eloquent.translatable-models', [TestTranslatableModel::class]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->description = 'World';
     $model->save();

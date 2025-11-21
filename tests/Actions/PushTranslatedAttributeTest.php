@@ -1,14 +1,14 @@
 <?php
 
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\PushTranslatedAttribute;
-use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 
 it('creates translated attribute when language exists', function () {
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -26,8 +26,8 @@ it('creates translated attribute when language exists', function () {
 
 it('creates language when it does not exist', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
-    
-    $model = new TestTranslatableModel();
+
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -45,7 +45,7 @@ it('creates language when it does not exist', function () {
 it('updates existing translated attribute', function () {
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -58,4 +58,3 @@ it('updates existing translated attribute', function () {
 
     expect($translated->translated_attribute)->toBe('Salut');
 });
-

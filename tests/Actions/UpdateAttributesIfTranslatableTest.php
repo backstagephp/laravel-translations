@@ -1,15 +1,15 @@
 <?php
 
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\UpdateAttributesIfTranslatable;
-use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 
 it('updates translatable attributes for all languages', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->description = 'World';
     $model->save();
@@ -27,7 +27,7 @@ it('calls translateAttributeForAllLanguages with overwrite true', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->description = 'World';
     $model->save();
@@ -49,4 +49,3 @@ it('calls translateAttributeForAllLanguages with overwrite true', function () {
 
     expect($translation)->not->toBeNull();
 })->skip('Requires translation service');
-

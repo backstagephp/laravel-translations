@@ -91,4 +91,3 @@ it('supports soft deletes', function () {
         ->and(LanguageRule::find($rule->id))->toBeNull()
         ->and(LanguageRule::withTrashed()->find($rule->id))->not->toBeNull();
 });
-

@@ -1,16 +1,16 @@
 <?php
 
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttributeForAllLanguages;
-use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 
 it('translates attribute for all languages', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
     Language::create(['code' => 'de', 'name' => 'German', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -25,8 +25,8 @@ it('translates attribute for all languages', function () {
 it('throws exception when no languages exist', function () {
     TranslatedAttribute::query()->delete();
     Language::query()->delete();
-    
-    $model = new TestTranslatableModel();
+
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->id = 999;
     $model->exists = true;
@@ -39,7 +39,7 @@ it('respects overwrite flag', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -55,4 +55,3 @@ it('respects overwrite flag', function () {
 
     expect($result['fr'])->toBe('Existing');
 })->skip('Requires translation service');
-

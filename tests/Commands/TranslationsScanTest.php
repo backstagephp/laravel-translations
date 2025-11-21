@@ -2,9 +2,8 @@
 
 use Backstage\Translations\Laravel\Commands\TranslationsScan;
 use Backstage\Translations\Laravel\Models\Language;
-use Backstage\Translations\Laravel\Jobs\ScanTranslationStrings;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Queue;
 
 it('scans translations when languages exist', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
@@ -34,4 +33,3 @@ it('dispatches scan job for each active language', function () {
 
     expect(Artisan::output())->toBeString();
 });
-

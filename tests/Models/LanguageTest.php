@@ -1,9 +1,9 @@
 <?php
 
 use Backstage\Translations\Laravel\Models\Language;
-use Backstage\Translations\Laravel\Models\Translation;
-use Backstage\Translations\Laravel\Models\TranslatedAttribute;
 use Backstage\Translations\Laravel\Models\LanguageRule;
+use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Backstage\Translations\Laravel\Models\Translation;
 
 it('can create a language', function () {
     $language = Language::create([
@@ -45,7 +45,7 @@ it('returns null when no default language exists', function () {
     Language::query()->delete();
     $en = Language::create(['code' => 'en', 'name' => 'English']);
     $fr = Language::create(['code' => 'fr', 'name' => 'French']);
-    
+
     Language::whereIn('code', ['en', 'fr'])->update(['default' => false]);
 
     expect(Language::default())->toBeNull();
@@ -134,4 +134,3 @@ it('returns textual rules query when rules exist', function () {
         ->and($query)->toContain('translation-rules-query-base-rules')
         ->and($query)->toContain('Test instructions');
 });
-

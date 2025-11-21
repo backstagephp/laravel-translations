@@ -1,8 +1,8 @@
 <?php
 
 use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
-use Backstage\Translations\Laravel\Models\Translation;
 use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Models\Translation;
 
 it('collects translations grouped by code, group, and namespace', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
@@ -63,9 +63,8 @@ it('runs cache update', function () {
         'namespace' => '*',
     ]);
 
-    $cache = new TranslationStringsCache();
+    $cache = new TranslationStringsCache;
     $result = $cache->run();
 
     expect($result)->toBeArray();
 });
-

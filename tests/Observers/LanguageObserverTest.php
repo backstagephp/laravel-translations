@@ -1,9 +1,9 @@
 <?php
 
-use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Events\LanguageAdded;
 use Backstage\Translations\Laravel\Events\LanguageCodeChanged;
 use Backstage\Translations\Laravel\Events\LanguageDeleted;
+use Backstage\Translations\Laravel\Models\Language;
 use Illuminate\Support\Facades\Event;
 
 it('sets default to true when creating first language', function () {
@@ -76,4 +76,3 @@ it('fires LanguageDeleted event when language is deleted', function () {
 
     Event::assertDispatched(LanguageDeleted::class);
 });
-

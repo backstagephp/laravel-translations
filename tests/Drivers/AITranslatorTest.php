@@ -2,7 +2,6 @@
 
 use Backstage\Translations\Laravel\Drivers\AITranslator;
 use Backstage\Translations\Laravel\Models\Language;
-use Prism\Prism\Facades\Prism;
 use Illuminate\Support\Facades\Config;
 
 it('translates text using AI', function () {
@@ -12,7 +11,7 @@ it('translates text using AI', function () {
     Config::set('translations.translators.drivers.ai.model', 'gpt-4');
     Config::set('translations.translators.drivers.ai.system_prompt', 'Translate text');
 
-    $translator = new AITranslator();
+    $translator = new AITranslator;
 
     expect(fn () => $translator->translate('Hello', 'fr'))
         ->toThrow();
@@ -24,7 +23,7 @@ it('translates JSON arrays', function () {
     Config::set('translations.translators.drivers.ai.provider', 'openai');
     Config::set('translations.translators.drivers.ai.model', 'gpt-4');
 
-    $translator = new AITranslator();
+    $translator = new AITranslator;
 
     expect(fn () => $translator->translate(['welcome' => 'Welcome', 'logout' => 'Log out'], 'fr'))
         ->toThrow();
@@ -36,9 +35,8 @@ it('throws exception when AI returns invalid JSON', function () {
     Config::set('translations.translators.drivers.ai.provider', 'openai');
     Config::set('translations.translators.drivers.ai.model', 'gpt-4');
 
-    $translator = new AITranslator();
+    $translator = new AITranslator;
 
     expect(fn () => $translator->translate(['key' => 'value'], 'fr'))
         ->toThrow();
 })->skip('Requires actual AI provider configuration');
-

@@ -20,7 +20,7 @@ it('updates translation codes when language code changes', function () {
     $language->save();
 
     $event = new LanguageCodeChanged($language);
-    $listener = new HandleLanguageCodeChanges();
+    $listener = new HandleLanguageCodeChanges;
     $listener->handle($event);
 
     $translation->refresh();
@@ -28,4 +28,3 @@ it('updates translation codes when language code changes', function () {
     expect($translation->code)->toBe('en-US')
         ->and($translation->translated_at)->toBeNull();
 });
-

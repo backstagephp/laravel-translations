@@ -1,10 +1,8 @@
 <?php
 
 use Backstage\Translations\Laravel\Base\TranslationLoader;
-use Backstage\Translations\Laravel\Models\Translation;
 use Backstage\Translations\Laravel\Models\Language;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Schema;
+use Backstage\Translations\Laravel\Models\Translation;
 
 it('loads translations from database', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
@@ -72,4 +70,3 @@ it('checks if translations table exists', function () {
 
     expect($result)->toBeTrue();
 });
-

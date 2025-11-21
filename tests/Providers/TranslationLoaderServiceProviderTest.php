@@ -1,7 +1,7 @@
 <?php
 
-use Backstage\Translations\Laravel\TranslationLoaderServiceProvider;
 use Backstage\Translations\Laravel\Base\TranslationLoader;
+use Backstage\Translations\Laravel\TranslationLoaderServiceProvider;
 
 it('registers translation loader', function () {
     $app = app();
@@ -26,4 +26,3 @@ it('is a deferrable provider', function () {
 
     expect($provider)->toBeInstanceOf(\Illuminate\Contracts\Support\DeferrableProvider::class);
 });
-

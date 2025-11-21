@@ -1,15 +1,15 @@
 <?php
 
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\GetTranslatedAttribute;
-use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Backstage\Translations\Laravel\Tests\Models\TestTranslatableModel;
 
 it('returns translated attribute when translation exists', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -29,7 +29,7 @@ it('returns translated attribute when translation exists', function () {
 it('returns original attribute when translation does not exist', function () {
     Language::create(['code' => 'en', 'name' => 'English', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -43,7 +43,7 @@ it('returns original attribute when locale matches app locale', function () {
 
     app()->setLocale('en');
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -55,7 +55,7 @@ it('returns original attribute when locale matches app locale', function () {
 it('returns original attribute when attribute is not translatable', function () {
     Language::create(['code' => 'fr', 'name' => 'French', 'active' => true]);
 
-    $model = new TestTranslatableModel();
+    $model = new TestTranslatableModel;
     $model->title = 'Hello';
     $model->save();
 
@@ -63,4 +63,3 @@ it('returns original attribute when attribute is not translatable', function () 
 
     expect($result)->toBe($model->id);
 });
-

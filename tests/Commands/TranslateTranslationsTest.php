@@ -1,11 +1,11 @@
 <?php
 
 use Backstage\Translations\Laravel\Commands\TranslateTranslations;
+use Backstage\Translations\Laravel\Jobs\TranslateKeys;
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\Translation;
-use Backstage\Translations\Laravel\Jobs\TranslateKeys;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Queue;
 
 it('translates for all languages when no code option provided', function () {
     Queue::fake();
@@ -25,7 +25,7 @@ it('translates for specific language when code option provided', function () {
 
     Artisan::call(TranslateTranslations::class, ['--code' => 'fr']);
 
-    Queue::assertPushed(TranslateKeys::class, function ($job) use ($language) {
+    Queue::assertPushed(TranslateKeys::class, function ($job) {
         return $job->lang && $job->lang->code === 'fr';
     });
 });
@@ -79,4 +79,3 @@ it('fails when updating translations for non-existent language', function () {
 
     expect(Artisan::output())->toContain('No translations found');
 });
-

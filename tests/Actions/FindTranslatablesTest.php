@@ -2,10 +2,9 @@
 
 use Backstage\Translations\Laravel\Domain\Scanner\Actions\FindTranslatables;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
 
 it('scans for translation strings', function () {
-    Config::set('translations.scan.paths', [__DIR__.'/../../src']);
+    Config::set('translations.scan.paths', [__DIR__ . '/../../src']);
     Config::set('translations.scan.extensions', ['*.php']);
     Config::set('translations.scan.functions', ['trans', '__']);
 
@@ -61,4 +60,3 @@ it('returns null group when key has no group', function () {
 
     expect($result)->toBeNull();
 });
-
