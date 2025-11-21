@@ -103,12 +103,12 @@ class Language extends Model
         $rules = $this
             ->languageRules
             ->map(function (LanguageRule $languageRule) {
-                return '<translation-rules-query>'.$languageRule->getTextualQuery().'</translation-rules-query>';
+                return '<translation-rules-query>' . $languageRule->getTextualQuery() . '</translation-rules-query>';
             })
             ->filter()
             ->implode("\n");
 
-        return $baseRules."\n\n".$rules;
+        return $baseRules . "\n\n" . $rules;
     }
 
     public function getLocalizedCountryNameAttribute($locale = null)
