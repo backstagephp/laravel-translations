@@ -22,9 +22,9 @@
     ],
     "require": {
         "php": "^8.3",
+        "backstage/laravel-ai": "self.version",
         "backstage/laravel-permanent-cache": "dev-main",
         "deeplcom/deepl-php": ">=1.12",
-        "prism-php/prism": "^0.98",
         "illuminate/contracts": "^10.0||^11.0||^12.0",
         "lorisleiva/laravel-actions": ">=2.0",
         "spatie/fork": "^1.2",
