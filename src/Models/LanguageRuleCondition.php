@@ -28,15 +28,16 @@ class LanguageRuleCondition extends Model
     public function getTextualQuery(): string
     {
         $key = $this->key;
-        
+
         if ($this->type !== 'must' && $this->type !== 'must_not') {
             return '';
         }
 
         $values = $this->value ?? [];
 
-        if (empty($values) || !is_array($values)) {
-            report(new \Exception('Value is null or empty for key: ' . $key . ' and type: ' . $this->type. ' and id: ' . $this->id));
+        if (empty($values) || ! is_array($values)) {
+            report(new \Exception('Value is null or empty for key: '.$key.' and type: '.$this->type.' and id: '.$this->id));
+
             return '';
         }
 

@@ -79,7 +79,7 @@ class Language extends Model
 
     public function getTextualRulesQuery(): string
     {
-        if (!$this->languageRules()->exists()) {
+        if (! $this->languageRules()->exists()) {
             return '';
         }
 
@@ -97,16 +97,16 @@ class Language extends Model
                 If a translation *must be* a certain text, it cannot equal the source.
             </translation-rules-query-base-rules>
         HTML;
-        
+
         $this->load('languageRules');
-        
+
         $rules = $this
             ->languageRules
             ->map(function (LanguageRule $languageRule) {
-            return '<translation-rules-query>'.$languageRule->getTextualQuery().'</translation-rules-query>';
-        })
-        ->filter()
-        ->implode("\n");
+                return '<translation-rules-query>'.$languageRule->getTextualQuery().'</translation-rules-query>';
+            })
+            ->filter()
+            ->implode("\n");
 
         return $baseRules."\n\n".$rules;
     }
