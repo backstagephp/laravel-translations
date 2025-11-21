@@ -79,7 +79,7 @@ class Language extends Model
 
     public function getTextualRulesQuery(): string
     {
-        if ($this->languageRules()->exists()) {
+        if (!$this->languageRules()->exists()) {
             return '';
         }
 
