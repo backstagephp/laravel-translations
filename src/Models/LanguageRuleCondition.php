@@ -2,11 +2,8 @@
 
 namespace Backstage\Translations\Laravel\Models;
 
-use Backstage\Translations\Laravel\Observers\LanguageRuleConditionObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
-#[ObservedBy(LanguageRuleConditionObserver::class)]
 class LanguageRuleCondition extends Model
 {
     protected $table = 'language_rules_conditions';
@@ -16,13 +13,11 @@ class LanguageRuleCondition extends Model
         'key',
         'type',
         'value',
-        'multiple_value',
     ];
 
     protected $casts = [
         'type' => 'string',
-        'value' => 'string',
-        'multiple_value' => 'array',
+        'value' => 'array',
     ];
 
     public function languageRule()
@@ -33,47 +28,37 @@ class LanguageRuleCondition extends Model
     public function getTextualQuery(): string
     {
         $key = $this->key;
-        $value = null;
-        if ($this->type === 'must' || $this->type === 'must_not') {
-            $value = $this->value;
+        
+        if ($this->type !== 'must' && $this->type !== 'must_not') {
+            return '';
         }
 
-        if ($this->type === 'must_multiple' || $this->type === 'must_not_multiple') {
-            $value = $this->multiple_value;
-        }
+        $values = $this->value ?? [];
 
-        if ($value === null) {
-            report(new \Exception('Value is null for key: '.$key.' and type: '.$this->type.' and id: '.$this->id));
-
+        if (empty($values) || !is_array($values)) {
+            report(new \Exception('Value is null or empty for key: ' . $key . ' and type: ' . $this->type. ' and id: ' . $this->id));
             return '';
         }
 
         $resultingQuery = [];
+        $resultingQuery[] = 'The following rules must be applied while translating the text:';
 
-        if (is_array($value) && count($value) > 0 || ! is_array($value) && $value !== '' || $value !== null) {
-            $resultingQuery[] = 'The following rules must be applied while translating the text:';
-        }
-
-        if ($this->type === 'must' || $this->type === 'must_not') {
+        if (count($values) === 1) {
             if ($this->type === 'must') {
-                $resultingQuery[] = "{$key} must translate to '{$value}'";
+                $resultingQuery[] = "{$key} must translate to '{$values[0]}'";
             }
 
             if ($this->type === 'must_not') {
-                $resultingQuery[] = "{$key} must not translate to '{$value}'";
+                $resultingQuery[] = "{$key} must not translate to '{$values[0]}'";
             }
-        }
+        } else {
+            if ($this->type === 'must') {
+                $resultingQuery[] = "{$key} must translate to one of these options: '".implode("', '", $values)."'";
+            }
 
-        if ($this->type === 'must_multiple') {
-            $values = $value;
-
-            $resultingQuery[] = "{$key} must translate to one of these options: '".implode("', '", $values)."'";
-        }
-
-        if ($this->type === 'must_not_multiple') {
-            $values = $value;
-
-            $resultingQuery[] = "{$key} must not translate to any of these options: '".implode("', '", $values)."'";
+            if ($this->type === 'must_not') {
+                $resultingQuery[] = "{$key} must not translate to any of these options: '".implode("', '", $values)."'";
+            }
         }
 
         return implode("\n", $resultingQuery);
