@@ -29,6 +29,7 @@ class TranslationServiceProvider extends PackageServiceProvider
                 'create_languages_table',
                 'create_translations_table',
                 'create_translated_attributes_table',
+                'create_language_rules_tables',
             )
             ->hasConfigFile('translations')
             ->hasCommands(

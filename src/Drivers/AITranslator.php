@@ -3,14 +3,17 @@
 namespace Backstage\Translations\Laravel\Drivers;
 
 use Backstage\Translations\Laravel\Contracts\TranslatorContract;
+use Backstage\Translations\Laravel\Models\Language;
 use Prism\Prism\Facades\Prism;
 
 class AITranslator implements TranslatorContract
 {
     public function translate(string | array $text, string $targetLanguage, ?string $extraPrompt = null): string | array
     {
+        $translationRules = Language::query()->where('code', $targetLanguage)->first()->getTextualRulesQuery();
+
         if (is_array($text)) {
-            return $this->translateJson($text, $targetLanguage, $extraPrompt);
+            return $this->translateJson($text, $targetLanguage, $extraPrompt."\n\n".$translationRules);
         }
 
         $systemPromptLines = [
@@ -78,7 +81,11 @@ class AITranslator implements TranslatorContract
 
         $systemPrompt = implode("\n", $systemPromptLines);
 
+        $systemPrompt = '<translation-system-prompt>'.$systemPrompt.'</translation-system-prompt>';
+
         $instructionsString = implode("\n", $instructions);
+
+        $prompt = '<translation-instructions>'.$instructionsString.'</translation-instructions>'."\n\n".$translationRules;
 
         $response = Prism::text()
             ->withClientOptions([
@@ -91,7 +98,7 @@ class AITranslator implements TranslatorContract
             ->withClientRetry(4, 100)
             ->using(config('translations.translators.drivers.ai.provider'), config('translations.translators.drivers.ai.model'))
             ->withSystemPrompt($systemPrompt)
-            ->withPrompt($instructionsString)
+            ->withPrompt($prompt)
             ->asText();
 
         return trim($response->text);
