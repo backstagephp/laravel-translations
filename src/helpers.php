@@ -5,7 +5,7 @@ if (! function_exists('localized_country_name')) {
     {
         $code = strtolower(explode('-', $code)[1] ?? $code);
 
-        return Locale::getDisplayRegion('-' . $code, $locale ?? app()->getLocale());
+        return Locale::getDisplayRegion('-'.$code, $locale ?? app()->getLocale());
     }
 }
 
