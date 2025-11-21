@@ -103,7 +103,7 @@ class SyncTranslations extends Command
     protected static function cleanOrphanedTranslations($orphans): void
     {
         progress('Deleting unused translations', $orphans, function (TranslatedAttribute $attr) {
-            $attr->forceDelete();
+            $attr->delete();
         });
     }
 
