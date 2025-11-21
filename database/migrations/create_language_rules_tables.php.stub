@@ -28,11 +28,9 @@ return new class extends Migration
 
             $table->string('key');
 
-            $table->string('type'); // must, must_not, must_multiple, must_not_multiple
+            $table->string('type'); // must, must_not
 
-            $table->text('value')->nullable();
-
-            $table->json('multiple_value');
+            $table->json('value');
 
             $table->timestamps();
         });
