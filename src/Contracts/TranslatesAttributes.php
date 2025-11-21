@@ -143,5 +143,5 @@ interface TranslatesAttributes
      * @param  string  $attribute  Attribute name.
      * @return array|string Rules array or '*' string for all.
      */
-    public function getTranslatableAttributeRulesFor(string $attribute): array|string;
+    public function getTranslatableAttributeRulesFor(string $attribute): array | string;
 }
