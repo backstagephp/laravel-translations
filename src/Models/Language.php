@@ -79,6 +79,10 @@ class Language extends Model
 
     public function getTextualRulesQuery(): string
     {
+        if ($this->languageRules()->exists()) {
+            return '';
+        }
+
         $baseRules = <<<'HTML'
             <translation-rules-query-base-rules>
                 Important: Always treat singular, plural, diminutives, and common English equivalents as identical before translating. 
@@ -93,10 +97,16 @@ class Language extends Model
                 If a translation *must be* a certain text, it cannot equal the source.
             </translation-rules-query-base-rules>
         HTML;
-
-        $rules = $this->load('languageRules')->languageRules->map(function (LanguageRule $languageRule) {
+        
+        $this->load('languageRules');
+        
+        $rules = $this
+            ->languageRules
+            ->map(function (LanguageRule $languageRule) {
             return '<translation-rules-query>'.$languageRule->getTextualQuery().'</translation-rules-query>';
-        })->filter()->implode("\n");
+        })
+        ->filter()
+        ->implode("\n");
 
         return $baseRules."\n\n".$rules;
     }
