@@ -16,14 +16,14 @@ class IsTranslatableAttribute
     public function handle(object $model, string $attribute): bool
     {
         /**
-         * @var array $translatableAttrbiutes
+         * @var array $translatableAttributes
          */
-        $translatableAttrbiutes = $model->getTranslatedAttributes();
+        $translatableAttributes = $model->getTranslatableAttributes();
 
         /**
          * @var bool $isTranslatableAttribute
          */
-        $isTranslatableAttribute = in_array($attribute, $translatableAttrbiutes);
+        $isTranslatableAttribute = in_array($attribute, $translatableAttributes);
 
         return $isTranslatableAttribute;
     }
