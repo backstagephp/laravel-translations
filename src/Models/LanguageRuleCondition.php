@@ -43,10 +43,10 @@ class LanguageRuleCondition extends Model
         }
 
         if ($value === null) {
-            report(new \Exception('Value is null for key: ' . $key . ' and type: ' . $this->type. ' and id: ' . $this->id));
+            report(new \Exception('Value is null for key: '.$key.' and type: '.$this->type.' and id: '.$this->id));
+
             return '';
         }
-        
 
         $resultingQuery = [];
 
