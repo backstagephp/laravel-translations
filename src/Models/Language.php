@@ -62,6 +62,11 @@ class Language extends Model
         return $this->hasMany(Translation::class, 'code', 'code');
     }
 
+    public function languageRules(): HasMany
+    {
+        return $this->hasMany(LanguageRule::class, 'code', 'code');
+    }
+
     public function getLanguageCodeAttribute()
     {
         return explode('-', $this->attributes['code'])[0];
@@ -70,6 +75,40 @@ class Language extends Model
     public function getCountryCodeAttribute()
     {
         return explode('-', $this->attributes['code'])[1];
+    }
+
+    public function getTextualRulesQuery(): string
+    {
+        if (! $this->languageRules()->exists()) {
+            return '';
+        }
+
+        $baseRules = <<<'HTML'
+            <translation-rules-query-base-rules>
+                Important: Always treat singular, plural, diminutives, and common English equivalents as identical before translating. 
+                For example: 'Worst', 'worstjes', 'Sausage', 'Sausages' are all equivalent. 
+                Also: 'Huis', 'Huisje', 'House' are all equivalent. 
+                And: 'Kaas', 'Kaasje', 'Cheese' are all equivalent. 
+                
+                Apply all translation rules after this normalization. 
+                If a rule states a text *must not* match or translate to something, avoid that. 
+                If it *must* match or translate to something, enforce that. 
+                Multiple values follow the same logic. 
+                If a translation *must be* a certain text, it cannot equal the source.
+            </translation-rules-query-base-rules>
+        HTML;
+
+        $this->load('languageRules');
+
+        $rules = $this
+            ->languageRules
+            ->map(function (LanguageRule $languageRule) {
+                return '<translation-rules-query>'.$languageRule->getTextualQuery().'</translation-rules-query>';
+            })
+            ->filter()
+            ->implode("\n");
+
+        return $baseRules."\n\n".$rules;
     }
 
     public function getLocalizedCountryNameAttribute($locale = null)
