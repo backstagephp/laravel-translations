@@ -35,22 +35,22 @@ class FindTranslatables
          * @var string $pattern
          */
         $pattern =
-            '[^\w]'.
-            '(?<!->)'. // Ignore method chaining
-            '(?:'.implode('|', $functions->toArray()).')'.
-            '\(\s*'.
-            '(?:'.
-            "'((?:[^'\\\\]|\\\\.)+)'".  // Match single-quoted keys
-            '|'.
-            '`((?:[^`\\\\]|\\\\.)+)`'.  // Match backtick-quoted keys
-            '|'.
-            '"((?:[^"\\\\]|\\\\.)+)"'.  // Match double-quoted keys
-            '|'.
-            '(\$[a-zA-Z_][a-zA-Z0-9_]*)'. // Match variables
-            ')'.
-            '\s*'.
-            '(?:,([^)]*))?'.  // Capture second argument (parameters)
-            '\s*'.
+            '[^\w]' .
+            '(?<!->)' . // Ignore method chaining
+            '(?:' . implode('|', $functions->toArray()) . ')' .
+            '\(\s*' .
+            '(?:' .
+            "'((?:[^'\\\\]|\\\\.)+)'" .  // Match single-quoted keys
+            '|' .
+            '`((?:[^`\\\\]|\\\\.)+)`' .  // Match backtick-quoted keys
+            '|' .
+            '"((?:[^"\\\\]|\\\\.)+)"' .  // Match double-quoted keys
+            '|' .
+            '(\$[a-zA-Z_][a-zA-Z0-9_]*)' . // Match variables
+            ')' .
+            '\s*' .
+            '(?:,([^)]*))?' .  // Capture second argument (parameters)
+            '\s*' .
             '[\),]';
 
         foreach ($finder as $file) {
