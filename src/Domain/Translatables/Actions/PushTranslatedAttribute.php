@@ -48,6 +48,8 @@ class PushTranslatedAttribute
     public static function modifyTranslatedAttributeValue(Model $model, string $attribute, mixed $reverseMutatedAttributeValue, string $locale): void
     {
         $model->translatableAttributes()->updateOrCreate([
+            'translatable_type' => get_class($model),
+            'translatable_id' => $model->getKey(),
             'attribute' => $attribute,
             'code' => $locale,
         ], [
