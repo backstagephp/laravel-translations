@@ -18,7 +18,7 @@ class DetectLanguageFromText
         $detected = $tr->getLastDetectedSource();
 
         if (! $detected) {
-            throw new \Exception('Language detection failed for text: '.$text);
+            throw new \Exception('Language detection failed for text: ' . $text);
         }
 
         return $detected;
