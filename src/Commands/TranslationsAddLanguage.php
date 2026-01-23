@@ -18,7 +18,7 @@ class TranslationsAddLanguage extends Command
         $code = $this->argument('code') ?? text('Enter language code');
         $name = $this->argument('name') ?? text('Enter name');
 
-        $this->createLanguage($code, $name);
+        return $this->createLanguage($code, $name);
     }
 
     protected function createLanguage($code, $name)
