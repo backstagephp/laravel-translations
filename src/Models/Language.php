@@ -54,7 +54,7 @@ class Language extends Model
 
     public function translatableAttributes(): HasMany
     {
-        return $this->hasMany(TranslatedAttribute::class, 'locale', 'code');
+        return $this->hasMany(TranslatedAttribute::class, 'code', 'code');
     }
 
     public function translations(): HasMany
