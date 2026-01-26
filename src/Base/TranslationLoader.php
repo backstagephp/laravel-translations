@@ -32,7 +32,7 @@ class TranslationLoader extends FileLoader
             $translations->where('group', $group);
         }
 
-        return $translations->where(fn ($query) => $query->where('code', 'LIKE', $locale.'_%')->orWhere('code', $locale))
+        return $translations->where(fn ($query) => $query->where('code', 'LIKE', $locale . '_%')->orWhere('code', $locale))
             ->pluck('text', 'key')
             ->toArray();
     }
