@@ -32,15 +32,15 @@ class LanguageRule extends Model
         $text = '';
 
         if ($this->global_instructions) {
-            $text .= "\n<global-instructions>".str($this->global_instructions)->stripTags()->toString().'</global-instructions>';
+            $text .= "\n<global-instructions>" . str($this->global_instructions)->stripTags()->toString() . '</global-instructions>';
         }
 
         $this->load('conditions')->conditions->each(function (LanguageRuleCondition $condition) use (&$text) {
             if ($query = $condition->getTextualQuery()) {
-                $text .= "\n<translation-rules-query-condition-subquery>".$query.'</translation-rules-query-condition-subquery>';
+                $text .= "\n<translation-rules-query-condition-subquery>" . $query . '</translation-rules-query-condition-subquery>';
             }
         });
 
-        return '<translation-rules-query-conditions>'.trim($text).'</translation-rules-query-conditions>';
+        return '<translation-rules-query-conditions>' . trim($text) . '</translation-rules-query-conditions>';
     }
 }
