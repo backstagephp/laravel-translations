@@ -8,12 +8,12 @@ use Prism\Prism\Facades\Prism;
 
 class AITranslator implements TranslatorContract
 {
-    public function translate(string|array $text, string $targetLanguage, ?string $extraPrompt = null): string|array
+    public function translate(string | array $text, string $targetLanguage, ?string $extraPrompt = null): string | array
     {
         $translationRules = Language::query()->where('code', $targetLanguage)->first()->getTextualRulesQuery();
 
         if (is_array($text)) {
-            return $this->translateJson($text, $targetLanguage, $extraPrompt."\n\n".$translationRules);
+            return $this->translateJson($text, $targetLanguage, $extraPrompt . "\n\n" . $translationRules);
         }
 
         $systemPromptLines = [
@@ -81,11 +81,11 @@ class AITranslator implements TranslatorContract
 
         $systemPrompt = implode("\n", $systemPromptLines);
 
-        $systemPrompt = '<translation-system-prompt>'.$systemPrompt.'</translation-system-prompt>';
+        $systemPrompt = '<translation-system-prompt>' . $systemPrompt . '</translation-system-prompt>';
 
         $instructionsString = implode("\n", $instructions);
 
-        $prompt = '<translation-instructions>'.$instructionsString.'</translation-instructions>'."\n\n".$translationRules;
+        $prompt = '<translation-instructions>' . $instructionsString . '</translation-instructions>' . "\n\n" . $translationRules;
 
         $response = Prism::text()
             ->withClientOptions([
@@ -139,7 +139,7 @@ class AITranslator implements TranslatorContract
             PROMPT;
 
         if ($extraPrompt) {
-            $prompt = $extraPrompt."\n\n".$prompt;
+            $prompt = $extraPrompt . "\n\n" . $prompt;
         }
 
         $response = Prism::text()
