@@ -15,6 +15,7 @@ use Backstage\Translations\Laravel\Domain\Translatables\Actions\TranslateAttribu
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\UpdateAttributesIfTranslatable;
 use Backstage\Translations\Laravel\Domain\Translatables\Actions\UpdateTranslateAttributes;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Illuminate\Console\OutputStyle;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasTranslatableAttributes
@@ -156,7 +157,7 @@ trait HasTranslatableAttributes
         return $this->morphMany(TranslatedAttribute::class, 'translatable');
     }
 
-    public function syncTranslations(?\Illuminate\Console\OutputStyle $output = null): void
+    public function syncTranslations(?OutputStyle $output = null): void
     {
         SyncTranslations::run(
             model: $this,

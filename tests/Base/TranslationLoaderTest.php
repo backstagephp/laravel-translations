@@ -62,7 +62,7 @@ it('returns file translations only when namespace is not wildcard', function () 
 it('checks if translations table exists', function () {
     $loader = new TranslationLoader(app('files'), app('path.lang'));
 
-    $reflection = new \ReflectionClass(TranslationLoader::class);
+    $reflection = new ReflectionClass(TranslationLoader::class);
     $method = $reflection->getMethod('checkTableExists');
     $method->setAccessible(true);
 

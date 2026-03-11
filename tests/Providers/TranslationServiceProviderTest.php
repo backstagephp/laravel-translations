@@ -1,6 +1,8 @@
 <?php
 
 use Backstage\Translations\Laravel\Contracts\TranslatorContract;
+use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Models\Translation;
 use Backstage\Translations\Laravel\TranslationServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 
@@ -19,13 +21,13 @@ it('registers all commands', function () {
 });
 
 it('registers event listeners', function () {
-    $language = \Backstage\Translations\Laravel\Models\Language::create(['code' => 'en', 'name' => 'English']);
+    $language = Language::create(['code' => 'en', 'name' => 'English']);
 
     expect($language)->not->toBeNull();
 
     $language->delete();
 
-    expect(\Backstage\Translations\Laravel\Models\Translation::where('code', 'en')->count())->toBe(0);
+    expect(Translation::where('code', 'en')->count())->toBe(0);
 });
 
 it('registers cache when use_permanent_cache is enabled', function () {

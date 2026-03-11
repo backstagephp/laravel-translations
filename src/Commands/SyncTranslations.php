@@ -5,6 +5,7 @@ namespace Backstage\Translations\Laravel\Commands;
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -113,7 +114,7 @@ class SyncTranslations extends Command
             ->get()
             ->filter(function (TranslatedAttribute $attr) {
                 /**
-                 * @var \Illuminate\Database\Eloquent\Model $type
+                 * @var Model $type
                  */
                 $type = $attr->translatable_type;
 
@@ -136,7 +137,7 @@ class SyncTranslations extends Command
                 }
 
                 /**
-                 * @var \Illuminate\Database\Eloquent\Builder $query
+                 * @var Builder $query
                  */
                 $query = get_class($model)::query();
 

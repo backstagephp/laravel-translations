@@ -1,6 +1,7 @@
 <?php
 
 use Backstage\Translations\Laravel\Domain\Scanner\Actions\FindTranslatables;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 
 it('scans for translation strings', function () {
@@ -10,13 +11,13 @@ it('scans for translation strings', function () {
 
     $result = FindTranslatables::scan();
 
-    expect($result)->toBeInstanceOf(\Illuminate\Support\Collection::class);
+    expect($result)->toBeInstanceOf(Collection::class);
 });
 
 it('extracts namespace from translation key', function () {
     $key = 'namespace::group.key';
 
-    $reflection = new \ReflectionClass(FindTranslatables::class);
+    $reflection = new ReflectionClass(FindTranslatables::class);
     $method = $reflection->getMethod('extractNamespace');
     $method->setAccessible(true);
 
@@ -28,7 +29,7 @@ it('extracts namespace from translation key', function () {
 it('extracts group from translation key', function () {
     $key = 'group.key';
 
-    $reflection = new \ReflectionClass(FindTranslatables::class);
+    $reflection = new ReflectionClass(FindTranslatables::class);
     $method = $reflection->getMethod('extractGroup');
     $method->setAccessible(true);
 
@@ -40,7 +41,7 @@ it('extracts group from translation key', function () {
 it('returns null namespace when key has no namespace', function () {
     $key = 'group.key';
 
-    $reflection = new \ReflectionClass(FindTranslatables::class);
+    $reflection = new ReflectionClass(FindTranslatables::class);
     $method = $reflection->getMethod('extractNamespace');
     $method->setAccessible(true);
 
@@ -52,7 +53,7 @@ it('returns null namespace when key has no namespace', function () {
 it('returns null group when key has no group', function () {
     $key = 'welcome';
 
-    $reflection = new \ReflectionClass(FindTranslatables::class);
+    $reflection = new ReflectionClass(FindTranslatables::class);
     $method = $reflection->getMethod('extractGroup');
     $method->setAccessible(true);
 

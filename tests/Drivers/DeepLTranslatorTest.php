@@ -16,7 +16,7 @@ it('translates text using DeepL', function () {
 it('normalizes language codes correctly', function () {
     $translator = new DeepLTranslator;
 
-    $reflection = new \ReflectionClass(DeepLTranslator::class);
+    $reflection = new ReflectionClass(DeepLTranslator::class);
     $method = $reflection->getMethod('normalizeLanguageCode');
     $method->setAccessible(true);
 
@@ -44,5 +44,5 @@ it('throws exception when DeepL auth key is not set', function () {
     $translator = new DeepLTranslator;
 
     expect(fn () => $translator->translate('Hello', 'fr'))
-        ->toThrow(\RuntimeException::class, 'DeepL auth key is not set');
+        ->toThrow(RuntimeException::class, 'DeepL auth key is not set');
 });
