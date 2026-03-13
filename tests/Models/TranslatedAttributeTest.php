@@ -3,6 +3,7 @@
 use Backstage\Translations\Laravel\Models\Language;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 it('can create a translated attribute', function () {
     Language::create(['code' => 'en', 'name' => 'English']);
@@ -86,5 +87,5 @@ it('casts translated_at to datetime', function () {
         'translated_at' => now(),
     ]);
 
-    expect($attribute->translated_at)->toBeInstanceOf(\Illuminate\Support\Carbon::class);
+    expect($attribute->translated_at)->toBeInstanceOf(Carbon::class);
 });

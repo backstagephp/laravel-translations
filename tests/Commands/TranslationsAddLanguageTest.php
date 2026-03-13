@@ -2,6 +2,7 @@
 
 use Backstage\Translations\Laravel\Commands\TranslationsAddLanguage;
 use Backstage\Translations\Laravel\Models\Language;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
 it('can add a new language', function () {
@@ -22,7 +23,7 @@ it('prevents adding duplicate language', function () {
         'name' => 'English',
     ]);
 
-    expect($result)->toBe(\Illuminate\Console\Command::INVALID)
+    expect($result)->toBe(Command::INVALID)
         ->and(Artisan::output())->toContain('already exists')
         ->and(Language::where('code', 'en')->count())->toBe(1);
 });

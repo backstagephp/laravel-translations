@@ -32,7 +32,7 @@ it('throws exception when no languages exist', function () {
     $model->exists = true;
 
     expect(fn () => TranslateAttributeForAllLanguages::run($model, 'title'))
-        ->toThrow(\RuntimeException::class, 'No languages available');
+        ->toThrow(RuntimeException::class, 'No languages available');
 });
 
 it('respects overwrite flag', function () {

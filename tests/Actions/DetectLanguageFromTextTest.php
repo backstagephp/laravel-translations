@@ -15,5 +15,5 @@ it('throws exception when language detection fails', function () {
     $text = '';
 
     expect(fn () => DetectLanguageFromText::run($text))
-        ->toThrow(\Exception::class);
+        ->toThrow(Exception::class);
 })->skip('Google Translate may detect language even for empty text');
