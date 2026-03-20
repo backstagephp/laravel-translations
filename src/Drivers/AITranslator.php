@@ -88,13 +88,8 @@ class AITranslator implements TranslatorContract
         $prompt = '<translation-instructions>' . $instructionsString . '</translation-instructions>' . "\n\n" . $translationRules;
 
         $response = Prism::text()
-            ->withClientOptions([
-                'timeout' => 600,
-                'text_output_only' => true,
-            ])
-            ->withProviderOptions([
-                'reasoning' => ['effort' => 'high'],
-            ])
+            ->withClientOptions(config('translations.ai_client_options', []))
+            ->withProviderOptions(config('translations.ai_provider_options', []))
             ->withClientRetry(4, 100)
             ->using(config('translations.translators.drivers.ai.provider'), config('translations.translators.drivers.ai.model'))
             ->withSystemPrompt($systemPrompt)
