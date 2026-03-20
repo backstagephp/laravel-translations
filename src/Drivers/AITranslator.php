@@ -93,7 +93,7 @@ class AITranslator implements TranslatorContract
                 'text_output_only' => true,
             ])
             ->withProviderOptions([
-                'reasoning' => ['effort' => 'minimal'],
+                'reasoning' => ['effort' => 'high'],
             ])
             ->withClientRetry(4, 100)
             ->using(config('translations.translators.drivers.ai.provider'), config('translations.translators.drivers.ai.model'))
