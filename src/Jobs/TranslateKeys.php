@@ -36,6 +36,14 @@ class TranslateKeys implements ShouldQueue
         return 3;
     }
 
+    /**
+     * Determine the time at which the job should timeout.
+     */
+    public function retryUntil()
+    {
+        return now()->addMinutes(1);
+    }
+
     public function __construct(public ?Language $lang = null) {}
 
     public function handle(): void

@@ -33,16 +33,6 @@ class Language extends Model
         'default' => 'boolean',
     ];
 
-    public function getCodeAttribute(?string $value): ?string
-    {
-        return $value !== null ? trim($value) : null;
-    }
-
-    public function setCodeAttribute(string $value): void
-    {
-        $this->attributes['code'] = trim($value);
-    }
-
     public function scopeActive($query)
     {
         return $query->where('active', true);
@@ -79,12 +69,12 @@ class Language extends Model
 
     public function getLanguageCodeAttribute()
     {
-        return explode('-', trim($this->attributes['code']))[0];
+        return explode('-', $this->attributes['code'])[0];
     }
 
     public function getCountryCodeAttribute()
     {
-        return explode('-', trim($this->attributes['code']))[1] ?? null;
+        return explode('-', $this->attributes['code'])[1];
     }
 
     public function getTextualRulesQuery(): string
@@ -123,14 +113,14 @@ class Language extends Model
 
     public function getLocalizedCountryNameAttribute($locale = null)
     {
-        $code = strtolower(explode('-', trim($this->attributes['code']))[1] ?? trim($this->attributes['code']));
+        $code = strtolower(explode('-', $this->attributes['code'])[1] ?? $this->attributes['code']);
 
         return Locale::getDisplayRegion('-' . $code, $locale ?? app()->getLocale());
     }
 
     public function getLocalizedLanguageNameAttribute($locale = null)
     {
-        $code = strtolower(explode('-', trim($this->attributes['code']))[0]);
+        $code = strtolower(explode('-', $this->attributes['code'])[0]);
 
         return Locale::getDisplayLanguage($code, $locale ?? app()->getLocale());
     }

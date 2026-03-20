@@ -56,10 +56,8 @@ class TranslationServiceProvider extends PackageServiceProvider
             ]);
         }
 
-        $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {
-            $schedule->command(SyncTranslations::class)
-                ->dailyAt('00:00')
-                ->withoutOverlapping();
-        });
+        Schedule::command(SyncTranslations::class)
+            ->dailyAt('00:00')
+            ->withoutOverlapping();
     }
 }
