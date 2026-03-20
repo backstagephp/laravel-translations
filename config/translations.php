@@ -30,6 +30,15 @@ return [
 
     'use_permanent_cache' => false,
 
+    'ai_client_options' => [
+        'timeout' => 600,
+        'text_output_only' => true,
+    ],
+
+    'ai_provider_options' => [
+        'reasoning' => ['effort' => 'high'],
+    ],
+
     'eloquent' => [
         'translatable-models' => [
             //
