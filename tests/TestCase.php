@@ -14,7 +14,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Backstage\\Translations\\Laravel\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+            fn (string $modelName) => 'Backstage\\Translations\\Laravel\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
         $this->runMigrations();
@@ -55,10 +55,10 @@ class TestCase extends Orchestra
         }
 
         $migrations = [
-            __DIR__ . '/../database/migrations/create_languages_table.php.stub',
-            __DIR__ . '/../database/migrations/create_translations_table.php.stub',
-            __DIR__ . '/../database/migrations/create_translated_attributes_table.php.stub',
-            __DIR__ . '/../database/migrations/create_language_rules_tables.php.stub',
+            __DIR__.'/../database/migrations/create_languages_table.php.stub',
+            __DIR__.'/../database/migrations/create_translations_table.php.stub',
+            __DIR__.'/../database/migrations/create_translated_attributes_table.php.stub',
+            __DIR__.'/../database/migrations/create_language_rules_tables.php.stub',
         ];
 
         foreach ($migrations as $migration) {
