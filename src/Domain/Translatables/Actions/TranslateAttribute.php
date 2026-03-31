@@ -4,6 +4,7 @@ namespace Backstage\Translations\Laravel\Domain\Translatables\Actions;
 
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
 use Backstage\Translations\Laravel\Facades\Translator;
+use Illuminate\Support\Arr;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class TranslateAttribute
@@ -109,7 +110,7 @@ class TranslateAttribute
         collect($rules)
             ->filter(fn ($rule) => str_starts_with($rule, '!'))
             ->map(fn ($rule) => ltrim($rule, '!'))
-            ->each(fn ($key) => \Illuminate\Support\Arr::forget($data, $key));
+            ->each(fn ($key) => Arr::forget($data, $key));
 
         collect($rules)
             ->filter(fn ($rule) => str_starts_with($rule, '*'))

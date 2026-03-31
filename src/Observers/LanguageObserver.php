@@ -18,6 +18,10 @@ class LanguageObserver
         if (! Language::where('active', true)->exists()) {
             $language->active = true;
         }
+
+        if ($language->default) {
+            Language::where('default', true)->update(['default' => false]);
+        }
     }
 
     public function created(Language $language)

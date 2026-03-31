@@ -4,6 +4,7 @@ namespace Backstage\Translations\Laravel\Domain\Translatables\Actions;
 
 use Backstage\Translations\Laravel\Models\Concerns\HasTranslatableAttributes;
 use Backstage\Translations\Laravel\Models\Language;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -17,7 +18,7 @@ class UpdateTranslateAttributes
     public function handle(object $model, array $attributes): void
     {
         /**
-         * @var \Illuminate\Database\Eloquent\Collection $languages
+         * @var Collection $languages
          */
         $languages = Language::all();
 

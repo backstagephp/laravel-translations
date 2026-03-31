@@ -23,7 +23,7 @@
     "require": {
         "php": "^8.3",
         "backstage/laravel-ai": "self.version",
-        "backstage/laravel-permanent-cache": "dev-main",
+        "backstage/laravel-permanent-cache": "self.version",
         "deeplcom/deepl-php": ">=1.12",
         "illuminate/contracts": "^10.0||^11.0||^12.0",
         "lorisleiva/laravel-actions": ">=2.0",

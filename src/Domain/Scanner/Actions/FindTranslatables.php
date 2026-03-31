@@ -27,7 +27,7 @@ class FindTranslatables
             ->files();
 
         /**
-         * @var \Illuminate\Support\Collection $functions
+         * @var Collection $functions
          */
         $functions = collect(config('translations.scan.functions'));
 
@@ -35,22 +35,22 @@ class FindTranslatables
          * @var string $pattern
          */
         $pattern =
-            '[^\w]' .
-            '(?<!->)' . // Ignore method chaining
-            '(?:' . implode('|', $functions->toArray()) . ')' .
-            '\(\s*' .
-            '(?:' .
-            "'((?:[^'\\\\]|\\\\.)+)'" .  // Match single-quoted keys
-            '|' .
-            '`((?:[^`\\\\]|\\\\.)+)`' .  // Match backtick-quoted keys
-            '|' .
-            '"((?:[^"\\\\]|\\\\.)+)"' .  // Match double-quoted keys
-            '|' .
-            '(\$[a-zA-Z_][a-zA-Z0-9_]*)' . // Match variables
-            ')' .
-            '\s*' .
-            '(?:,([^)]*))?' .  // Capture second argument (parameters)
-            '\s*' .
+            '[^\w]'.
+            '(?<!->)'. // Ignore method chaining
+            '(?:'.implode('|', $functions->toArray()).')'.
+            '\(\s*'.
+            '(?:'.
+            "'((?:[^'\\\\]|\\\\.)+)'".  // Match single-quoted keys
+            '|'.
+            '`((?:[^`\\\\]|\\\\.)+)`'.  // Match backtick-quoted keys
+            '|'.
+            '"((?:[^"\\\\]|\\\\.)+)"'.  // Match double-quoted keys
+            '|'.
+            '(\$[a-zA-Z_][a-zA-Z0-9_]*)'. // Match variables
+            ')'.
+            '\s*'.
+            '(?:,([^)]*))?'.  // Capture second argument (parameters)
+            '\s*'.
             '[\),]';
 
         foreach ($finder as $file) {
@@ -126,17 +126,17 @@ class FindTranslatables
     protected static function mergeExistingKeys(Collection $newKeys): Collection
     {
         /**
-         * @var \Illuminate\Support\Collection $existingKeys
+         * @var Collection $existingKeys
          */
         $existingKeys = collect(json_decode(File::get(static::$baseFilename), true) ?? []);
 
         /**
-         * @var \Illuminate\Support\Collection $unionAble
+         * @var Collection $unionAble
          */
         $unionAble = $newKeys->filter(fn ($key) => ! $existingKeys->has($key));
 
         /**
-         * @var \Illuminate\Support\Collection $union
+         * @var Collection $union
          */
         $union = $existingKeys->union($unionAble);
 

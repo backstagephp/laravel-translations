@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Lang;
@@ -44,12 +45,12 @@ class ScanTranslationStrings implements ShouldQueue
         $this->storeTranslations($localizedTranslations);
     }
 
-    protected function getLocales(): \Illuminate\Support\Collection
+    protected function getLocales(): Collection
     {
         return Language::active()->pluck('code');
     }
 
-    protected function mapTranslations($translations, $locales): \Illuminate\Support\Collection
+    protected function mapTranslations($translations, $locales): Collection
     {
         return $translations->flatMap(function ($translation) use ($locales) {
             return $locales->map(function ($locale) use ($translation) {

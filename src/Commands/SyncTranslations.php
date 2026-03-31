@@ -5,6 +5,7 @@ namespace Backstage\Translations\Laravel\Commands;
 use Backstage\Translations\Laravel\Contracts\TranslatesAttributes;
 use Backstage\Translations\Laravel\Models\TranslatedAttribute;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -66,7 +67,7 @@ class SyncTranslations extends Command
 
         try {
             $itemsCount = $items
-                ->filter(function (TranslatesAttributes | Model $item) {
+                ->filter(function (TranslatesAttributes|Model $item) {
                     $translations = $item->translatableAttributes()->count();
 
                     if ($translations === count($item->getTranslatableAttributes())) {
@@ -75,12 +76,12 @@ class SyncTranslations extends Command
 
                     return true;
                 })
-                ->map(fn (TranslatesAttributes | Model $item) => count($item->getTranslatableAttributes()))
+                ->map(fn (TranslatesAttributes|Model $item) => count($item->getTranslatableAttributes()))
                 ->sum();
 
             $this->output->progressStart($itemsCount);
 
-            $items->each(function (TranslatesAttributes | Model $item) {
+            $items->each(function (TranslatesAttributes|Model $item) {
                 try {
                     $item->syncTranslations($this->output);
                 } catch (\Throwable $e) {
@@ -90,7 +91,7 @@ class SyncTranslations extends Command
         } catch (\Throwable $e) {
             info('Payload is too large, syncing items one by one.');
 
-            progress('Syncing translatable items', $items, function (TranslatesAttributes | Model $item) {
+            progress('Syncing translatable items', $items, function (TranslatesAttributes|Model $item) {
                 try {
                     $item->syncTranslations($this->output);
                 } catch (\Throwable $e) {
@@ -103,7 +104,7 @@ class SyncTranslations extends Command
     protected static function cleanOrphanedTranslations($orphans): void
     {
         progress('Deleting unused translations', $orphans, function (TranslatedAttribute $attr) {
-            $attr->forceDelete();
+            $attr->delete();
         });
     }
 
@@ -113,7 +114,7 @@ class SyncTranslations extends Command
             ->get()
             ->filter(function (TranslatedAttribute $attr) {
                 /**
-                 * @var \Illuminate\Database\Eloquent\Model $type
+                 * @var Model $type
                  */
                 $type = $attr->translatable_type;
 
@@ -136,7 +137,7 @@ class SyncTranslations extends Command
                 }
 
                 /**
-                 * @var \Illuminate\Database\Eloquent\Builder $query
+                 * @var Builder $query
                  */
                 $query = get_class($model)::query();
 
