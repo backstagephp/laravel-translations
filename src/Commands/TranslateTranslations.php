@@ -11,7 +11,8 @@ class TranslateTranslations extends Command
 {
     protected $signature = 'translations:translate
                             {--code= : Translate language strings for a specific language}
-                            {--update : Update and overwrite existing translations}';
+                            {--update : Update and overwrite existing translations}
+                            {--queue : Dispatch the translation job to the queue instead of running it synchronously}';
 
     protected $description = 'Translate language strings using the configured driver';
 
@@ -44,6 +45,16 @@ class TranslateTranslations extends Command
 
     protected function handleAllLanguages(): void
     {
+        if ($this->option('queue')) {
+            $this->info('Dispatching translation job for all languages to the queue...');
+
+            TranslateKeys::dispatch();
+
+            $this->info('Translation job for all languages dispatched.');
+
+            return;
+        }
+
         $this->info('Translating imports for all languages...');
 
         TranslateKeys::dispatchSync();
@@ -57,6 +68,16 @@ class TranslateTranslations extends Command
 
         if (! $language) {
             $this->fail("Language {$code} not found.");
+        }
+
+        if ($this->option('queue')) {
+            $this->info("Dispatching translation job for language {$language->localizedLanguageName} to the queue...");
+
+            TranslateKeys::dispatch($language);
+
+            $this->info("Translation job for {$language->localizedLanguageName} dispatched.");
+
+            return;
         }
 
         $this->info("Translating imports for language: {$language->localizedLanguageName}...");
