@@ -25,7 +25,7 @@
         "backstage/laravel-ai": "self.version",
         "backstage/laravel-permanent-cache": "self.version",
         "deeplcom/deepl-php": ">=1.12",
-        "illuminate/contracts": "^10.0||^11.0||^12.0",
+        "illuminate/contracts": "^10.0||^11.0||^12.0||^13.0",
         "lorisleiva/laravel-actions": ">=2.0",
         "spatie/fork": "^1.2",
         "spatie/laravel-package-tools": "^1.16",
