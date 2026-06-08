@@ -92,9 +92,6 @@ class AITranslator implements TranslatorContract
                 'timeout' => 600,
                 'text_output_only' => true,
             ])
-            ->withProviderOptions([
-                'reasoning' => ['effort' => 'minimal'],
-            ])
             ->withClientRetry(4, 100)
             ->using(config('translations.translators.drivers.ai.provider'), config('translations.translators.drivers.ai.model'))
             ->withSystemPrompt($systemPrompt)

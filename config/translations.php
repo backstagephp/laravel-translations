@@ -46,7 +46,7 @@ return [
 
             'ai' => [
                 'provider' => Provider::OpenAI,
-                'model' => 'gpt-4.1',
+                'model' => 'gpt-5.2',
                 'system_prompt' => 'You translate Laravel translations strings to the language you have been asked.',
             ],
 
