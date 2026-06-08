@@ -181,9 +181,9 @@ trait HasTranslatableAttributes
         );
     }
 
-    public function getTranslatableAttributeRulesFor(string $attribute): array | string
+    public function getTranslatableAttributeRulesFor(string $attribute): array|string
     {
-        $methodName = 'getTranslatableAttributeRulesFor' . str($attribute)->studly();
+        $methodName = 'getTranslatableAttributeRulesFor'.str($attribute)->studly();
 
         if (! method_exists($this, $methodName)) {
             return '*';
