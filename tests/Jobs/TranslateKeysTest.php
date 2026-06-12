@@ -76,6 +76,6 @@ it('has correct timeout and retry settings', function () {
     $job = new TranslateKeys;
 
     expect($job->timeout)->toBe(2200)
-        ->and($job->tries())->toBe(5)
+        ->and($job->tries())->toBe(3)
         ->and($job->backoff())->toBe(3);
 });
