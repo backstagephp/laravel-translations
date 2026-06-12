@@ -25,7 +25,7 @@ class TranslateKeys implements ShouldQueue
      */
     public function tries(): int
     {
-        return 5;
+        return 3;
     }
 
     /**
@@ -33,7 +33,21 @@ class TranslateKeys implements ShouldQueue
      */
     public function backoff(): int
     {
-        return 3;
+        return 30;
+    }
+
+    /**
+     * Determine the time at which the job should timeout.
+     *
+     * Must exceed (timeout * tries) plus backoff windows, otherwise long-running
+     * attempts fail with MaxAttemptsExceededException before they finish.
+     * Also requires the queue connection's retry_after to be greater than
+     * timeout (e.g. REDIS_QUEUE_RETRY_AFTER=2400) so that a still-running job
+     * is not re-released onto the queue.
+     */
+    public function retryUntil()
+    {
+        return now()->addSeconds(($this->timeout + $this->backoff()) * $this->tries());
     }
 
     public function __construct(public ?Language $lang = null) {}
