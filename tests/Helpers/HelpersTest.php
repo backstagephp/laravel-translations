@@ -14,14 +14,14 @@ it('localized_country_name handles code without country', function () {
 });
 
 it('localized_language_name returns language name', function () {
-    $result = localized_language_name('en', 'en');
+    $result = support()->localizedLanguageName('en', 'en');
 
     expect($result)->toBeString()
         ->and($result)->not->toBeEmpty();
 });
 
 it('localized_language_name handles locale code', function () {
-    $result = localized_language_name('en-US', 'en');
+    $result = support()->localizedLanguageName('en-US', 'en');
 
     expect($result)->toBeString()
         ->and($result)->not->toBeEmpty();
@@ -38,7 +38,7 @@ it('localized_country_name uses app locale when not provided', function () {
 it('localized_language_name uses app locale when not provided', function () {
     app()->setLocale('fr');
 
-    $result = localized_language_name('en');
+    $result = support()->localizedLanguageName('en');
 
     expect($result)->toBeString();
 });

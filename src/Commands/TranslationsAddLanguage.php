@@ -34,7 +34,7 @@ class TranslationsAddLanguage extends Command
         Language::create([
             'code' => $code,
             'name' => $name,
-            'native' => localized_language_name($name),
+            'native' => ucfirst(support()->localizedLanguageName($name)),
         ]);
 
         $this->info("Language $name ($code) added.");
