@@ -4,7 +4,10 @@ use Backstage\Translations\Laravel\Events\LanguageAdded;
 use Backstage\Translations\Laravel\Events\LanguageCodeChanged;
 use Backstage\Translations\Laravel\Events\LanguageDeleted;
 use Backstage\Translations\Laravel\Models\Language;
+use Backstage\Translations\Laravel\Models\TranslatedAttribute;
+use Backstage\Translations\Laravel\Models\Translation;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Validation\ValidationException;
 
 it('sets default to true when creating first language', function () {
     $language = Language::create(['code' => 'en', 'name' => 'English']);
@@ -75,4 +78,37 @@ it('fires LanguageDeleted event when language is deleted', function () {
     $language->delete();
 
     Event::assertDispatched(LanguageDeleted::class);
+});
+
+it('blocks deleting a language that still has translations', function () {
+    $language = Language::create(['code' => 'en', 'name' => 'English']);
+
+    Translation::create(['code' => 'en', 'key' => 'welcome', 'text' => 'Welcome']);
+
+    expect(fn () => $language->delete())->toThrow(ValidationException::class);
+
+    expect(Language::where('code', 'en')->exists())->toBeTrue();
+});
+
+it('blocks deleting a language that still has translated attributes', function () {
+    $language = Language::create(['code' => 'en', 'name' => 'English']);
+
+    TranslatedAttribute::create([
+        'code' => 'en',
+        'translatable_type' => 'test',
+        'translatable_id' => 1,
+        'attribute' => 'title',
+    ]);
+
+    expect(fn () => $language->delete())->toThrow(ValidationException::class);
+
+    expect(Language::where('code', 'en')->exists())->toBeTrue();
+});
+
+it('allows deleting a language without translations or translated attributes', function () {
+    $language = Language::create(['code' => 'en', 'name' => 'English']);
+
+    $language->delete();
+
+    expect(Language::where('code', 'en')->exists())->toBeFalse();
 });
