@@ -6,9 +6,24 @@ use Backstage\Translations\Laravel\Events\LanguageAdded;
 use Backstage\Translations\Laravel\Events\LanguageCodeChanged;
 use Backstage\Translations\Laravel\Events\LanguageDeleted;
 use Backstage\Translations\Laravel\Models\Language;
+use Illuminate\Validation\ValidationException;
 
 class LanguageObserver
 {
+    /**
+     * Guard the data this package owns: a language may not be deleted while it
+     * still has translations or translated attributes. Consumers (e.g. the CMS)
+     * layer additional guards on top for their own language_code references.
+     */
+    public function deleting(Language $language): void
+    {
+        if ($language->translations()->exists() || $language->translatableAttributes()->exists()) {
+            throw ValidationException::withMessages([
+                'code' => __('This language cannot be deleted because it still has translations.'),
+            ]);
+        }
+    }
+
     public function creating(Language $language)
     {
         if (! Language::where('default', true)->exists()) {

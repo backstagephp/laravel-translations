@@ -15,7 +15,8 @@ return new class extends Migration
             $table->foreign('code')
                 ->references('code')
                 ->on('languages')
-                ->onDelete('cascade');
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
 
             $table->morphs('translatable');
 
