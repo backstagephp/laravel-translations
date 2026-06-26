@@ -2,6 +2,7 @@
 
 namespace Backstage\Translations\Laravel\Tests;
 
+use Backstage\Support\SupportServiceProvider as BackstageSupportServiceProvider;
 use Backstage\Translations\Laravel\TranslationServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Schema;
@@ -23,6 +24,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
+            BackstageSupportServiceProvider::class,
             TranslationServiceProvider::class,
         ];
     }
