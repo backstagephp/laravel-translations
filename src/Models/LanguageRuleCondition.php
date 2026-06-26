@@ -36,7 +36,7 @@ class LanguageRuleCondition extends Model
         $values = $this->value ?? [];
 
         if (empty($values) || ! is_array($values)) {
-            report(new \Exception('Value is null or empty for key: ' . $key . ' and type: ' . $this->type . ' and id: ' . $this->id));
+            report(new \Exception('Value is null or empty for key: '.$key.' and type: '.$this->type.' and id: '.$this->id));
 
             return '';
         }
@@ -54,11 +54,11 @@ class LanguageRuleCondition extends Model
             }
         } else {
             if ($this->type === 'must') {
-                $resultingQuery[] = "{$key} must translate to one of these options: '" . implode("', '", $values) . "'";
+                $resultingQuery[] = "{$key} must translate to one of these options: '".implode("', '", $values)."'";
             }
 
             if ($this->type === 'must_not') {
-                $resultingQuery[] = "{$key} must not translate to any of these options: '" . implode("', '", $values) . "'";
+                $resultingQuery[] = "{$key} must not translate to any of these options: '".implode("', '", $values)."'";
             }
         }
 
