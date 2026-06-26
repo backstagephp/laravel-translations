@@ -17,8 +17,8 @@ class TranslationsScan extends Command
         if (Language::count() === 0) {
             Language::create([
                 'code' => app()->getLocale(),
-                'name' => localized_language_name(app()->getLocale()),
-                'native' => localized_language_name(app()->getLocale()),
+                'name' => support()->localizedLanguageName(app()->getLocale()),
+                'native' => support()->localizedLanguageName(app()->getLocale()),
                 'active' => true,
             ]);
         }
