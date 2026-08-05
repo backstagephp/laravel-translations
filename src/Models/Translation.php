@@ -2,6 +2,7 @@
 
 namespace Backstage\Translations\Laravel\Models;
 
+use Backstage\Translations\Laravel\Base\DatabaseTranslations;
 use Backstage\Translations\Laravel\Caches\TranslationStringsCache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,7 +35,13 @@ class Translation extends Model
         parent::boot();
 
         static::saved(function (Translation $translation) {
+            app()->forgetInstance(DatabaseTranslations::class);
+
             dispatch(fn () => TranslationStringsCache::update());
+        });
+
+        static::deleted(function (Translation $translation) {
+            app()->forgetInstance(DatabaseTranslations::class);
         });
     }
 

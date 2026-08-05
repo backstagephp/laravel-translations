@@ -9,8 +9,9 @@ class DatabaseTranslations
     protected array $loaded = [];
 
     /**
-     * Container-scoped memo: each locale/group/namespace scope hits the
-     * database once per request, Octane included.
+     * Singleton memo: each locale/group/namespace scope hits the database once
+     * per container lifecycle. Translation saved/deleted events forget the
+     * instance, so the next resolve starts fresh.
      */
     public function get(string $locale, string $group, ?string $namespace = null): array
     {

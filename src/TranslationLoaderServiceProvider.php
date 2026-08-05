@@ -16,7 +16,7 @@ class TranslationLoaderServiceProvider extends IlluminateTranslationServiceProvi
             return new TranslationLoader($app['files'], $app['path.lang']);
         });
 
-        $this->app->scoped(DatabaseTranslations::class);
+        $this->app->singleton(DatabaseTranslations::class);
     }
 
     /**

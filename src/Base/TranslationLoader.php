@@ -21,9 +21,9 @@ class TranslationLoader extends FileLoader
     }
 
     /**
-     * Resolved per call instead of injected: this loader is a singleton while
-     * DatabaseTranslations is container-scoped, so holding a reference would
-     * leak the first request's rows across Octane requests.
+     * Resolved per call instead of injected: Translation mutations invalidate
+     * by forgetting the DatabaseTranslations instance, which an injected
+     * reference would survive.
      */
     protected function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
     {
