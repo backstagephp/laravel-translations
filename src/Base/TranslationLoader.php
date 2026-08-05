@@ -20,21 +20,14 @@ class TranslationLoader extends FileLoader
         return array_replace_recursive($fileTranslations, static::getTranslationsFromDatabase($locale, $group, $namespace));
     }
 
+    /**
+     * Resolved per call instead of injected: this loader is a singleton while
+     * DatabaseTranslations is container-scoped, so holding a reference would
+     * leak the first request's rows across Octane requests.
+     */
     protected function getTranslationsFromDatabase(string $locale, string $group, ?string $namespace = null): array
     {
-        $translations = Translation::select('key', 'text', 'namespace', 'group');
-
-        if ($namespace !== '*') {
-            $translations->where('namespace', $namespace);
-        }
-
-        if ($group !== '*') {
-            $translations->where('group', $group);
-        }
-
-        return $translations->where(fn ($query) => $query->where('code', 'LIKE', $locale . '_%')->orWhere('code', $locale))
-            ->pluck('text', 'key')
-            ->toArray();
+        return app(DatabaseTranslations::class)->get($locale, $group, $namespace);
     }
 
     protected static function checkTableExists(): bool

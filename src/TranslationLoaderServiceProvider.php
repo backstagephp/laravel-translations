@@ -2,6 +2,7 @@
 
 namespace Backstage\Translations\Laravel;
 
+use Backstage\Translations\Laravel\Base\DatabaseTranslations;
 use Backstage\Translations\Laravel\Base\TranslationLoader;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Foundation\Application;
@@ -14,6 +15,8 @@ class TranslationLoaderServiceProvider extends IlluminateTranslationServiceProvi
         $this->app->singleton('translation.loader', function (Application $app) {
             return new TranslationLoader($app['files'], $app['path.lang']);
         });
+
+        $this->app->scoped(DatabaseTranslations::class);
     }
 
     /**
@@ -21,6 +24,6 @@ class TranslationLoaderServiceProvider extends IlluminateTranslationServiceProvi
      */
     public function provides(): array
     {
-        return ['translation.loader'];
+        return ['translation.loader', DatabaseTranslations::class];
     }
 }
