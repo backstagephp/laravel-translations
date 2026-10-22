@@ -94,24 +94,24 @@ class ScanTranslationStrings implements ShouldQueue
 
     protected function storeTranslations($translations): void
     {
-        Event::fake();
+        Event::fakeFor(function () use ($translations) {
+            $translations->each(function ($translation) {
+                if (! is_array($translation['text'])) {
+                    Translation::firstOrCreate([
+                        'group' => $translation['group'],
+                        'code' => $translation['code'],
+                        'key' => $translation['key'],
+                        'namespace' => $translation['namespace'],
+                    ], [
+                        'text' => $translation['text'] ?? $translation['key'],
+                        'source_text' => $translation['text'] !== $translation['key'] ? $translation['text'] : null,
+                        'translated_at' => static::translationIsTranslated($translation) ? now() : null,
+                    ]);
+                }
+            });
 
-        $translations->each(function ($translation) {
-            if (! is_array($translation['text'])) {
-                Translation::firstOrCreate([
-                    'group' => $translation['group'],
-                    'code' => $translation['code'],
-                    'key' => $translation['key'],
-                    'namespace' => $translation['namespace'],
-                ], [
-                    'text' => $translation['text'] ?? $translation['key'],
-                    'source_text' => $translation['text'] !== $translation['key'] ? $translation['text'] : null,
-                    'translated_at' => static::translationIsTranslated($translation) ? now() : null,
-                ]);
-            }
+            TranslationStringsCache::update();
         });
-
-        TranslationStringsCache::update();
     }
 
     protected static function translationIsTranslated(array $translation): bool
